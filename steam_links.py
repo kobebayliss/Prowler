@@ -51,7 +51,30 @@ for i in range(max_pages):
 
         if top_100_games:
             for game in top_100_games:
-                print(f"Rank: {game['Rank']}, Name: {game['Name']}, Link: {game['Link']}")
+                #print(f"Rank: {game['Rank']}, Name: {game['Name']}, Link: {game['Link']}")
+                url_2 = f"https://store.steampowered.com{game['Link']}"
+                page = requests.get(url_2)
+
+                #parse the HTML content using BS
+                soup = BeautifulSoup(page.content, "html.parser")
+
+                #assigning elements of the page to variables
+                name_element = soup.find(id="appHubAppName")
+                price_element = soup.find(id="game_area_purchase")
+                price_element_1 = price_element.find(class_="game_purchase_action")
+                print(name_element.text.strip())
+
+                #checking if the game has a discount or not
+                if price_element_1.find(class_="discount_final_price"):
+                    discount_element = price_element_1.find(class_="discount_final_price")
+                    print(discount_element.text.strip())
+                else:
+                    if price_element_1.find(class_="game_purchase_price price"):
+                        price_element_2 = price_element_1.find(class_="game_purchase_price price")
+                        print(price_element_2.text.strip())
+                    else:
+                        print("failed")
+
         else:
             print("Failed to fetch top games.")
 
