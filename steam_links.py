@@ -59,25 +59,35 @@ for i in range(max_pages):
                 soup = BeautifulSoup(page.content, "html.parser")
 
                 #assigning elements of the page to variables
-                name_element = soup.find(id="appHubAppName")
-                print(name_element.text.strip())
+                if soup.find(id="appHubAppName"):
+                    name_element = soup.find(id="appHubAppName")
+                    print(name_element.text.strip())
+                else:
+                    print("Failed to find name")
+                    continue
                 price_element = soup.find(id="game_area_purchase")
                 if soup.find(id="gameAreaDLCSection"):
                     removing_dlc = soup.find(id="gameAreaDLCSection").decompose()
+                if price_element.find(class_="game_area_purchase_game demo_above_purchase"):
+                    removing_demo = price_element.find(class_="game_area_purchase_game demo_above_purchase").decompose()
 
-                all_prices = price_element.find_all(class_=["discount_final_price", "game_purchase_price price"])
+                if price_element.find_all(class_=["discount_final_price", "game_purchase_price price"]):
+                    all_prices = price_element.find_all(class_=["discount_final_price", "game_purchase_price price"])
 
-                price_list = []
+                    price_list = []
 
-                for price in all_prices:
-                    price_1 = price.text.replace('NZ$', '').replace(' ', '').replace('\r', '').replace('\n', '').replace('\t', '').lower()
-                    if price_1 == "freetoplay" or price_1 == "free":
-                        price_2 = 0
-                    else:
-                        price_2 = float(price_1)
-                    price_list.append(price_2)
+                    for price in all_prices:
+                        price_1 = price.text.replace('$', '').replace(' ', '').replace('\r', '').replace('\n', '').replace('\t', '').lower()
+                        if price_1 == "freetoplay" or price_1 == "free":
+                            price_2 = 0
+                        else:
+                            price_2 = float(price_1)
+                        price_list.append(price_2)
 
-                print(f"${min(price_list)}")
+                    print(f"${min(price_list)}")
+                else:
+                    print("Failed to find price")
+                    continue
 
         else:
             print("Failed to fetch top games.")
