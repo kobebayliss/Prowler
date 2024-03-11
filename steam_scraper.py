@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from fuzzywuzzy import fuzz
 import time
 
 games_names = []
@@ -39,7 +40,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             #if condition for when website should finish scrolling
-            if i > 5:
+            if i > 20:
                 break
         
         updated_html = driver.page_source
@@ -70,9 +71,10 @@ def scrape_steam_page(url):
             if soup2.find(id="genresAndManufacturer"):
                 genre_container = soup2.find(id="genresAndManufacturer")
                 genre = genre_container.find('span').text.strip()
-                developer = genre_container.find('div', class_="dev_row", 'a').text.strip()
+                developer = genre_container.find('div', class_="dev_row").find('a').text.strip()
             else:
                 genre = "Failed to find genre"
+                developer = "Failed to find developer"
 
             #print out all information about the game
             print(f"Game {index}:")
