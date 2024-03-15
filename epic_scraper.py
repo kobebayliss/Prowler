@@ -34,7 +34,18 @@ def scrape_epic_page():
                 price = price_container_2.find('span', class_="css-119zqif").text.strip()
             else:
                 price = "N/A"
-            print(f"{name.ljust(60)} - {price.rjust(15)}")
+            link_container = game.find('a', class_="css-g3jcms")
+            link = f"https://store.epicgames.com/{link_container.get('href')}"
+            print(link)
+            game_page = requests.get(link)
+            soup2 = BeautifulSoup(game_page.content, 'html.parser')
+            print(soup2)
+            description_container = soup2.find(id="about-long-description")
+            description = description_container.find('div', class_="css-1o9l22h").text.strip()
+            print(f"Name: {name}")
+            print(f"Price: {price}")
+            print(f"Link: {link}")
+            print(f"Description: {description}")
         start_value += 100
 
 epic_scraper = scrape_epic_page()
