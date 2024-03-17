@@ -40,7 +40,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             #if condition for when website should finish scrolling
-            if i > 20:
+            if i > 5:
                 break
         
         updated_html = driver.page_source
@@ -67,7 +67,11 @@ def scrape_steam_page(url):
             game_page = requests.get(link)
             soup2 = BeautifulSoup(game_page.content, 'html.parser')
             #error handling and retrieving description
-            description = error_handle(soup2, "game_description_snippet", "description")
+            if soup2.find(id="aboutThisGame"):
+                description_container = soup2.find(id="aboutThisGame")
+                description = description_container.find(class_="game_area_description").text.strip()
+            else:
+                description = "Failed to find description"
             if soup2.find(id="genresAndManufacturer"):
                 genre_container = soup2.find(id="genresAndManufacturer")
                 genre = genre_container.find('span').text.strip()
@@ -81,7 +85,6 @@ def scrape_steam_page(url):
             print(f"Name: {name}")
             print(f"Price: {price}")
             print(f"Link: {link}")
-            print(f"Description: {description}")
             print(f"Genre: {genre}")
             print(f"Developer: {developer}")
             print()
