@@ -3,11 +3,21 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from fuzzywuzzy import fuzz
+import mysql.connector
 import time
+
+# connecting to the prowler_games database
+games_db = mysql.connector.connect(
+  host = "localhost",
+  user = "root",
+  password = "password1",
+  database = "prowler_games"
+)
+mycursor = games_db.cursor()
 
 games_names = []
 
-#function to stop errors if a certain class doesn't exist
+# function to stop errors if a certain class doesn't exist
 def error_handle(container_1, class_name, variable):
     if container_1.find('div', class_=class_name):
         variable = container_1.find('div', class_=class_name).text.strip()
@@ -17,61 +27,63 @@ def error_handle(container_1, class_name, variable):
 
 steam_url = "https://store.steampowered.com/search/?sort_by=_ASC&filter=topsellers&os=win&supportedlang=english"
 
-#initialise web driver
+# initialise web driver
 driver = webdriver.Chrome()
 driver.get(steam_url)
 
 def scrape_steam_page(url):
-    #loading page
+    # loading page
     response = requests.get(url)
 
-    #checking that the page successfully loaded
+    # checking that the page successfully loaded
     if response.status_code == 200:
-        #time between each scroll
+        # time between each scroll
         scroll_pause_time = 0.4
-        #find screen height
+        # find screen height
         screen_height = driver.execute_script("return window.screen.height;")
         i = 1
-        #while loop to continue scrolling
+        # while loop to continue scrolling
         while True:
-            #scroll down
+            # scroll down
             driver.execute_script(f"window.scrollTo(0, {screen_height * i});")
             i += 1
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
-            #if condition for when website should finish scrolling
-            if i > 5:
+            # if condition for when website should finish scrolling
+            if i > 1:
                 break
         
         updated_html = driver.page_source
 
-        #parsing website's HTML
+        # parsing website's HTML
         soup = BeautifulSoup(updated_html, 'html.parser')
 
-        #creating a container for all the content
+        # creating a container for all the content
         container = soup.find(id="search_resultsRows")
         index = 1
 
-        #for loop which loops through all the games since they are a links
+        # for loop which loops through all the games since they are a links
         for game in container.find_all('a'):
-            #finding name of game
+            # finding name of game
             name = game.find('span', class_='title').get_text(strip=True)
-            #container for price
+            # container for price
             price_tag = game.find('div', class_='col search_price_discount_combined responsive_secondrow')
-            #retrieving and error handling price
+            # retrieving and error handling price
             price = error_handle(price_tag, "discount_final_price", "price")
-            #getting link
+            price = price.replace("$", "")
+            # getting link
             link = game.get('href')
 
-            #getting website for each individual game and parsing it
+            # getting website for each individual game and parsing it
             game_page = requests.get(link)
             soup2 = BeautifulSoup(game_page.content, 'html.parser')
-            #error handling and retrieving description
+            # error handling and retrieving description
             if soup2.find(id="aboutThisGame"):
                 description_container = soup2.find(id="aboutThisGame")
                 description = description_container.find(class_="game_area_description").text.strip()
             else:
                 description = "Failed to find description"
+            # error handling for finding genre and developer
             if soup2.find(id="genresAndManufacturer"):
                 genre_container = soup2.find(id="genresAndManufacturer")
                 genre = genre_container.find('span').text.strip()
@@ -80,20 +92,37 @@ def scrape_steam_page(url):
                 genre = "Failed to find genre"
                 developer = "Failed to find developer"
 
-            #print out all information about the game
+            # print out all information about the game
             print(f"Game {index}:")
             print(f"Name: {name}")
             print(f"Price: {price}")
             print(f"Link: {link}")
             print(f"Genre: {genre}")
             print(f"Developer: {developer}")
+            
+            # SQL statement to insert the game's information into the prowler_games database
+            sql = "INSERT INTO games (game_name, steam_price, epic_price, game_genre_id, game_picture, game_developer, game_description) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            # values to insert
+            val = (name, price, 0, 0, "N/A", developer, description)
+            add_value = input("Add to Database? ")
+            if add_value == "y":
+                # adding values and saving them
+                mycursor.execute(sql, val)
+                games_db.commit()
+                print(mycursor.rowcount, "details inserted")
+
             print()
+            # increasing index for game by 1 each time
             index+=1
             games_names.append(name)
+        # quitting the selenium driver
         driver.quit()
 
     else:
+        # error handling
         print(f"Failed to retrieve the page. Status code: {response.status_code}")
 
 games_list = scrape_steam_page(steam_url)
 print(games_names)
+# closing connection to DB
+games_db.close()
