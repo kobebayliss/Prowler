@@ -10,12 +10,22 @@ import time
 games_db = mysql.connector.connect(
   host = "localhost",
   user = "root",
-  password = "password1",
+  password = "2WS8YL8hqh988NxaPVP2iufPv",
   database = "prowler_games"
 )
 mycursor = games_db.cursor()
 
-games_names = []
+genre_id = {}
+
+# get genre information to produce my dictionary
+sql = "SELECT genre_id, genre FROM genres"
+mycursor.execute(sql)
+results = mycursor.fetchall()
+for row in results:
+    # assigning the genre to its id in my dictionary
+    genre_id[row[1]] = row[0]
+
+print(genre_id)
 
 # function to stop errors if a certain class doesn't exist
 def error_handle(container_1, class_name, variable):
@@ -86,18 +96,37 @@ def scrape_steam_page(url):
             # error handling for finding genre and developer
             if soup2.find(id="genresAndManufacturer"):
                 genre_container = soup2.find(id="genresAndManufacturer")
-                genre = genre_container.find('span').text.strip()
+                genres = genre_container.find('span').text.strip()
+                genres_list = genres.split(', ')
                 developer = genre_container.find('div', class_="dev_row").find('a').text.strip()
             else:
-                genre = "Failed to find genre"
+                genres = "Failed to find genre"
                 developer = "Failed to find developer"
+            
+            genres_id_list = []
+            # iterate through the genres
+            for a in range(len(genres_list)):
+                # add the id for the genre by searching for the genre in the dictionary
+                genres_id_list.append(genre_id[genres_list[a]])
+            print(genres_id_list)
+
+            # iterate through the values of genre id list            
+            for a in range(len(genres_id_list)):
+                # insert into the linkin table the values for the index of the game and the genre id
+                sql = "INSERT INTO game_genre (game_id, genre_id) VALUES (%s, %s)"
+                val = (index, genres_id_list[a])
+                add_value = input("Add to Database? ")
+                # confirming that the data should be inserted
+                if add_value == "y":
+                    mycursor.execute(sql, val)
+                    games_db.commit()
 
             # print out all information about the game
             print(f"Game {index}:")
             print(f"Name: {name}")
             print(f"Price: {price}")
             print(f"Link: {link}")
-            print(f"Genre: {genre}")
+            print(f"Genre: {genres_list}")
             print(f"Developer: {developer}")
             
             # SQL statement to insert the game's information into the prowler_games database
@@ -114,7 +143,6 @@ def scrape_steam_page(url):
             print()
             # increasing index for game by 1 each time
             index+=1
-            games_names.append(name)
         # quitting the selenium driver
         driver.quit()
 
@@ -123,6 +151,5 @@ def scrape_steam_page(url):
         print(f"Failed to retrieve the page. Status code: {response.status_code}")
 
 games_list = scrape_steam_page(steam_url)
-print(games_names)
 # closing connection to DB
 games_db.close()
