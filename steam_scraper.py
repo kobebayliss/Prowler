@@ -32,6 +32,7 @@ def error_handle(container_1, class_name, variable):
     if container_1.find('div', class_=class_name):
         variable = container_1.find('div', class_=class_name).text.strip()
     else:
+        failed = True
         variable = f"Failed to find {variable}"
     return variable
 
@@ -60,7 +61,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             # if condition for when website should finish scrolling
-            if i > 1:
+            if i > 50:
                 break
         
         updated_html = driver.page_source
@@ -74,13 +75,14 @@ def scrape_steam_page(url):
 
         # for loop which loops through all the games since they are a links
         for game in container.find_all('a'):
+            failed = False
             # finding name of game
             name = game.find('span', class_='title').get_text(strip=True)
             # container for price
             price_tag = game.find('div', class_='col search_price_discount_combined responsive_secondrow')
             # retrieving and error handling price
             price = error_handle(price_tag, "discount_final_price", "price")
-            price = price.replace("$", "")
+            price = price.replace("NZ$ ", "")
             # getting link
             link = game.get('href')
 
@@ -92,34 +94,39 @@ def scrape_steam_page(url):
                 description_container = soup2.find(id="aboutThisGame")
                 description = description_container.find(class_="game_area_description").text.strip()
             else:
+                failed = True
                 description = "Failed to find description"
             # error handling for finding genre and developer
             if soup2.find(id="genresAndManufacturer"):
                 genre_container = soup2.find(id="genresAndManufacturer")
-                genres = genre_container.find('span').text.strip()
-                genres_list = genres.split(', ')
-                developer = genre_container.find('div', class_="dev_row").find('a').text.strip()
+                if genre_container.find('span'):
+                    genres = genre_container.find('span').text.strip()
+                    genres_list = genres.split(', ')
+                    developer = genre_container.find('div', class_="dev_row").find('a').text.strip()
             else:
                 genres = "Failed to find genre"
                 developer = "Failed to find developer"
+                failed = True
             
-            genres_id_list = []
-            # iterate through the genres
-            for a in range(len(genres_list)):
-                # add the id for the genre by searching for the genre in the dictionary
-                genres_id_list.append(genre_id[genres_list[a]])
-            print(genres_id_list)
+            if genres != "Failed to find genre":
+                genres_id_list = []
+                # iterate through the genres
+                for a in range(len(genres_list)):
+                    # add the id for the genre by searching for the genre in the dictionary
+                    genres_id_list.append(genre_id[genres_list[a]])
 
-            # iterate through the values of genre id list            
-            for a in range(len(genres_id_list)):
-                # insert into the linkin table the values for the index of the game and the genre id
-                sql = "INSERT INTO game_genre (game_id, genre_id) VALUES (%s, %s)"
-                val = (index, genres_id_list[a])
-                add_value = input("Add to Database? ")
-                # confirming that the data should be inserted
-                if add_value == "y":
+                # iterate through the values of genre id list            
+                for a in range(len(genres_id_list)):
+                    # insert into the linkin table the values for the index of the game and the genre id
+                    sql = "INSERT INTO game_genre (game_id, genre_id) VALUES (%s, %s)"
+                    val = (index, genres_id_list[a])
                     mycursor.execute(sql, val)
                     games_db.commit()
+
+                sql = "SELECT genre_id FROM game_genre WHERE game_id = (%s)"
+                val = (index,)
+                mycursor.execute(sql, val)
+                results = mycursor.fetchall()
 
             # print out all information about the game
             print(f"Game {index}:")
@@ -130,11 +137,10 @@ def scrape_steam_page(url):
             print(f"Developer: {developer}")
             
             # SQL statement to insert the game's information into the prowler_games database
-            sql = "INSERT INTO games (game_name, steam_price, epic_price, game_genre_id, game_picture, game_developer, game_description) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO games (game_name, steam_price, epic_price, game_picture, game_developer, game_description) VALUES (%s, %s, %s, %s, %s, %s)"
             # values to insert
-            val = (name, price, 0, 0, "N/A", developer, description)
-            add_value = input("Add to Database? ")
-            if add_value == "y":
+            val = (name, price, 0, "N/A", developer, description)
+            if failed == False:
                 # adding values and saving them
                 mycursor.execute(sql, val)
                 games_db.commit()
