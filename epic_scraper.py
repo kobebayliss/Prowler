@@ -10,6 +10,29 @@ import mysql.connector
 from fuzzywuzzy import fuzz
 import time
 
+# connecting to the prowler_games database
+games_db = mysql.connector.connect(
+  host = "localhost",
+  user = "root",
+  password = "2WS8YL8hqh988NxaPVP2iufPv",
+  database = "prowler_games"
+)
+mycursor = games_db.cursor()
+
+# dictionary of already existing games in database
+steam_names = {}
+
+# sql to retrieve all names and prices
+sql = "SELECT game_id, game_name FROM games"
+# executing sql statement
+mycursor.execute(sql)
+results = mycursor.fetchall()
+#iterate through each record's price and name and add them to dictionary
+for row in results:
+    steam_names[row[0]] = row[1]
+
+print(steam_names)
+
 # initialising the undetected selenium page to bypass cloudflare
 options = uc.ChromeOptions() 
 options.headless = False
@@ -51,16 +74,31 @@ def scrape_epic_page():
                 price = "N/A"
             # getting link for game
             link_container = game.find('a', class_="css-g3jcms")
-            link = f"https://store.epicgames.com/{link_container.get('href')}"
+            link = f"https://store.epicgames.com{link_container.get('href')}"
             # printing all game details
             print(f"Index: {index}")
             print(f"Name: {name}")
             print(f"Price: {price}")
             print(f"Link: {link}")
 
-            steam_game = input("Enter game here: ")
-            if is_similar(name, steam_game):
-                print("They are same game")
+            matches = [index for index, game_name in steam_names.items() if name in game_name]
+            if matches:
+                print(matches[0])
+                print("-------------")
+                print()
+                print()
+                print("Yes")
+                print()
+                print()
+                print("-------------")
+                # sql to update epic price
+                sql = "UPDATE games SET epic_price = (%s) WHERE game_id = (%s)"
+                val = (price, matches[0])
+                yes_no = input("Input")
+                if yes_no == "y":
+                    mycursor.execute(sql, val)
+                    games_db.commit()
+                    print(mycursor.rowcount, "details updated")
 
             index+=1
         start_value += 100

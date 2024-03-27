@@ -123,11 +123,6 @@ def scrape_steam_page(url):
                     mycursor.execute(sql, val)
                     games_db.commit()
 
-                sql = "SELECT genre_id FROM game_genre WHERE game_id = (%s)"
-                val = (index,)
-                mycursor.execute(sql, val)
-                results = mycursor.fetchall()
-
             # print out all information about the game
             print(f"Game {index}:")
             print(f"Name: {name}")
