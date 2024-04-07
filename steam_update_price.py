@@ -37,15 +37,6 @@ results = mycursor.fetchall()
 for row in results:
     games_prices[row[0]] = row[1]
 
-# function to stop errors if a certain class doesn't exist
-def error_handle(container_1, class_name, variable):
-    if container_1.find('div', class_=class_name):
-        variable = container_1.find('div', class_=class_name).text.strip()
-    else:
-        failed = True
-        variable = f"Failed to find {variable}"
-    return variable
-
 steam_url = "https://store.steampowered.com/search/?sort_by=_ASC&filter=topsellers&os=win&supportedlang=english"
 
 # initialise web driver
@@ -71,7 +62,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             # if condition for when website should finish scrolling
-            if i > 4:
+            if i > 6:
                 break
         
         updated_html = driver.page_source
@@ -91,31 +82,42 @@ def scrape_steam_page(url):
             # container for price
             price_tag = game.find('div', class_='col search_price_discount_combined responsive_secondrow')
             # retrieving and error handling price
-            price = error_handle(price_tag, "discount_final_price", "price")
+            if price_tag.find('div', class_="discount_final_price"):
+                price = price_tag.find('div', class_="discount_final_price").text.strip()
+            else:
+                failed = True
+                price = f"Failed to find price"
             # getting link
             link = game.get('href')
 
-            # getting website for each individual game and parsing it
-            game_page = requests.get(link)
-            soup2 = BeautifulSoup(game_page.content, 'html.parser')
-            # error handling and retrieving description
-            if soup2.find(id="aboutThisGame"):
-                description_container = soup2.find(id="aboutThisGame")
-                description = description_container.find(class_="game_area_description").text.strip()
-            else:
-                failed = True
-                description = "Failed to find description"
-            # error handling for finding genre and developer
-            if soup2.find(id="genresAndManufacturer"):
-                genre_container = soup2.find(id="genresAndManufacturer")
-                if genre_container.find('span'):
-                    genres = genre_container.find('span').text.strip()
-                    genres_list = genres.split(', ')
-                    developer = genre_container.find('div', class_="dev_row").find('a').text.strip()
-            else:
-                genres = "Failed to find genre"
-                developer = "Failed to find developer"
-                failed = True
+            if name not in games_prices:
+                # getting website for each individual game and parsing it
+                game_page = requests.get(link)
+                soup2 = BeautifulSoup(game_page.content, 'html.parser')
+                # error handling for if the game is actually a DLC
+                if soup2.find('div', class_="game_area_bubble game_area_dlc_bubble"):
+                    dlc_container = soup2.find('div', class_="game_area_bubble game_area_dlc_bubble")
+                    dlc_text = dlc_container.find('h1').text.strip()
+                    if dlc_text == "Downloadable Content":
+                        failed = True
+                # error handling and retrieving description
+                if soup2.find(id="aboutThisGame"):
+                    description_container = soup2.find(id="aboutThisGame")
+                    description = description_container.find(class_="game_area_description").text.strip()
+                else:
+                    failed = True
+                    description = "Failed to find description"
+                # error handling for finding genre and developer
+                if soup2.find(id="genresAndManufacturer"):
+                    genre_container = soup2.find(id="genresAndManufacturer")
+                    if genre_container.find('span'):
+                        genres = genre_container.find('span').text.strip()
+                        genres_list = genres.split(', ')
+                        developer = genre_container.find('div', class_="dev_row").find('a').text.strip()
+                else:
+                    genres = "Failed to find genre"
+                    developer = "Failed to find developer"
+                    failed = True
             
             # checking if game already in database
             if name in games_prices:
@@ -161,11 +163,6 @@ def scrape_steam_page(url):
             # print out all information about the game
             print(f"Game {index}:")
             print(f"Name: {name}")
-            print(f"Price: {price}")
-            print(f"Link: {link}")
-            print(f"Genre: {genres_list}")
-            print(f"Developer: {developer}")
-
             print()
             # increasing index for game by 1 each time
             index+=1

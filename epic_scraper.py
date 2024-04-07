@@ -94,11 +94,9 @@ def scrape_epic_page():
                 # sql to update epic price
                 sql = "UPDATE games SET epic_price = (%s) WHERE game_id = (%s)"
                 val = (price, matches[0])
-                yes_no = input("Input")
-                if yes_no == "y":
-                    mycursor.execute(sql, val)
-                    games_db.commit()
-                    print(mycursor.rowcount, "details updated")
+                mycursor.execute(sql, val)
+                games_db.commit()
+                print(mycursor.rowcount, "details updated")
 
             index+=1
         start_value += 100
