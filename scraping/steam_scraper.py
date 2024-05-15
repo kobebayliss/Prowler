@@ -62,7 +62,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             # if condition for when website should finish scrolling
-            if i > 6:
+            if i > 8:
                 break
         
         updated_html = driver.page_source
@@ -100,6 +100,14 @@ def scrape_steam_page(url):
                     dlc_text = dlc_container.find('h1').text.strip()
                     if dlc_text == "Downloadable Content":
                         failed = True
+                # error handling and scraping game's image
+                if soup2.find(id="gameHeaderImageCtn"):
+                    image_container = soup2.find(id="gameHeaderImageCtn")
+                    game_image_tag = image_container.find('img')
+                    game_image = game_image_tag.get('src')
+                else:
+                    game_image = "Failed to find image"
+                    failed = True
                 # error handling and retrieving description
                 if soup2.find(id="aboutThisGame"):
                     description_container = soup2.find(id="aboutThisGame")
@@ -133,9 +141,9 @@ def scrape_steam_page(url):
             else:
                 # here, the game isn't in the database so we insert a new record for it
                 # SQL statement to insert the game's information into the prowler_games database
-                sql = "INSERT INTO games (game_name, steam_price, epic_price, game_picture, game_developer, game_description) VALUES (%s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO games (game_name, steam_price, epic_price, game_developer, game_description, game_image) VALUES (%s, %s, %s, %s, %s, %s)"
                 # values to insert
-                val = (name, price, 0, "N/A", developer, description)
+                val = (name, price, 0, developer, description, game_image)
                 if failed == False:
                     # adding values and saving them
                     mycursor.execute(sql, val)
