@@ -1,5 +1,3 @@
-"use client"
-
 import React from 'react'
 import Nav from '@/components/nav'
 import { Card, CardContent } from "@/components/ui/card"
@@ -19,13 +17,11 @@ export default function HomePage() {
         <CarouselContent>
           {Array.from({ length: 5 }).map((_, index) => (
             <CarouselItem key={index}>
-              <div className="p-1">
-                <Card>
-                  <CardContent className="flex items-center justify-center p-6">
-                    <img src="/images/cyberpunk.jpg" alt="Cyberpunk image"/>
-                  </CardContent>
-                </Card>
-              </div>
+              <Card>
+                <CardContent className="flex items-center justify-center p-0 border-0">
+                  <img src="/images/cyberpunk.jpg" alt="Cyberpunk image" className="w-full h-auto"/>
+                </CardContent>
+              </Card>
             </CarouselItem>
           ))}
         </CarouselContent>

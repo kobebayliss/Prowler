@@ -30,7 +30,6 @@ const config = {
         'lightbutton': '#46e7f0',
         'buttonhover': '#3157bb',
         'lightbuttonhover': '#11cdd7',
-        border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
