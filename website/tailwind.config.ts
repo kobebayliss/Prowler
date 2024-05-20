@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      brightness: {
+        60: '.65',
+      },
       spacing: {
         'restscreen': '95.2vh',
         'carouselsize': '1200px',
@@ -65,6 +68,7 @@ const config = {
         '18': '72px',
         '4.5': '18px',
         '4.5px': '4.5px',
+        'overlay': '1044px',
       },
       height: {
         '4.5': '18px',
