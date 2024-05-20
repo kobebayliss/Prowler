@@ -20,18 +20,14 @@ const config = {
     extend: {
       spacing: {
         'restscreen': '95.2vh',
-        'carouselsize': '92vh',
+        'carouselsize': '1200px',
       },
       colors: {
-        'midnight': '#0d1426',
+        'midnight': '#090a0b',
         'offwhite': '#EFEFEF',
-        'greyish': '#D1D1D1',
-        'lightmidnight': '#24386a',
-        'button': '#4f73d1',
-        'lightbutton': '#46e7f0',
-        'buttonhover': '#274594',
-        'lightbuttonhover': '#0fb1ba',
-        'grey': '#a7a7a7',
+        'greyish': '#c9c9c9',
+        'grey': '#8c8c8c',
+        'lightmidnight': '#27272a',
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -68,13 +64,18 @@ const config = {
       margin: {
         '18': '72px',
         '4.5': '18px',
+        '4.5px': '4.5px',
       },
       height: {
         '4.5': '18px',
+        'carousel': '1200px',
       },
       width: {
         '4.5': '18px',
         '30': '120px',
+        '100': '550px',
+        '70%': '70%',
+        'carousel': '1200px',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -100,17 +101,21 @@ const config = {
     fontFamily: {
       azosans: ["azosans", "sans-serif"],
       galvji: ["galvji", "sans-serif"],
+      inter: ["inter", "sans-serif"],
+      roboto: ["roboto", "sans-serif"],
+      interbold: ["interbold", "sans-serif"],
+      interlight: ["interlight", "sans-serif"],
     },
     fontSize: {
       sm: '0.8rem',
       base: '1rem',
-      xl: '1.25rem',
+      xl: '1.75rem',
       '2xl': '1.563rem',
       '3xl': '1.953rem',
       '4xl': '2.441rem',
       '5xl': '3.052rem',
       'header': '1.8rem',
-      'title': '7rem',
+      'title': '6.4rem',
     }
   },
   plugins: [require("tailwindcss-animate")],

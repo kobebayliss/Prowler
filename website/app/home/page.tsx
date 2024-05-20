@@ -26,11 +26,20 @@ export default function HomePage() {
 
   return (
     <div className="flex h-[calc(100vh-65px)]">
-      <p className="text-offwhite text-title font-azosans self-center ml-8 mb-80">Spend less on games.</p>
-      <div className="flex flex-grow justify-end mr-6">
+      <div className="w-full content-center">
+      <p className="text-offwhite text-title font-inter ml-14 mb-4">Spend less on games.</p>
+      <p className="text-offwhite text-xl font-interlight ml-14 mb-14">Find the lowest prices for thousands of games simply by searching,<br/>  or browse through games on the browse tab.</p>
+      <input 
+        type="text"
+        placeholder="Search for games here..." 
+        className="h-16 ml-14 mb-60 p-5 w-70% rounded-2xl custom-placeholder input-focus bg-lightmidnight"
+      />
+      </div>
+      <div className="flex justify-end mr-10 relative">
+        <div className="absolute pointer-events-none h-carousel w-carousel self-center rounded-4xl bg-black z-10 opacity-0 hover:opacity-60 transition-all duration-200"/>
         <Carousel 
           plugins={[plugin.current]}
-          className="self-center size-carouselsize"
+          className="self-center size-carouselsize z-0"
           onMouseEnter={plugin.current.stop}
           onMouseLeave={plugin.current.reset}
         >
@@ -43,8 +52,8 @@ export default function HomePage() {
                       src={`/images/${image}`}
                       alt="Game Image" 
                       className="rounded-4xl"
-                      width={1300}
-                      height={1300}
+                      width={1200}
+                      height={1200}
                     />
                   </CardContent>
                 </Card>

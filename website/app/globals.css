@@ -88,4 +88,30 @@
     font-family: 'galvji';
     src: url('fonts/galvji.ttf');
   }
-  
+  @font-face {
+    font-family: 'inter';
+    src: url('fonts/Inter-Medium.ttf');
+  }
+  @font-face {
+    font-family: 'roboto';
+    src: url('fonts/Roboto-Medium.ttf');
+  }
+  @font-face {
+    font-family: 'interbold';
+    src: url('fonts/Inter-Bold.ttf');
+  }
+  @font-face {
+    font-family: 'interlight';
+    src: url('fonts/Inter-Light.ttf');
+  }
+  .custom-placeholder::placeholder {
+    color: #8c8c8c;
+    font-size: 18px;
+    font-family: inter;
+  }
+  .input-focus:focus {
+    outline: 1px solid #efefef;
+  }
+  input {
+    color: #efefef;
+  }
