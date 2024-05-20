@@ -20,6 +20,7 @@ const config = {
     extend: {
       spacing: {
         'restscreen': '95.2vh',
+        'carouselsize': '92vh',
       },
       colors: {
         'midnight': '#0d1426',
@@ -28,8 +29,9 @@ const config = {
         'lightmidnight': '#24386a',
         'button': '#4f73d1',
         'lightbutton': '#46e7f0',
-        'buttonhover': '#3157bb',
-        'lightbuttonhover': '#11cdd7',
+        'buttonhover': '#274594',
+        'lightbuttonhover': '#0fb1ba',
+        'grey': '#a7a7a7',
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -78,6 +80,7 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        '4xl': '3rem',
       },
       keyframes: {
         "accordion-down": {
@@ -107,6 +110,7 @@ const config = {
       '4xl': '2.441rem',
       '5xl': '3.052rem',
       'header': '1.8rem',
+      'title': '7rem',
     }
   },
   plugins: [require("tailwindcss-animate")],

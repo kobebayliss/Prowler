@@ -18,7 +18,10 @@ export default function Nav() {
         </div>
         <div className="flex items-end mr-4">
           <a className="font-galvji text-base text-offwhite mb-2 mr-4 px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-10" href="#">Login</a>
-          <a className="flex bg-transparent bg-gradient-to-r from-button to-lightbutton hover:from-buttonhover hover:to-lightbuttonhover w-30 h-10 mt-2 text-offwhite font-galvji rounded-lg transition duration-100 font-bold place-content-center items-center mb-1" href="../signup">Sign Up<img className="h-4.5 w-4.5 ml-2" src="/images/arrowtopright.png" alt="Arrow"></img></a>
+          <a className="flex bg-transparent bg-gradient-to-r from-button to-lightbutton hover:from-buttonhover hover:to-lightbuttonhover w-30 h-10 mt-2 text-offwhite font-galvji rounded-lg font-bold place-content-center items-center mb-1" 
+          href="../signup">
+            Sign Up
+            <img className="h-4.5 w-4.5 ml-2" src="/images/arrowtopright.png" alt="Arrow"></img></a>
         </div>
       </div>
       <div className="w-full h-px bg-lightmidnight mt-1"></div>
