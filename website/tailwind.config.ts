@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -19,14 +19,14 @@ const config = {
     },
     extend: {
       brightness: {
-        60: '.65',
+        80: '.75',
       },
       spacing: {
         'restscreen': '95.2vh',
         'carouselsize': '1200px',
       },
       colors: {
-        'midnight': '#090a0b',
+        'midnight': '#141618',
         'offwhite': '#EFEFEF',
         'greyish': '#c9c9c9',
         'grey': '#8c8c8c',
@@ -65,21 +65,28 @@ const config = {
         },
       },
       margin: {
+        '2.3': '9.2px',
         '18': '72px',
+        '13': '52px',
         '4.5': '18px',
         '4.5px': '4.5px',
         'overlay': '1044px',
+        'searchmargin': '21vh',
       },
       height: {
         '4.5': '18px',
         'carousel': '1200px',
+        'popup': '14vh',
+        'line': '3vh',
       },
       width: {
+        '0.2': '0.5px',
         '4.5': '18px',
         '30': '120px',
         '100': '550px',
-        '70%': '70%',
-        'carousel': '1200px',
+        '75%': '75%',
+        'carousel': '700px',
+        'half': '50%',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -88,6 +95,10 @@ const config = {
         '4xl': '3rem',
       },
       keyframes: {
+        slide: {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -100,6 +111,7 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        slide: 'slide 0.15s ease-out forwards',
       },
     },
     fontFamily: {
@@ -113,16 +125,17 @@ const config = {
     fontSize: {
       sm: '0.8rem',
       base: '1rem',
-      xl: '1.75rem',
+      'prices': '2.2vh',
+      xl: '2.2vh',
       '2xl': '1.563rem',
       '3xl': '1.953rem',
       '4xl': '2.441rem',
       '5xl': '3.052rem',
       'header': '1.8rem',
-      'title': '6.4rem',
+      'title': '7vh',
     }
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;
