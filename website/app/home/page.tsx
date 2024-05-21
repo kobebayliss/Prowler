@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from 'next/image';
+import { db } from "@/config/db.js";
 import {
   Carousel,
   CarouselContent,
