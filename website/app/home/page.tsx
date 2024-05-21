@@ -60,7 +60,9 @@ export default function HomePage() {
                           layout="fill"
                           objectFit="cover"
                         />
-                        <div className={`flex flex-col items-center absolute bottom-0 w-full h-popup bg-lightmidnight rounded-b-4xl z-10 transition-all duration-150 ${isHovered ? 'animate-slide' : 'hidden'}`}>
+                        <div 
+                        className={`flex flex-col items-center absolute bottom-0 w-full h-popup bg-lightmidnight rounded-b-4xl z-10 transition-all duration-200 
+                        ${isHovered ? 'animate-slideup' : 'animate-slidedown'}`}>
                           <p className="font-inter text-2xl text-offwhite mt-3.5">Ghost of Tsushima</p>
                           <div className="flex">
                             <p className="font-interlight text-prices text-offwhite mt-2">$59.99</p>

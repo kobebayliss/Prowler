@@ -95,9 +95,13 @@ const config = {
         '4xl': '3rem',
       },
       keyframes: {
-        slide: {
+        slideup: {
           '0%': { transform: 'translateY(100%)' },
           '100%': { transform: 'translateY(0)' },
+        },
+        slidedown: {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(100%)' },
         },
         "accordion-down": {
           from: { height: "0" },
@@ -111,7 +115,8 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        slide: 'slide 0.15s ease-out forwards',
+        slideup: 'slideup 0.2s ease-out forwards',
+        slidedown: 'slidedown 0.2s ease-out forwards',
       },
     },
     fontFamily: {
