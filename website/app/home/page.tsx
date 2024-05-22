@@ -36,6 +36,15 @@ export default function HomePage() {
           Find the lowest prices for thousands of games simply by searching,<br />
           or browse through games on the browse tab.
         </p>
+        <form className="w-34% ml-12 h-searchbox mb-40">   
+            <div className="relative">
+                <IoIosSearch className="absolute text-offwhite w-auto h-search ml-4.5 top-1/2 transform -translate-y-1/2"/>
+                <input 
+                className="w-full pl-19 p-5 text-search placeholder:font-inter placeholder:text-grey text-offwhite font-inter border border-offwhite rounded-searchbox bg-lightmidnight" 
+                placeholder="Search for a game..."
+                />
+            </div>
+        </form>
       </div>
       <div className="flex w-half justify-end relative">
         <Carousel 

@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      padding: {
+        '19': '70px',
+      },
       brightness: {
         80: '.75',
       },
@@ -29,7 +32,7 @@ const config = {
         'midnight': '#141618',
         'offwhite': '#EFEFEF',
         'greyish': '#c9c9c9',
-        'grey': '#8c8c8c',
+        'grey': '#7a7a7a',
         'lightmidnight': '#27272a',
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -66,6 +69,7 @@ const config = {
       },
       margin: {
         '2.3': '9.2px',
+        '19': '76px',
         '18': '72px',
         '13': '52px',
         '4.5': '18px',
@@ -79,14 +83,16 @@ const config = {
         'carousel': '1200px',
         'popup': '12vh',
         'line': '3vh',
-        'search': '5vh',
+        'search': '2.2rem',
+        'searchbox': '4rem',
       },
       width: {
+        '0.4': '1.5px',
         '0.2': '0.5px',
         '4.5': '18px',
         '30': '120px',
         '100': '550px',
-        '75%': '70%',
+        '34%': '34%',
         '100%': '100%',
         'carousel': '700px',
         'half': '50%',
@@ -96,6 +102,7 @@ const config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
         '4xl': '3rem',
+        'searchbox': '0.6rem',
       },
       keyframes: {
         slideup: {
@@ -133,6 +140,7 @@ const config = {
     fontSize: {
       sm: '0.8rem',
       base: '1rem',
+      'search': '1.35vh',
       'prices': '2vh',
       xl: '2.2vh',
       '2xl': '2.9vh',
