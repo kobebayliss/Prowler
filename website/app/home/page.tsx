@@ -29,12 +29,12 @@ export default function HomePage() {
   return (
     <div className="flex h-[calc(100vh-65px)]">
       <div className="w-full content-center">
-        <p className="text-offwhite text-title font-inter ml-10 mb-4">Spend less on games.</p>
+        <p className="text-offwhite text-title font-inter ml-10 mb-1">Spend less on games.</p>
         <p className="text-offwhite text-xl font-interlight ml-10 mb-13">
           Find the lowest prices for thousands of games simply by searching,<br />
           or browse through games on the browse tab.
         </p>
-        <form className="w-34% ml-10 h-searchbox mb-40">   
+        <form className="w-34% ml-10 h-searchbox mb-44">   
             <div className="relative">
                 <IoIosSearch className="absolute text-offwhite w-auto h-search ml-4.5 top-1/2 transform -translate-y-1/2"/>
                 <input 
