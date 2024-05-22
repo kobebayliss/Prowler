@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      ringWidth: {
+        '0.5': '0.5px',
+      },
       padding: {
         '19': '70px',
       },
@@ -92,7 +95,7 @@ const config = {
         '4.5': '18px',
         '30': '120px',
         '100': '550px',
-        '34%': '34%',
+        '34%': '45%',
         '100%': '100%',
         'carousel': '700px',
         'half': '50%',
@@ -140,7 +143,7 @@ const config = {
     fontSize: {
       sm: '0.8rem',
       base: '1rem',
-      'search': '1.35vh',
+      'search': '2.0vh',
       'prices': '2vh',
       xl: '2.2vh',
       '2xl': '2.9vh',
