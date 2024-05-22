@@ -6,6 +6,8 @@ import Autoplay from "embla-carousel-autoplay";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from 'next/image';
 import { db } from "@/config/db.js";
+import { IoIosSearch } from "react-icons/io";
+import { Input } from "@/components/ui/input"
 import {
   Carousel,
   CarouselContent,
@@ -34,11 +36,6 @@ export default function HomePage() {
           Find the lowest prices for thousands of games simply by searching,<br />
           or browse through games on the browse tab.
         </p>
-        <input 
-          type="text"
-          placeholder="Search for games here..." 
-          className="h-15 ml-12 mb-searchmargin p-5 w-75% rounded-2xl custom-placeholder input-focus bg-lightmidnight"
-        />
       </div>
       <div className="flex w-half justify-end relative">
         <Carousel 

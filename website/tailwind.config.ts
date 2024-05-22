@@ -79,6 +79,7 @@ const config = {
         'carousel': '1200px',
         'popup': '12vh',
         'line': '3vh',
+        'search': '5vh',
       },
       width: {
         '0.2': '0.5px',
@@ -86,6 +87,7 @@ const config = {
         '30': '120px',
         '100': '550px',
         '75%': '70%',
+        '100%': '100%',
         'carousel': '700px',
         'half': '50%',
       },

@@ -104,14 +104,3 @@
     font-family: 'interlight';
     src: url('fonts/Inter-Light.ttf');
   }
-  .custom-placeholder::placeholder {
-    color: #8c8c8c;
-    font-size: 18px;
-    font-family: inter;
-  }
-  .input-focus:focus {
-    outline: 1px solid #efefef;
-  }
-  input {
-    color: #efefef;
-  }
