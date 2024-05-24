@@ -14,6 +14,14 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
+const carouselNames =[
+  "Ghost of Tsushima",
+  "Sea of Thieves",
+  "Cyberpunk 2077",
+  "Elden Ring",
+  "No Man's Sky",
+];
+
 const carouselImages = [
   "tsushima.jpg",
   "seaofthieves.jpg",
@@ -30,15 +38,15 @@ export default function HomePage() {
     <div className="flex h-[calc(100vh-65px)]">
       <div className="w-full content-center">
         <p className="text-offwhite text-title font-inter ml-10 mb-1">Spend less on games.</p>
-        <p className="text-offwhite text-xl font-interlight ml-10 mb-13">
+        <p className="text-offwhite text-xl font-interlight ml-10 mb-8">
           Find the lowest prices for thousands of games simply by searching,<br />
           or browse through games on the browse tab.
         </p>
-        <form className="w-34% ml-10 h-searchbox mb-44">   
+        <form className="w-34% ml-10 h-searchbox mb-40">   
             <div className="relative">
                 <IoIosSearch className="absolute text-offwhite w-auto h-search ml-4.5 top-1/2 transform -translate-y-1/2"/>
                 <input 
-                className="w-full pl-19 p-5 text-search placeholder:font-inter placeholder:text-grey text-offwhite font-inter rounded-searchbox bg-lightmidnight focus:outline-none focus:ring-1 focus:ring-offwhite transition-all duration-100" 
+                className="w-full pl-19 p-4.5 text-search placeholder:font-inter placeholder:text-grey text-offwhite font-inter rounded-searchbox bg-lightmidnight focus:outline-none focus:ring-1 focus:ring-offwhite transition-all duration-100" 
                 placeholder="Search for a game..."
                 />
             </div>
@@ -68,7 +76,7 @@ export default function HomePage() {
                         <div 
                         className={`flex flex-col items-center absolute bottom-0 w-full h-popup bg-lightmidnight rounded-b-4xl z-10 transition-all duration-200 
                         ${isHovered ? 'animate-slideup' : 'animate-slidedown'}`}>
-                          <p className="font-inter text-2xl text-offwhite mt-top">Ghost of Tsushima</p>
+                          <p className="font-inter text-2xl text-offwhite mt-top">{carouselNames[index]}</p>
                           <div className="flex">
                             <p className="font-interlight text-prices text-offwhite mt-2">$59.99</p>
                             <div className="bg-grey h-line w-0.2 mt-2.3 mx-8"/>

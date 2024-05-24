@@ -3,7 +3,7 @@ import type { Config } from "tailwindcss";
 const config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
+    './pages/**/*.{ts,tsx,js}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
@@ -18,10 +18,14 @@ const config = {
       },
     },
     extend: {
+      gridTemplateColumns: {
+        'autofit': 'repeat(auto-fit, minmax(400px, 1fr))',
+      },
       ringWidth: {
         '0.5': '0.5px',
       },
       padding: {
+        '4.5': '18px',
         '19': '70px',
       },
       brightness: {
@@ -71,11 +75,14 @@ const config = {
         },
       },
       margin: {
+        '7.5': '30px',
         '2.3': '9.2px',
+        '22': '84px',
         '19': '76px',
         '18': '72px',
         '13': '52px',
         '4.5': '18px',
+        '9': '38px',
         '4.5px': '4.5px',
         'overlay': '1044px',
         'searchmargin': '21vh',
@@ -87,7 +94,7 @@ const config = {
         'popup': '12vh',
         'line': '3vh',
         'search': '2.2rem',
-        'searchbox': '4rem',
+        'searchbox': '4vh',
       },
       width: {
         '0.4': '1.5px',
@@ -95,7 +102,8 @@ const config = {
         '4.5': '18px',
         '30': '120px',
         '100': '550px',
-        '34%': '48%',
+        '120': '440px',
+        '34%': '50%',
         '100%': '100%',
         'carousel': '700px',
         'half': '50%',
@@ -147,7 +155,7 @@ const config = {
       'prices': '2vh',
       xl: '2.2vh',
       '2xl': '2.9vh',
-      '3xl': '1.953rem',
+      '3xl': '2.05rem',
       '4xl': '2.441rem',
       '5xl': '3.052rem',
       'header': '1.8rem',

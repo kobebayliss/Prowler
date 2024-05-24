@@ -9,7 +9,7 @@ export default function Nav() {
         <div className="flex items-start">
           <a className="flex" href="../home">
             <img className="h-14 w-auto mt-1 pl-6" src="/images/prowlerlogo.png" alt="Prowler Logo"></img>
-            <div className="font-azosans font-bold text-header text-offwhite mt-3 pr-8">Prowler</div>
+            <div className="font-azosans text-header text-offwhite mt-3 pr-8">Prowler</div>
           </a>
           <ul className="flex items-center gap-8 ml-10 mt-4">
             <a className="font-inter text-base text-grey hover:text-offwhite px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-10" href="../browse">Browse</a>
