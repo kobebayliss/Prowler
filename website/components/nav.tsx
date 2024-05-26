@@ -12,13 +12,13 @@ export default function Nav() {
             <div className="font-azosans text-header text-offwhite mt-3 pr-8">Prowler</div>
           </a>
           <ul className="flex items-center gap-8 ml-10 mt-4">
-            <a className="font-inter text-base text-grey hover:text-offwhite px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-10" href="../browse">Browse</a>
-            <a className="font-inter text-base text-grey hover:text-offwhite px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-10" href="../faqs">FAQs</a>
-            <a className="font-inter text-base text-grey hover:text-offwhite px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-10" href="../report">Report Error</a>
+            <a className="font-inter text-base text-grey hover:text-offwhite px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-200" href="../browse">Browse</a>
+            <a className="font-inter text-base text-grey hover:text-offwhite px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-200" href="../faqs">FAQs</a>
+            <a className="font-inter text-base text-grey hover:text-offwhite px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-200" href="../report">Report Error</a>
           </ul>
         </div>
         <div className="flex items-end mr-3">
-          <a className="font-inter text-base text-offwhite mb-2 mr-4 mt-3.5 px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-10" href="#">Login</a>
+          <a className="font-inter text-base text-offwhite mb-2 mr-4 mt-3.5 px-3 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-200" href="#">Login</a>
           <a href="../signup">
           <Button className="mb-4.5px">
             <p className="ml-3">Sign Up</p>

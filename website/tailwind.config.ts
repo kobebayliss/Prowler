@@ -10,6 +10,10 @@ const config = {
   ],
   prefix: "",
   theme: {
+    screens: {
+      'lg': '1050px',
+      'tablet': '710px',
+    },
     container: {
       center: true,
       padding: "2rem",
@@ -18,6 +22,9 @@ const config = {
       },
     },
     extend: {
+      scale: {
+        '103': '1.03',
+      },
       gridTemplateColumns: {
         'autofit': 'repeat(auto-fit, minmax(400px, 1fr))',
       },
@@ -29,6 +36,7 @@ const config = {
         '19': '70px',
       },
       brightness: {
+        90: '.85',
         80: '.75',
       },
       spacing: {
@@ -39,7 +47,7 @@ const config = {
         'midnight': '#141618',
         'offwhite': '#EFEFEF',
         'greyish': '#c9c9c9',
-        'grey': '#7a7a7a',
+        'grey': '#7f7f7f',
         'lightmidnight': '#27272a',
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -75,26 +83,32 @@ const config = {
         },
       },
       margin: {
+        'responsivemargin': '14%',
         '7.5': '30px',
-        '2.3': '9.2px',
+        '2.3': '6px',
         '22': '84px',
         '19': '76px',
         '18': '72px',
         '13': '52px',
         '4.5': '18px',
         '9': '38px',
+        '0.3': '1px',
         '4.5px': '4.5px',
         'overlay': '1044px',
         'searchmargin': '21vh',
-        'top': '1.4vh',
+        'top': '1vh',
       },
       height: {
+        'cardimage': '66%',
         '4.5': '18px',
         'carousel': '1200px',
         'popup': '12vh',
-        'line': '3vh',
+        'line': '3.5vh',
         'search': '2.2rem',
+        'logos': '35px',
         'searchbox': '4vh',
+        '70': '290px',
+        '5.5': '22px',
       },
       width: {
         '0.4': '1.5px',
@@ -102,9 +116,11 @@ const config = {
         '4.5': '18px',
         '30': '120px',
         '100': '550px',
-        '120': '440px',
+        'card': '100%',
         '34%': '50%',
         '100%': '100%',
+        '26': '100px',
+        '38': '164px',
         'carousel': '700px',
         'half': '50%',
       },
@@ -151,6 +167,7 @@ const config = {
     fontSize: {
       sm: '0.8rem',
       base: '1rem',
+      'filter': '1.08rem',
       'search': '2.0vh',
       'prices': '2vh',
       xl: '2.2vh',
