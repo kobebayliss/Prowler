@@ -105,10 +105,11 @@ const config = {
         'popup': '12vh',
         'line': '3.5vh',
         'search': '2.2rem',
-        'logos': '35px',
+        'logos': '3.2vh',
         'searchbox': '4vh',
         '70': '290px',
         '5.5': '22px',
+        'card': '34vh',
       },
       width: {
         '0.4': '1.5px',

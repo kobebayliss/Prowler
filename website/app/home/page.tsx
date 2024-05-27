@@ -79,13 +79,13 @@ export default function HomePage() {
                         className={`flex flex-col items-center absolute bottom-0 w-full h-popup bg-lightmidnight rounded-b-4xl z-10 transition-all duration-200 
                         ${isHovered ? 'animate-slideup' : 'animate-slidedown'}`}>
                           <p className="font-inter text-2xl text-offwhite mt-top">{carouselNames[index]}</p>
-                          <div className="flex mt-0.5">
-                            <FaSteam className="text-offwhite mt-0.5 mr-5 h-logos w-auto"/>
-                            <p className="font-interlight text-prices text-offwhite mt-2">$59.99</p>
-                            <div className="bg-grey h-line w-0.2 mt-2.3 mx-8"/>
-                            <p className="font-interlight text-prices text-offwhite mt-2">$59.99</p>
-                            <SiEpicgames className="text-offwhite mt-0.5 ml-5 h-logos w-auto"/>
-                          </div>
+                          <div className="flex mt-2 items-center">
+                              <FaSteam className="text-offwhite mr-5 h-logos w-auto"/>
+                              <p className="font-interlight text-prices text-offwhite mt-1">$59.99</p>
+                              <div className="bg-grey h-line w-0.2 mt-1.5 mx-8"/>
+                              <p className="font-interlight text-prices text-offwhite mt-1">$59.99</p>
+                              <SiEpicgames className="text-offwhite ml-5 h-logos w-auto"/>
+                            </div>
                         </div>
                       </a>
                     ) : (

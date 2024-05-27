@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 
 export default function Nav() {
   return (
-    <div>
-      <div className="flex justify-between items-center">
+    <div className="sticky top-0 z-50 bg-midnight w-full backdrop-blur supports-[backdrop-filter]:bg-midnight/70">
+      <div className="flex justify-between items-center pb-1">
         <div className="flex items-start">
           <a className="flex" href="../home">
             <img className="h-14 w-auto mt-1 pl-6" src="/images/prowlerlogo.png" alt="Prowler Logo"></img>
@@ -27,7 +27,7 @@ export default function Nav() {
           </a>
         </div>
       </div>
-      <div className="w-full h-px bg-lightmidnight mt-1"></div>
+      <div className="w-full h-px bg-lightmidnight"></div>
     </div>
   );
 }

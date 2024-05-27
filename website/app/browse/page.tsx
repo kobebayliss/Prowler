@@ -35,7 +35,7 @@ export default function BrowsePage() {
             <div className="grid gap-x-6 gap-y-8 grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 mt-1 pb-8 w-full px-9">
                 {Array.from({ length: cardCount }).map((_, index) => (
                     <a href="#">
-                        <div key={index} className="h-70 w-card bg-lightmidnight rounded-xl hover:scale-103 transition-all duration-300">
+                        <div key={index} className="h-card w-card bg-lightmidnight rounded-xl hover:scale-103 transition-all duration-300">
                             <Image
                                 src="/images/tsushima.jpg"
                                 alt="Game image"
@@ -45,12 +45,12 @@ export default function BrowsePage() {
                             />
                             <div className="flex flex-col items-center">
                             <p className="font-inter text-2xl text-offwhite mt-top">Ghost of Tsushima</p>
-                            <div className="flex mt-1">
-                                <FaSteam className="text-offwhite mt-0.5 mr-5 h-logos w-auto"/>
-                                <p className="font-interlight text-prices text-offwhite mt-2">$59.99</p>
-                                <div className="bg-grey h-line w-0.2 mt-2.3 mx-8"/>
-                                <p className="font-interlight text-prices text-offwhite mt-2">$59.99</p>
-                                <SiEpicgames className="text-offwhite mt-0.5 ml-5 h-logos w-auto"/>
+                            <div className="flex mt-1 items-center">
+                                <FaSteam className="text-offwhite mr-5 h-logos w-auto"/>
+                                <p className="font-interlight text-prices text-offwhite mt-1">$59.99</p>
+                                <div className="bg-grey h-line w-0.2 mt-1.5 mx-8"/>
+                                <p className="font-interlight text-prices text-offwhite mt-1">$59.99</p>
+                                <SiEpicgames className="text-offwhite ml-5 h-logos w-auto"/>
                             </div>
                             </div>
                         </div>
