@@ -10,7 +10,7 @@ import { FaFilter } from "react-icons/fa";
 
 
 export default function BrowsePage() {
-    const cardCount = 9;
+    const cardCount = 18;
 
     return (
         <div>
@@ -45,12 +45,12 @@ export default function BrowsePage() {
                             />
                             <div className="flex flex-col items-center">
                             <p className="font-inter text-2xl text-offwhite mt-top">Ghost of Tsushima</p>
-                            <div className="flex mt-1 items-center">
-                                <FaSteam className="text-offwhite mr-5 h-logos w-auto"/>
-                                <p className="font-interlight text-prices text-offwhite mt-1">$59.99</p>
-                                <div className="bg-grey h-line w-0.2 mt-1.5 mx-8"/>
-                                <p className="font-interlight text-prices text-offwhite mt-1">$59.99</p>
-                                <SiEpicgames className="text-offwhite ml-5 h-logos w-auto"/>
+                            <div className="flex mt-topper items-center">
+                                <FaSteam className="text-offwhite mr-seperate h-logos w-auto"/>
+                                <p className="font-interlight text-prices text-offwhite mt-em">$59.99</p>
+                                <div className="bg-grey h-line w-0.2 mt-em mx-linemargin"/>
+                                <p className="font-interlight text-prices text-offwhite mt-em">$59.99</p>
+                                <SiEpicgames className="text-offwhite ml-seperate h-logos w-auto"/>
                             </div>
                             </div>
                         </div>

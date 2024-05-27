@@ -104,3 +104,7 @@
     font-family: 'interlight';
     src: url('fonts/Inter-Light.ttf');
   }
+
+  html, body {
+    background-color: #141618;
+  }
