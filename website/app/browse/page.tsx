@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Image from 'next/image';
 import { IoIosSearch } from "react-icons/io";
 import { FaSteam } from "react-icons/fa";
@@ -8,9 +10,18 @@ import { SiEpicgames } from "react-icons/si";
 import { FaSortAlphaDown } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa";
 
-
 export default function BrowsePage() {
-    const cardCount = 18;
+    const [games, setGames] = useState([]);
+
+    useEffect(() => {
+        axios.get("http://localhost:8081/games")
+            .then(response => {
+                setGames(response.data);
+            })
+            .catch(error => {
+                console.error("There was an error fetching the game's information: ", error);
+            });
+    }, []);
 
     return (
         <div>
@@ -31,33 +42,33 @@ export default function BrowsePage() {
                     </a>
                 </div>
             </div>
-        <div className="flex justify-center w-full">
-            <div className="grid gap-x-6 gap-y-8 grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 mt-1 pb-8 w-full px-9">
-                {Array.from({ length: cardCount }).map((_, index) => (
-                    <a href="#">
-                        <div key={index} className="h-card w-card bg-lightmidnight rounded-xl hover:scale-103 transition-all duration-300">
-                            <Image
-                                src="/images/tsushima.jpg"
-                                alt="Game image"
-                                width={10000}
-                                height={10000}
-                                className="w-full h-cardimage rounded-t-xl"
-                            />
-                            <div className="flex flex-col items-center">
-                            <p className="font-inter text-2xl text-offwhite mt-top">Ghost of Tsushima</p>
-                            <div className="flex mt-topper items-center">
-                                <FaSteam className="text-offwhite mr-seperate h-logos w-auto"/>
-                                <p className="font-interlight text-prices text-offwhite mt-em">$59.99</p>
-                                <div className="bg-grey h-line w-0.2 mt-em mx-linemargin"/>
-                                <p className="font-interlight text-prices text-offwhite mt-em">$59.99</p>
-                                <SiEpicgames className="text-offwhite ml-seperate h-logos w-auto"/>
+            <div className="flex justify-center w-full">
+                <div className="grid gap-x-6 gap-y-8 grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 mt-1 pb-8 w-full px-9">
+                    {games.map((game) => (
+                        <a href="#" key={game.game_id}>
+                            <div className="h-card w-card bg-lightmidnight rounded-xl hover:scale-103 transition-all duration-300">
+                                <Image
+                                    src={game.game_image}
+                                    alt="Game image"
+                                    width={10000}
+                                    height={10000}
+                                    className="w-full h-cardimage rounded-t-xl"
+                                />
+                                <div className="flex flex-col items-center">
+                                    <p className="font-inter text-2xl text-offwhite mt-top">{game.game_name}</p>
+                                    <div className="flex mt-topper items-center">
+                                        <FaSteam className="text-offwhite mr-seperate h-logos w-auto"/>
+                                        <p className="font-interlight text-prices text-offwhite mt-em">{game.steam_price}</p>
+                                        <div className="bg-grey h-line w-0.2 mt-em mx-linemargin"/>
+                                        <p className="font-interlight text-prices text-offwhite mt-em">{game.epic_price}</p>
+                                        <SiEpicgames className="text-offwhite ml-seperate h-logos w-auto"/>
+                                    </div>
+                                </div>
                             </div>
-                            </div>
-                        </div>
-                    </a>
-                ))}
+                        </a>
+                    ))}
+                </div>
             </div>
-        </div>
         </div>
     );
 }

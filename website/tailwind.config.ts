@@ -12,7 +12,7 @@ const config = {
   theme: {
     screens: {
       'lg': '1050px',
-      'tablet': '710px',
+      'tablet': '670px',
     },
     container: {
       center: true,

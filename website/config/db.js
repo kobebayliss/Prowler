@@ -1,4 +1,4 @@
-const mysql = require("mysql");
+import mysql from "mysql";
 
 const db = mysql.createConnection({
     host: "localhost",
@@ -7,12 +7,12 @@ const db = mysql.createConnection({
     database: "prowler_games",
 });
 
-db.connect(err => {
+db.connect((err) => {
     if (err) {
-        console.error("Error connecting to MySQL database:", err);
-    } else {
-        console.log("Connected to MySQL database");
+        console.error("Database connection is failed: " + err.stack);
+        return;
     }
+    console.log("Connected to the database.");
 });
 
-export{db}
+export default db;
