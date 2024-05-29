@@ -143,7 +143,7 @@ def scrape_steam_page(url):
                 # SQL statement to insert the game's information into the prowler_games database
                 sql = "INSERT INTO games (game_name, steam_price, epic_price, game_developer, game_description, game_image) VALUES (%s, %s, %s, %s, %s, %s)"
                 # values to insert
-                val = (name, price, 0, developer, description, game_image)
+                val = (name, price, "N/A", developer, description, game_image)
                 if failed == False:
                     # adding values and saving them
                     mycursor.execute(sql, val)

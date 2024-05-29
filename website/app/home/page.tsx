@@ -48,7 +48,8 @@ export default function HomePage() {
             <div className="relative">
                 <IoIosSearch className="absolute text-offwhite w-auto h-search ml-4.5 top-1/2 transform -translate-y-1/2"/>
                 <input 
-                className="w-full pl-19 p-4.5 text-search placeholder:font-inter placeholder:text-grey text-offwhite font-inter rounded-searchbox bg-lightmidnight focus:outline-none focus:ring-1 focus:ring-offwhite transition-all duration-100" 
+                className="w-full pl-19 p-4.5 text-search placeholder:font-inter placeholder:text-grey text-offwhite font-inter 
+                rounded-searchbox bg-lightmidnight focus:outline-none focus:ring-1 focus:ring-offwhite transition-all duration-100" 
                 placeholder="Search for a game..."
                 />
             </div>
@@ -76,7 +77,8 @@ export default function HomePage() {
                           objectFit="cover"
                         />
                         <div 
-                        className={`flex flex-col items-center absolute bottom-0 w-full h-popup bg-lightmidnight rounded-b-4xl z-10 transition-all duration-200 
+                        className={`flex flex-col items-center absolute bottom-0 w-full h-popup 
+                        bg-lightmidnight rounded-b-4xl z-10 transition-all duration-200 
                         ${isHovered ? 'animate-slideup' : 'animate-slidedown'}`}>
                           <p className="font-inter text-2xl text-offwhite mt-top">{carouselNames[index]}</p>
                           <div className="flex mt-topper items-center">
@@ -88,7 +90,7 @@ export default function HomePage() {
                           </div>
                         </div>
                       </a>
-                    ) : (
+                      ) : (
                       <div className="w-full h-full bg-gray-200 rounded-4xl" />
                     )}
                   </CardContent>

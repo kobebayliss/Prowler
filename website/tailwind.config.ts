@@ -11,8 +11,8 @@ const config = {
   prefix: "",
   theme: {
     screens: {
-      'lg': '1050px',
-      'tablet': '670px',
+      'lg': '1080px',
+      'tablet': '680px',
     },
     container: {
       center: true,
@@ -22,8 +22,12 @@ const config = {
       },
     },
     extend: {
+      transitionDuration: {
+        '250': '250ms',
+        '150': '150ms',
+      },
       scale: {
-        '103': '1.03',
+        '103': '1.02',
       },
       gridTemplateColumns: {
         'autofit': 'repeat(auto-fit, minmax(400px, 1fr))',
@@ -34,6 +38,7 @@ const config = {
       padding: {
         '4.5': '18px',
         '19': '70px',
+        'topper': '1em',
       },
       brightness: {
         90: '.85',
@@ -83,10 +88,12 @@ const config = {
         },
       },
       margin: {
-        'topper': '0.35em',
-        'linemargin': '2em',
+        'topper': '0.45em',
+        'linemargin': '1.8em',
         'seperate': '1.4em',
+        'pricesmargin': '1.2em',
         'em': '0.15em',
+        'em1': '0.25em',
         'responsivemargin': '14%',
         '7.5': '30px',
         '2.3': '6px',
@@ -100,7 +107,7 @@ const config = {
         '4.5px': '4.5px',
         'overlay': '1044px',
         'searchmargin': '21vh',
-        'top': '0.3em',
+        'top': '0.45em',
       },
       height: {
         'cardimage': '66%',
@@ -113,7 +120,7 @@ const config = {
         'searchbox': '4vh',
         '70': '290px',
         '5.5': '22px',
-        'card': '280px',
+        'card': '300px',
       },
       width: {
         '0.4': '1.5px',
@@ -135,6 +142,7 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
         '4xl': '3rem',
         'searchbox': '0.6rem',
+        'popup': '0.4rem',
       },
       keyframes: {
         slideup: {
@@ -176,7 +184,7 @@ const config = {
       'search': '2.0vh',
       'prices': '1.08em',
       xl: '1.1em',
-      '2xl': '1.43em',
+      '2xl': '1.2em',
       '3xl': '2.08rem',
       '4xl': '2.441rem',
       '5xl': '3.052rem',

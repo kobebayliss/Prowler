@@ -38,11 +38,6 @@ options = uc.ChromeOptions()
 options.headless = False
 driver = uc.Chrome(options=options) 
 
-#function to determine if steam game matches epic game
-def is_similar(epicgame, steamgame, threshold=80):
-    similarity = fuzz.ratio(epicgame.lower(), steamgame.lower())
-    return similarity >= threshold
-
 def scrape_epic_page():
     start_value = 0
     index = 1
