@@ -22,6 +22,9 @@ const config = {
       },
     },
     extend: {
+      translate: {
+        '250': '220px',
+      },
       transitionDuration: {
         '250': '250ms',
         '150': '150ms',
@@ -88,6 +91,7 @@ const config = {
         },
       },
       margin: {
+        'showfilter': '250px',
         'topper': '0.45em',
         'linemargin': '1.8em',
         'seperate': '1.4em',
@@ -123,6 +127,8 @@ const config = {
         'card': '300px',
       },
       width: {
+        'showfilter': '100%',
+        'filters': '250px',
         '0.4': '1.5px',
         '0.2': '0.5px',
         '4.5': '18px',
@@ -145,6 +151,14 @@ const config = {
         'popup': '0.4rem',
       },
       keyframes: {
+        slideright: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        slideleft: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
         slideup: {
           '0%': { transform: 'translateY(100%)' },
           '100%': { transform: 'translateY(0)' },
@@ -167,6 +181,8 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
         slideup: 'slideup 0.2s ease-out forwards',
         slidedown: 'slidedown 0.2s ease-out forwards',
+        slideout: 'slideright 0.2s ease-in-out forwards',
+        slideback: 'slideleft 0.2s ease-in-out forwards',
       },
     },
     fontFamily: {
