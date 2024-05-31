@@ -15,6 +15,7 @@ export default function BrowsePage() {
     const [games, setGames] = useState([]);
     const [hoveredGameId, setHoveredGameId] = useState(null);
     const [showFilter, setShowFilter] = useState(false);
+    const [clickedButton, setClickedButton] = useState(false);
 
     useEffect(() => {
         axios.get("http://localhost:8081/games")
@@ -40,7 +41,7 @@ export default function BrowsePage() {
                     <button
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
                     h-10 w-38 rounded-lg justify-center items-center mr-3"
-                    onClick={() => { setShowFilter(!showFilter); }}
+                    onClick={() => { setShowFilter(!showFilter); setClickedButton(true) }}
                     >
                         <p className="text-offwhite font-inter text-filter mr-2.5">Show Filters</p>
                         <FaFilter className="text-offwhite h-5.5 w-auto"/>
@@ -54,14 +55,15 @@ export default function BrowsePage() {
                 </div>
             </div>
             <div className="flex">
-                <div className="absolute z-100">
-                <div className={`bg-offwhite w-filters h-full
-                ${showFilter ? 'animate-slideout block' : 'animate-slideback -translate-x-220'}`}>
-                    <p>dhwdhaiwahi</p>
+                <div className={`absolute z-100 ${clickedButton ? 'block' : 'hidden'}`}>
+                    <div className={`bg-offwhite w-filters h-full
+                    ${showFilter ? 'animate-slideout' : 'animate-slideback -translate-x-220'}`}>
+                        <p>dhwdhaiwahi</p>
+                    </div>
                 </div>
-                </div>
-                <div className={`flex justify-center transition-all duration-200 w-full ${showFilter ? 'ml-showfilter' : ''}`}>
-                    <div className="grid transition-transform gap-x-6 gap-y-8 grid-cols-1 tablet:grid-cols-2 lg:grid-cols-3 pb-8 w-full px-6">
+                <div className={`flex transition-all duration-200 w-full ${showFilter ? 'ml-showfilter' : ''}`}>
+                    <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-8 px-6
+                    ${showFilter ? 'filtertablet:grid-cols-2 filterlg:grid-cols-3': 'tablet:grid-cols-2 lg:grid-cols-3'}`}>
                         {games.map((game) => {
                             let gameName = game.game_name;
                             let isLong = 0;
@@ -72,8 +74,8 @@ export default function BrowsePage() {
                                     <div className="w-card bg-lightmidnight rounded-searchbox hover:scale-103 
                                     transition-all duration-200 hover:ring-1 hover:ring-offwhite">
                                         <div className="flex items-end justify-center">
-                                            <div className={`absolute flex h-8 px-4 bg-lightmidnight items-center rounded-popup content-center 
-                                            transition-all duration-150 mb-3 triangle-div whitespace-nowrap
+                                            <div className={`absolute flex h-8 px-4 bg-lightmidnight items-center rounded-popup 
+                                            content-center transition-all duration-150 mb-3 triangle-div whitespace-nowrap
                                             ${isLong === 1 && hoveredGameId === game.game_id ? 'opacity-100' : 'opacity-0'}`}>
                                                 <p className="text-offwhite font-inter">{game.game_name}</p>
                                             </div>
@@ -85,7 +87,7 @@ export default function BrowsePage() {
                                                 className="w-full h-auto rounded-t-searchbox"
                                             />
                                         </div>
-                                        <div className="flex flex-col items-center">
+                                        <div className={`flex flex-col items-center transition-all duration-200 ${showFilter ? 'scale-86': ''}`}>
                                             <div>
                                                 <p 
                                                 className="font-inter text-2xl text-offwhite mt-top max-w-sm overflow-hidden whitespace-nowrap"

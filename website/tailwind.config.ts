@@ -12,7 +12,9 @@ const config = {
   theme: {
     screens: {
       'lg': '1080px',
+      'filterlg': '1200px',
       'tablet': '680px',
+      'filtertablet': '900px'
     },
     container: {
       center: true,
@@ -31,6 +33,7 @@ const config = {
       },
       scale: {
         '103': '1.02',
+        '86': '0.88',
       },
       gridTemplateColumns: {
         'autofit': 'repeat(auto-fit, minmax(400px, 1fr))',
