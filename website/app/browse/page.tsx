@@ -10,6 +10,8 @@ import { SiEpicgames } from "react-icons/si";
 import { FaSortAlphaDown } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 
 export default function BrowsePage() {
     const [games, setGames] = useState([]);
@@ -26,7 +28,7 @@ export default function BrowsePage() {
                 console.error("There was an error fetching the game's information: ", error);
             });
     }, []);
-
+    
     return (
         <div>
             <div className="flex pt-4 pb-5 ml-7 items-center">
@@ -56,13 +58,20 @@ export default function BrowsePage() {
             </div>
             <div className="flex">
                 <div className={`absolute z-100 ${clickedButton ? 'block' : 'hidden'}`}>
-                    <div className={`bg-offwhite w-filters h-full
+                    <div className={`w-filters h-full
                     ${showFilter ? 'animate-slideout' : 'animate-slideback -translate-x-220'}`}>
-                        <p>dhwdhaiwahi</p>
+                        <div className="flex justify-center mt-5">
+                            <Switch className="mt-0.5"/>
+                            <p className="ml-3 text-2xl text-offwhite font-inter">On Sale</p>
+                        </div>
+                        <div className="flex justify-center mt-20 mx-8">
+                            <Slider defaultValue={[50]} max={120} step={1}/>
+
+                        </div>
                     </div>
                 </div>
-                <div className={`flex transition-all duration-200 w-full ${showFilter ? 'ml-showfilter' : ''}`}>
-                    <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-8 px-6
+                <div className={`flex transition-all duration-200 w-full px-6 ${showFilter ? 'ml-showfilter pl-0' : ''}`}>
+                    <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-8 w-full
                     ${showFilter ? 'filtertablet:grid-cols-2 filterlg:grid-cols-3': 'tablet:grid-cols-2 lg:grid-cols-3'}`}>
                         {games.map((game) => {
                             let gameName = game.game_name;
@@ -74,8 +83,8 @@ export default function BrowsePage() {
                                     <div className="w-card bg-lightmidnight rounded-searchbox hover:scale-103 
                                     transition-all duration-200 hover:ring-1 hover:ring-offwhite">
                                         <div className="flex items-end justify-center">
-                                            <div className={`absolute flex h-8 px-4 bg-lightmidnight items-center rounded-popup 
-                                            content-center transition-all duration-150 mb-3 triangle-div whitespace-nowrap
+                                            <div className={`absolute flex py-2 px-4 bg-lightmidnight items-center rounded-popup 
+                                            content-center transition-all duration-150 mb-3 triangle-div text-center 
                                             ${isLong === 1 && hoveredGameId === game.game_id ? 'opacity-100' : 'opacity-0'}`}>
                                                 <p className="text-offwhite font-inter">{game.game_name}</p>
                                             </div>

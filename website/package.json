@@ -10,7 +10,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-switch": "^1.0.3",
     "@vercel/postgres": "^0.8.0",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useRef, useState } from "react";
+import { useRouter } from "next/router";
 import Autoplay from "embla-carousel-autoplay";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from 'next/image';
@@ -35,6 +36,13 @@ const carouselImages = [
 export default function HomePage() {
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
   const [isHovered, setIsHovered] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    router.push(`/browse?search=$(searchTerm)`);
+  };
 
   return (
     <div className="flex h-[calc(100vh-65px)]">
@@ -44,13 +52,15 @@ export default function HomePage() {
           Find the lowest prices for thousands of games simply by searching,<br />
           or browse through games on the browse tab.
         </p>
-        <form className="w-34% ml-10 h-searchbox mb-40">   
+        <form className="w-34% ml-10 h-searchbox mb-40" onSubmit={handleSearchSubmit}>   
             <div className="relative">
                 <IoIosSearch className="absolute text-offwhite w-auto h-search ml-4.5 top-1/2 transform -translate-y-1/2"/>
                 <input 
                 className="w-full pl-19 p-4.5 text-search placeholder:font-inter placeholder:text-grey text-offwhite font-inter 
                 rounded-searchbox bg-lightmidnight focus:outline-none focus:ring-1 focus:ring-offwhite transition-all duration-100" 
                 placeholder="Search for a game..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </div>
         </form>
@@ -78,7 +88,7 @@ export default function HomePage() {
                         />
                         <div 
                         className={`flex flex-col items-center absolute bottom-0 w-full h-popup 
-                        bg-lightmidnight rounded-b-4xl z-10 transition-all duration-200 
+                        bg-lightmidnight rounded-b-4xl z-10 transition-all duration-200
                         ${isHovered ? 'animate-slideup' : 'animate-slidedown'}`}>
                           <p className="font-inter text-2xl text-offwhite mt-top">{carouselNames[index]}</p>
                           <div className="flex mt-topper items-center">

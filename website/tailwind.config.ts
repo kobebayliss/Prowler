@@ -26,6 +26,7 @@ const config = {
     extend: {
       translate: {
         '250': '220px',
+        '4.5': '18px',
       },
       transitionDuration: {
         '250': '250ms',
@@ -40,6 +41,7 @@ const config = {
       },
       ringWidth: {
         '0.5': '0.5px',
+        '3': '3px',
       },
       padding: {
         '4.5': '18px',
@@ -60,6 +62,7 @@ const config = {
         'greyish': '#c9c9c9',
         'grey': '#7f7f7f',
         'lightmidnight': '#27272a',
+        'blue': '#1E90FF',
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -94,6 +97,7 @@ const config = {
         },
       },
       margin: {
+        '0.75': '3px',
         'showfilter': '250px',
         'topper': '0.45em',
         'linemargin': '1.8em',
