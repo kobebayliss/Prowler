@@ -38,7 +38,8 @@ export default function HomePage() {
   const [isHovered, setIsHovered] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
-  const divRef = useRef(null);
+  const initialScreenWidth = window.screen.width;
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
@@ -46,18 +47,26 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    const initialScreenWidth = window.screen.width;
-    if (divRef.current) {
-      divRef.current.style.minWidth = `${initialScreenWidth * 0.5}px`;
-    }
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
+
+  const homewidth = 1200;
 
   return (
     <div className="homewidth:flex homewidth:justify-between h-[calc(100vh-65px)]">
-      <div className="homewidth:w-half homewidth:items-start homewidth:self-center homewidth:mt-0 mt-28 flex flex-col items-center" ref={divRef}>
-        <p className="text-offwhite text-center homewidth:text-start text-5xl font-inter homewidth:ml-10 homewidth:mb-1 mb-3 small:text-title">Spend less on games.</p>
-        <p className="text-offwhite text-center homewidth:text-start text-xl font-interlight homewidth:ml-10 homewidth:mb-8 mb-10">
-          Find the lowest prices for thousands of games simply by searching,<br />
+      <div className={`homewidth:w-half homewidth:items-start homewidth:self-center homewidth:mt-0 mt-28 flex flex-col items-center mx-4`}
+      style={screenWidth >= homewidth ? { minWidth: `${initialScreenWidth * 0.5}px` } :{}}>
+        <p className="text-offwhite text-center homewidth:text-start text-titlesmall font-inter homewidth:ml-10 homewidth:mb-1 mb-3 small:text-title">Spend less on games.</p>
+        <p className="text-offwhite text-center homewidth:text-start text-xl font-interlight homewidth:ml-10 homewidth:mb-8 mb-10 w-[540px] homewidth:w-desc">
+          Find the lowest prices for thousands of games simply by searching, 
           or browse through games on the browse tab.
         </p>
         <form className="homewidth:w-[365px] w-[400px] homewidth:ml-10 h-searchbox mb-40" onSubmit={handleSearchSubmit}>
@@ -74,8 +83,7 @@ export default function HomePage() {
         </form>
       </div>
       <div className="flex homewidth:w-half w-[80%] mx-auto homewidth:pr-10">
-        <Carousel 
-          plugins={[plugin.current]}
+        <Carousel plugins={[plugin.current]}
           className="w-full transition-all content-center homewidth:h-[calc(100vh-65px)] mb-10"
           onMouseEnter={() => { setIsHovered(true); plugin.current.stop(); }}
           onMouseLeave={() => { setIsHovered(false); plugin.current.reset(); }}

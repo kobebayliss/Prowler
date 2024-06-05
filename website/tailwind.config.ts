@@ -141,6 +141,7 @@ const config = {
         'card': '300px',
       },
       width: {
+        'desc': '560px',
         'main': '1000px',
         '18': '68px',
         '80%': '85%',
@@ -226,8 +227,9 @@ const config = {
       '3xl': '2.08rem',
       '4xl': '2.441rem',
       '5xl': '3.052rem',
+      'titlesmall': '2.85rem',
       'header': '1.8rem',
-      'title': '3.6em',
+      'title': '3.5em',
     }
   },
   plugins: [require("tailwindcss-animate")],
