@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import Image from 'next/image';
 import { IoIosSearch } from "react-icons/io";
@@ -12,29 +13,63 @@ import { FaFilter } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function BrowsePage() {
     const [games, setGames] = useState([]);
     const [hoveredGameId, setHoveredGameId] = useState(null);
     const [showFilter, setShowFilter] = useState(false);
     const [clickedButton, setClickedButton] = useState(false);
+    const [buttonName, setButtonName] = useState('Show');
+    const searchParams = useSearchParams();
+    const searchQuery = searchParams.get('search') || '';
+    const [extraGenres, setExtraGenres] = useState(false);
+    const [genreButton, setGenreButton] = useState('More');
 
     useEffect(() => {
         axios.get("http://localhost:8081/games")
             .then(response => {
-                setGames(response.data);
+                if (searchQuery) {
+                    const filteredGames = response.data.filter(game =>
+                        game.game_name.toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+                    setGames(filteredGames);
+                } else {
+                    setGames(response.data);
+                }
             })
             .catch(error => {
                 console.error("There was an error fetching the game's information: ", error);
             });
-    }, []);
+    }, [searchQuery]);
+
+    useEffect(() => {
+        setButtonName(showFilter ? 'Hide' : 'Show');
+    }, [showFilter]);
+
+    useEffect(() => {
+        setGenreButton(extraGenres ? 'Less' : 'More');
+    }, [extraGenres]);
     
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 821) {
+                setShowFilter(false);
+            }
+    };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     return (
         <div>
             <div className="flex pt-4 pb-5 ml-7 items-center">
-                <p className="text-offwhite font-inter text-3xl">Browsing Games</p>
-                <p className="text-grey font-inter text-base ml-14 mt-0.5">{games.length} {games.length === 1 ? 'Result' : 'Results'}</p>
-                <div className="flex ml-auto mr-4">
+                <p className="text-offwhite font-inter text-xll browsewidth:text-3xl">Browsing Games</p>
+                <p className="text-grey hidden font-inter text-base ml-14 browsewidth:block mt-0.5">{games.length} {games.length === 1 ? 'Result' : 'Results'}</p>
+                <div className="hidden browsewidth:flex ml-auto mr-6">
                     <a href="#" 
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
                     h-10 w-10 rounded-lg justify-center items-center mr-2.5">
@@ -43,9 +78,9 @@ export default function BrowsePage() {
                     <button
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
                     h-10 w-38 rounded-lg justify-center items-center mr-3"
-                    onClick={() => { setShowFilter(!showFilter); setClickedButton(true) }}
+                    onClick={() => { setShowFilter(!showFilter); setClickedButton(true); }}
                     >
-                        <p className="text-offwhite font-inter text-filter mr-2.5">Show Filters</p>
+                        <p className="text-offwhite font-inter text-filter mr-2.5">{buttonName} Filters</p>
                         <FaFilter className="text-offwhite h-5.5 w-auto"/>
                     </button>
                     <a href="#" 
@@ -54,6 +89,14 @@ export default function BrowsePage() {
                         <p className="text-offwhite font-inter text-filter mr-2.5">Sort</p>
                         <FaSortAlphaDown className="text-offwhite h-6 w-auto"/>
                     </a>
+                </div>
+                <div className="flex browsewidth:hidden ml-auto mr-3">
+                    <button
+                    className="flex hover:bg-lightmidnight transition-colors duration-200 
+                    h-10 w-26 rounded-lg justify-center items-center mr-3">
+                        <p className="text-offwhite font-inter text-filter mr-2.5">Filter</p>
+                        <FaFilter className="text-offwhite h-5.5 w-auto"/>
+                    </button>
                 </div>
             </div>
             <div className="flex">
@@ -64,19 +107,72 @@ export default function BrowsePage() {
                             <Switch className="mt-0.5"/>
                             <p className="ml-3 text-2xl text-offwhite font-inter">On Sale</p>
                         </div>
-                        <div className="flex justify-center mt-20 mx-8">
+                        <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                        <p className="flex font-inter text-xl text-offwhite ml-6 mt-3">Price Range</p>
+                        <div className="flex justify-center mt-5 mx-6">
                             <Slider defaultValue={[50]} max={120} step={1}/>
-
+                        </div>
+                        <div className="w-80% mt-6 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                        <p className="text-offwhite font-inter text-2xl mt-3 ml-6 mb-2">Genres</p>
+                        <div className="flex ml-6 mt-1.5 items-center">
+                            <Checkbox id="genre1"/>
+                            <label htmlFor="genre1" className="text-offwhite text-base font-interlight self-center ml-2.5">Indie</label>
+                        </div>
+                        <div className="flex ml-6 mt-1.5 items-center">
+                            <Checkbox id="genre2"/>
+                            <label htmlFor="genre2" className="text-offwhite text-base font-interlight self-center ml-2.5">Action</label>
+                        </div>
+                        <div className="flex ml-6 mt-1.5 items-center">
+                            <Checkbox id="genre3"/>
+                            <label htmlFor="genre3" className="text-offwhite text-base font-interlight self-center ml-2.5">Adventure</label>
+                        </div>
+                        <div className="flex ml-6 mt-1.5 items-center">
+                            <Checkbox id="genre4"/>
+                            <label htmlFor="genre4" className="text-offwhite text-base font-interlight self-center ml-2.5">Casual</label>
+                        </div>
+                        <div className={`${extraGenres ? 'block' : 'hidden'}`}>
+                            <div className="flex ml-6 mt-1.5 items-center">
+                                <Checkbox id="genre5"/>
+                                <label htmlFor="genre5" className="text-offwhite text-base font-interlight self-center ml-2.5">RPG</label>
+                            </div>
+                            <div className="flex ml-6 mt-1.5 items-center">
+                                <Checkbox id="genre6"/>
+                                <label htmlFor="genre6" className="text-offwhite text-base font-interlight self-center ml-2.5">Simulation</label>
+                            </div>
+                            <div className="flex ml-6 mt-1.5 items-center">
+                                <Checkbox id="genre7"/>
+                                <label htmlFor="genre7" className="text-offwhite text-base font-interlight self-center ml-2.5">Strategy</label>
+                            </div>
+                            <div className="flex ml-6 mt-1.5 items-center">
+                                <Checkbox id="genre8"/>
+                                <label htmlFor="genre8" className="text-offwhite text-base font-interlight self-center ml-2.5">Singleplayer</label>
+                            </div>
+                            <div className="flex ml-6 mt-1.5 items-center">
+                                <Checkbox id="genre9"/>
+                                <label htmlFor="genre9" className="text-offwhite text-base font-interlight self-center ml-2.5">Early Access</label>
+                            </div>
+                            <div className="flex ml-6 mt-1.5 items-center">
+                                <Checkbox id="genre10"/>
+                                <label htmlFor="genre10" className="text-offwhite text-base font-interlight self-center ml-2.5">Free to Play</label>
+                            </div>
+                        </div>
+                        <div className={`w-full transition-all duration-100`}>
+                            <div className="ml-6 mt-3">
+                                <button className="text-offwhite text-base font-inter hover:underline cursor-pointer"
+                                onClick={() => { setExtraGenres(!extraGenres) }}>
+                                Show {genreButton}</button>
+                            </div>
+                            <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         </div>
                     </div>
                 </div>
-                <div className={`flex transition-all duration-200 w-full px-6 ${showFilter ? 'ml-showfilter pl-0' : ''}`}>
+                <div className={`flex transition-all duration-200 ease-out w-full px-6 ${showFilter ? 'ml-showfilter pl-0' : ''}`}>
                     <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-8 w-full
                     ${showFilter ? 'filtertablet:grid-cols-2 filterlg:grid-cols-3': 'tablet:grid-cols-2 lg:grid-cols-3'}`}>
                         {games.map((game) => {
                             let gameName = game.game_name;
                             let isLong = 0;
-                            if (gameName.length > 28) gameName = gameName.substring(0, 28) + '...', isLong = 1;
+                            if (gameName.length > 27) gameName = gameName.substring(0, 27) + '...', isLong = 1;
 
                             return (
                                 <a href="#" key={game.game_id}>

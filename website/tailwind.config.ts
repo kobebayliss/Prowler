@@ -11,9 +11,13 @@ const config = {
   prefix: "",
   theme: {
     screens: {
+      'small': '650px',
+      'homewidth': '1200px',
+      'browsewidth': '820px',
+      'navwidth': '780px',
       'lg': '1080px',
       'filterlg': '1200px',
-      'tablet': '680px',
+      'tablet': '700px',
       'filtertablet': '900px'
     },
     container: {
@@ -35,6 +39,7 @@ const config = {
       scale: {
         '103': '1.02',
         '86': '0.88',
+        '120': '1.20',
       },
       gridTemplateColumns: {
         'autofit': 'repeat(auto-fit, minmax(400px, 1fr))',
@@ -97,6 +102,8 @@ const config = {
         },
       },
       margin: {
+        'half': '50%',
+        'main': '920px',
         '0.75': '3px',
         'showfilter': '250px',
         'topper': '0.45em',
@@ -134,6 +141,9 @@ const config = {
         'card': '300px',
       },
       width: {
+        'main': '1000px',
+        '18': '68px',
+        '80%': '85%',
         'showfilter': '100%',
         'filters': '250px',
         '0.4': '1.5px',
@@ -142,7 +152,7 @@ const config = {
         '30': '120px',
         '100': '550px',
         'card': '100%',
-        '34%': '50%',
+        '34%': '365px',
         '100%': '100%',
         '26': '100px',
         '38': '164px',
@@ -153,9 +163,11 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        'box': '0.2rem',
         '4xl': '3rem',
         'searchbox': '0.6rem',
         'popup': '0.4rem',
+        'carousel': '2rem',
       },
       keyframes: {
         slideright: {
@@ -188,8 +200,8 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
         slideup: 'slideup 0.2s ease-out forwards',
         slidedown: 'slidedown 0.2s ease-out forwards',
-        slideout: 'slideright 0.2s ease-in-out forwards',
-        slideback: 'slideleft 0.2s ease-in-out forwards',
+        slideout: 'slideright 0.2s ease-out forwards',
+        slideback: 'slideleft 0.2s ease-out forwards',
       },
     },
     fontFamily: {
@@ -201,6 +213,8 @@ const config = {
       interlight: ["interlight", "sans-serif"],
     },
     fontSize: {
+      'filter': '1.5em',
+      'pricerange': '0.85em',
       sm: '0.8rem',
       base: '1em',
       'filter': '1.08rem',
@@ -208,11 +222,12 @@ const config = {
       'prices': '1.08em',
       xl: '1.1em',
       '2xl': '1.2em',
+      'xll': '1.8em',
       '3xl': '2.08rem',
       '4xl': '2.441rem',
       '5xl': '3.052rem',
       'header': '1.8rem',
-      'title': '3.65em',
+      'title': '3.6em',
     }
   },
   plugins: [require("tailwindcss-animate")],
