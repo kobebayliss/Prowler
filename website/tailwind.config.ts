@@ -227,7 +227,7 @@ const config = {
       '3xl': '2.08rem',
       '4xl': '2.441rem',
       '5xl': '3.052rem',
-      'titlesmall': '2.85rem',
+      'titlesmall': '2.78rem',
       'header': '1.8rem',
       'title': '3.5em',
     }

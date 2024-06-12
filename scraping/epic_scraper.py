@@ -65,6 +65,9 @@ def scrape_epic_page():
                 price_container = game.find('div', class_="css-1a6kj04")
                 price_container_2 = price_container.find('div', class_="css-o1hbmr")
                 price = price_container_2.find('span', class_="css-119zqif").text.strip()
+                if price_container.find('div', class_="css-4jky3p"):
+                    normal_price = price_container.find('div', class_="css-4jky3p").text.strip()
+                    on_sale = True
             else:
                 price = "N/A"
             # getting link for game
@@ -87,8 +90,8 @@ def scrape_epic_page():
                 print()
                 print("-------------")
                 # sql to update epic price
-                sql = "UPDATE games SET epic_price = (%s) WHERE game_id = (%s)"
-                val = (price, matches[0])
+                sql = "UPDATE games SET epic_on_sale = %s, epic_price = %s, epic_normal_price = %s WHERE game_id = %s"
+                val = (on_sale, price, normal_price, matches[0])
                 mycursor.execute(sql, val)
                 games_db.commit()
                 print(mycursor.rowcount, "details updated")

@@ -13,11 +13,11 @@ import { FaFilter } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox"; 
 
 export default function BrowsePage() {
-    const [games, setGames] = useState([]);
-    const [hoveredGameId, setHoveredGameId] = useState(null);
+    const [games, setGames] = useState<GameType[]>([]);
+    const [hoveredGameId, setHoveredGameId] = useState<number | null>(null);
     const [showFilter, setShowFilter] = useState(false);
     const [clickedButton, setClickedButton] = useState(false);
     const [buttonName, setButtonName] = useState('Show');
@@ -30,12 +30,12 @@ export default function BrowsePage() {
         axios.get("http://localhost:8081/games")
             .then(response => {
                 if (searchQuery) {
-                    const filteredGames = response.data.filter(game =>
+                    const filteredGames = response.data.filter((game: GameType) =>
                         game.game_name.toLowerCase().includes(searchQuery.toLowerCase())
                     );
                     setGames(filteredGames);
                 } else {
-                    setGames(response.data);
+                    setGames(response.data);x
                 }
             })
             .catch(error => {
@@ -50,13 +50,13 @@ export default function BrowsePage() {
     useEffect(() => {
         setGenreButton(extraGenres ? 'Less' : 'More');
     }, [extraGenres]);
-    
+
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 821) {
                 setShowFilter(false);
             }
-    };
+        };
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => {

@@ -81,6 +81,12 @@ def scrape_steam_page(url):
             name = game.find('span', class_='title').get_text(strip=True)
             # container for price
             price_tag = game.find('div', class_='col search_price_discount_combined responsive_secondrow')
+            if price_tag.find('div', class_="discount_original_price"):
+                normal_price = price_tag.find('div', class_="discount_original_price").text.strip()
+                on_sale = True
+            else:
+                normal_price = "0"
+                on_sale = False
             # retrieving and error handling price
             if price_tag.find('div', class_="discount_final_price"):
                 price = price_tag.find('div', class_="discount_final_price").text.strip()
@@ -141,9 +147,9 @@ def scrape_steam_page(url):
             else:
                 # here, the game isn't in the database so we insert a new record for it
                 # SQL statement to insert the game's information into the prowler_games database
-                sql = "INSERT INTO games (game_name, steam_price, epic_price, game_developer, game_description, game_image) VALUES (%s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO games (game_name, steam_on_sale, steam_price, steam_normal_price, epic_on_sale, epic_price, epic_normal_price, game_developer, game_description, game_image) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 # values to insert
-                val = (name, price, "N/A", developer, description, game_image)
+                val = (name, on_sale, price, normal_price, "N/A", "N/A", "N/A", developer, description, game_image)
                 if failed == False:
                     # adding values and saving them
                     mycursor.execute(sql, val)
