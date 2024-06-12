@@ -8,13 +8,12 @@ app.use(cors());
 
 app.get("/games", (req, res) => {
     const sql = "SELECT * FROM games";
-    db.query(sql, (err, data) => {
-        if (err) {
+    db.query(sql)
+        .then(data => res.json(data.rows))
+        .catch(err => {
             console.error("Error ", err);
-            return res.status(500).json({ error: "Server Error" });
-        }
-        return res.json(data);
-    });
+            res.status(500).json({ error: "Server Error" });
+        });
 });
 
 app.listen(8081, () => {

@@ -1,18 +1,19 @@
-import mysql from "mysql";
+import pkg from 'pg';
+const { Client } = pkg;
 
-const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "2WS8YL8hqh988NxaPVP2iufPv",
-    database: "prowler_games",
-});
-
-db.connect((err) => {
-    if (err) {
-        console.error("Database connection is failed: " + err.stack);
-        return;
+const db = new Client({
+    user: 'default',
+    host: 'ep-hidden-night-a7qy5ttw-pooler.ap-southeast-2.aws.neon.tech',
+    database: 'verceldb',
+    password: '7vnKeSWk3yog',
+    port: 5432,
+    ssl: {
+        rejectUnauthorized: false
     }
-    console.log("Connected to the database.");
 });
+
+db.connect()
+    .then(() => console.log('Connected to the database.'))
+    .catch(err => console.error('Database connection failed:', err.stack));
 
 export default db;

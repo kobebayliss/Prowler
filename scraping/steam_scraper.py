@@ -3,15 +3,15 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from fuzzywuzzy import fuzz
-import mysql.connector
+import psycopg2
 import time
 
-# connecting to the prowler_games database
-games_db = mysql.connector.connect(
-  host = "localhost",
-  user = "root",
-  password = "2WS8YL8hqh988NxaPVP2iufPv",
-  database = "prowler_games"
+# connecting to the prowlerdb database
+games_db = psycopg2.connect(
+    host="ep-hidden-night-a7qy5ttw-pooler.ap-southeast-2.aws.neon.tech",
+    user="default",
+    password="7vnKeSWk3yog",
+    database="verceldb"
 )
 mycursor = games_db.cursor()
 

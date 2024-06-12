@@ -16,8 +16,8 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox"; 
 
 export default function BrowsePage() {
-    const [games, setGames] = useState<GameType[]>([]);
-    const [hoveredGameId, setHoveredGameId] = useState<number | null>(null);
+    const [games, setGames] = useState([]);
+    const [hoveredGameId, setHoveredGameId] = useState(null);
     const [showFilter, setShowFilter] = useState(false);
     const [clickedButton, setClickedButton] = useState(false);
     const [buttonName, setButtonName] = useState('Show');
@@ -30,12 +30,12 @@ export default function BrowsePage() {
         axios.get("http://localhost:8081/games")
             .then(response => {
                 if (searchQuery) {
-                    const filteredGames = response.data.filter((game: GameType) =>
+                    const filteredGames = response.data.filter(game =>
                         game.game_name.toLowerCase().includes(searchQuery.toLowerCase())
                     );
                     setGames(filteredGames);
                 } else {
-                    setGames(response.data);x
+                    setGames(response.data);
                 }
             })
             .catch(error => {
