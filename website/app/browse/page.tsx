@@ -1,23 +1,31 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import Image from 'next/image';
-import { IoIosSearch } from "react-icons/io";
 import { FaSteam } from "react-icons/fa";
 import { SiEpicgames } from "react-icons/si";
+import { IoIosSearch } from "react-icons/io";
 import { FaSortAlphaDown } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { Checkbox } from "@/components/ui/checkbox"; 
+import { Checkbox } from "@/components/ui/checkbox";
+
+interface Game {
+    game_id: number;
+    game_name: string;
+    game_image: string;
+    steam_price: string;
+    epic_price: string;
+}
 
 export default function BrowsePage() {
-    const [games, setGames] = useState([]);
-    const [hoveredGameId, setHoveredGameId] = useState(null);
+    const [games, setGames] = useState<Game[]>([]);
+    const [hoveredGameId, setHoveredGameId] = useState<number | null>(null);
     const [showFilter, setShowFilter] = useState(false);
     const [clickedButton, setClickedButton] = useState(false);
     const [buttonName, setButtonName] = useState('Show');
@@ -25,12 +33,14 @@ export default function BrowsePage() {
     const searchQuery = searchParams.get('search') || '';
     const [extraGenres, setExtraGenres] = useState(false);
     const [genreButton, setGenreButton] = useState('More');
+    const router = useRouter();
+    const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
 
     useEffect(() => {
         axios.get("http://localhost:8081/games")
             .then(response => {
                 if (searchQuery) {
-                    const filteredGames = response.data.filter(game =>
+                    const filteredGames = response.data.filter((game: Game) =>
                         game.game_name.toLowerCase().includes(searchQuery.toLowerCase())
                     );
                     setGames(filteredGames);
@@ -42,6 +52,11 @@ export default function BrowsePage() {
                 console.error("There was an error fetching the game's information: ", error);
             });
     }, [searchQuery]);
+
+    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        router.push(`/browse?search=${searchTerm}`);
+      };      
 
     useEffect(() => {
         setButtonName(showFilter ? 'Hide' : 'Show');
