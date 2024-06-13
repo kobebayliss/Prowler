@@ -214,7 +214,6 @@ const config = {
       interlight: ["interlight", "sans-serif"],
     },
     fontSize: {
-      'filter': '1.5em',
       'pricerange': '0.85em',
       sm: '0.8rem',
       base: '1em',

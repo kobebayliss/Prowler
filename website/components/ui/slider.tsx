@@ -18,7 +18,7 @@ const Slider = React.forwardRef<
           className
         )}
         value={value}
-        onValueChange={(newValue) => setValue(newValue)}
+        onValueChange={(newValue: [number, number]) => setValue(newValue)}
         {...props}
       >
         <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-offwhite dark:bg-slate-800 cursor-pointer">

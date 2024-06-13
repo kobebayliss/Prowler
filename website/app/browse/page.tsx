@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import Image from 'next/image';
@@ -23,7 +23,7 @@ interface Game {
     epic_price: string;
 }
 
-export default function BrowsePage() {
+function BrowsePageContent() {
     const [games, setGames] = useState<Game[]>([]);
     const [hoveredGameId, setHoveredGameId] = useState<number | null>(null);
     const [showFilter, setShowFilter] = useState(false);
@@ -53,10 +53,10 @@ export default function BrowsePage() {
             });
     }, [searchQuery]);
 
-    const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         router.push(`/browse?search=${searchTerm}`);
-      };      
+    };
 
     useEffect(() => {
         setButtonName(showFilter ? 'Hide' : 'Show');
@@ -68,7 +68,7 @@ export default function BrowsePage() {
 
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth < 821) {
+            if (typeof window !== "undefined" && window.innerWidth < 821) {
                 setShowFilter(false);
             }
         };
@@ -240,5 +240,13 @@ export default function BrowsePage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function BrowsePage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <BrowsePageContent />
+        </Suspense>
     );
 }
