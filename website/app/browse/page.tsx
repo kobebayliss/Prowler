@@ -37,7 +37,7 @@ function BrowsePageContent() {
     const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
 
     useEffect(() => {
-        axios.get("http://localhost:8081/games")
+        axios.get("https://prowler-git-main-kobe-bayliss-projects.vercel.app/api/games")
             .then(response => {
                 if (searchQuery) {
                     const filteredGames = response.data.filter((game: Game) =>
