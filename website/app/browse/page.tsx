@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
+import { PrismaClient } from '@prisma/client';
 
 interface Game {
     game_id: number;
@@ -22,6 +23,8 @@ interface Game {
     steam_price: string;
     epic_price: string;
 }
+
+const prisma = new PrismaClient();
 
 function BrowsePageContent() {
     const [games, setGames] = useState<Game[]>([]);
@@ -37,26 +40,31 @@ function BrowsePageContent() {
     const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
 
     useEffect(() => {
-        axios.get("/api/games")
-            .then(response => {
+        const fetchGames = async () => {
+            try {
+                let response;
                 if (searchQuery) {
-                    const filteredGames = response.data.filter((game: Game) =>
-                        game.game_name.toLowerCase().includes(searchQuery.toLowerCase())
-                    );
-                    setGames(filteredGames);
+                    response = await prisma.game.findMany({
+                        where: {
+                            game_name: {
+                                contains: searchQuery.toLowerCase()
+                            }
+                        }
+                    });
                 } else {
-                    setGames(response.data);
+                    response = await prisma.game.findMany();
                 }
-            })
-            .catch(error => {
+                setGames(response);
+            } catch (error) {
                 console.error("There was an error fetching the game's information: ", error);
-            });
-    }, [searchQuery]);
+            }
+        };
 
-    const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        router.push(`/browse?search=${searchTerm}`);
-    };
+        fetchGames();
+        return () => {
+            prisma.$disconnect();
+        };
+    }, [searchQuery]);
 
     useEffect(() => {
         setButtonName(showFilter ? 'Hide' : 'Show');
@@ -78,6 +86,11 @@ function BrowsePageContent() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        router.push(`/browse?search=${searchTerm}`);
+    };
 
     return (
         <div>
