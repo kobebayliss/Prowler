@@ -1,9 +1,8 @@
-"use client";
+"use client"
 
 import * as React from "react";
-import { useState, useEffect, FormEvent, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import axios from "axios";
 import Image from 'next/image';
 import { FaSteam } from "react-icons/fa";
 import { SiEpicgames } from "react-icons/si";
@@ -14,7 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PrismaClient } from '@prisma/client';
+import { createClient } from '@vercel/postgres';
+import 'dotenv/config';
 
 interface Game {
     game_id: number;
@@ -23,8 +23,6 @@ interface Game {
     steam_price: string;
     epic_price: string;
 }
-
-const prisma = new PrismaClient();
 
 function BrowsePageContent() {
     const [games, setGames] = useState<Game[]>([]);
@@ -39,32 +37,19 @@ function BrowsePageContent() {
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
 
-    useEffect(() => {
-        const fetchGames = async () => {
-            try {
-                let response;
-                if (searchQuery) {
-                    response = await prisma.game.findMany({
-                        where: {
-                            game_name: {
-                                contains: searchQuery.toLowerCase()
-                            }
-                        }
-                    });
-                } else {
-                    response = await prisma.game.findMany();
-                }
-                setGames(response);
-            } catch (error) {
-                console.error("There was an error fetching the game's information: ", error);
-            }
-        };
+    async function queryGames() {
+        const client = createClient();
+        await client.connect();
+       
+        try {
+            const { rows } = await client.sql`SELECT * FROM games;`;
+            console.log(rows)
+        } finally {
+          await client.end();
+        }
+    }
 
-        fetchGames();
-        return () => {
-            prisma.$disconnect();
-        };
-    }, [searchQuery]);
+    queryGames().catch(console.error);
 
     useEffect(() => {
         setButtonName(showFilter ? 'Hide' : 'Show');
