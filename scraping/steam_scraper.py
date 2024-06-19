@@ -8,9 +8,9 @@ import time
 
 # connecting to the prowlerdb database
 games_db = psycopg2.connect(
-    host="ep-hidden-night-a7qy5ttw-pooler.ap-southeast-2.aws.neon.tech",
+    host="ep-fancy-frost-a715bifg-pooler.ap-southeast-2.aws.neon.tech",
     user="default",
-    password="7vnKeSWk3yog",
+    password="18ObWTweLUqB",
     database="verceldb"
 )
 mycursor = games_db.cursor()
