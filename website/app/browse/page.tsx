@@ -13,11 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { sql } from '@vercel/postgres';
-import { PrismaClient } from '@prisma/client'
-import 'dotenv/config';
-
-const prisma = new PrismaClient();
 
 interface Game {
     game_id: number;
@@ -39,21 +34,6 @@ function BrowsePageContent() {
     const [genreButton, setGenreButton] = useState('More');
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
-    
-    async function main() {
-        const allGames = await prisma.games.findMany();
-        console.log(allGames)
-    };
-
-    main()
-        .then(async () => {
-            await prisma.$disconnect()
-        })
-        .catch(async (e) => {
-            console.error(e)
-            await prisma.$disconnect()
-            process.exit(1)
-        })
 
     useEffect(() => {
         setButtonName(showFilter ? 'Hide' : 'Show');
@@ -74,6 +54,18 @@ function BrowsePageContent() {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
+    }, []);
+
+    useEffect(() => {
+        const fetchGames = async () => {
+            try {
+                const response = await fetch('/api');
+                return response.json()
+            } catch (error) {
+                console.error("error getting the games:", error);
+            }
+        };
+        fetchGames();
     }, []);
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
