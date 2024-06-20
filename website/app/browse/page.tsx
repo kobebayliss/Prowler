@@ -13,8 +13,11 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { createClient } from '@vercel/postgres';
+import { sql } from '@vercel/postgres';
+import { PrismaClient } from '@prisma/client'
 import 'dotenv/config';
+
+const prisma = new PrismaClient();
 
 interface Game {
     game_id: number;
@@ -36,20 +39,21 @@ function BrowsePageContent() {
     const [genreButton, setGenreButton] = useState('More');
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
+    
+    async function main() {
+        const allGames = await prisma.games.findMany();
+        console.log(allGames)
+    };
 
-    async function queryGames() {
-        const client = createClient();
-        await client.connect();
-       
-        try {
-            const { rows } = await client.sql`SELECT * FROM games;`;
-            console.log(rows)
-        } finally {
-          await client.end();
-        }
-    }
-
-    queryGames().catch(console.error);
+    main()
+        .then(async () => {
+            await prisma.$disconnect()
+        })
+        .catch(async (e) => {
+            console.error(e)
+            await prisma.$disconnect()
+            process.exit(1)
+        })
 
     useEffect(() => {
         setButtonName(showFilter ? 'Hide' : 'Show');
@@ -123,7 +127,6 @@ function BrowsePageContent() {
                         <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="flex font-inter text-xl text-offwhite ml-6 mt-3">Price Range</p>
                         <div className="flex justify-center mt-5 mx-6">
-                            <Slider defaultValue={[50]} max={120} step={1}/>
                         </div>
                         <div className="w-80% mt-6 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="text-offwhite font-inter text-2xl mt-3 ml-6 mb-2">Genres</p>
@@ -183,7 +186,7 @@ function BrowsePageContent() {
                     <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-8 w-full
                     ${showFilter ? 'filtertablet:grid-cols-2 filterlg:grid-cols-3': 'tablet:grid-cols-2 lg:grid-cols-3'}`}>
                         {games.map((game) => {
-                            let gameName = game.game_name;
+                            let gameName = game.game_name as string || "";
                             let isLong = 0;
                             if (gameName.length > 27) gameName = gameName.substring(0, 27) + '...', isLong = 1;
 
