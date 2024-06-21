@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
+import axios from "axios";
 
 interface Game {
     game_id: number;
@@ -57,16 +58,21 @@ function BrowsePageContent() {
     }, []);
 
     useEffect(() => {
-        const fetchGames = async () => {
-            try {
-                const response = await fetch('/api');
-                return response.json()
-            } catch (error) {
-                console.error("error getting the games:", error);
-            }
-        };
-        fetchGames();
-    }, []);
+        axios.get("http://localhost:3000/api")
+            .then(response => {
+                if (searchQuery) {
+                    const filteredGames = response.data.filter((game: Game) =>
+                        game.game_name.toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+                    setGames(filteredGames);
+                } else {
+                    setGames(response.data);
+                }
+            })
+            .catch(error => {
+                console.error("There was an error fetching the game's information: ", error);
+            });
+    }, [searchQuery]);
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

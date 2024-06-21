@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
     try {
         const games = await prisma.games.findMany();
-        console.log(games)
         return Response.json(games)
     } catch (error) {
         console.error(error);
