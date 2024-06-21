@@ -58,7 +58,7 @@ function BrowsePageContent() {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:3000/api")
+        axios.get("/api")
             .then(response => {
                 if (searchQuery) {
                     const filteredGames = response.data.filter((game: Game) =>
@@ -125,6 +125,7 @@ function BrowsePageContent() {
                         <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="flex font-inter text-xl text-offwhite ml-6 mt-3">Price Range</p>
                         <div className="flex justify-center mt-5 mx-6">
+                            <Slider defaultValue={[50]} max={120} step={1}/>
                         </div>
                         <div className="w-80% mt-6 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="text-offwhite font-inter text-2xl mt-3 ml-6 mb-2">Genres</p>

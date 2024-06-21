@@ -131,7 +131,7 @@ const config = {
         'cardimage': '66%',
         '4.5': '18px',
         'carousel': '1200px',
-        'popup': '12vh',
+        'popup': '94px',
         'line': '2em',
         'search': '2.2rem',
         'logos': '2em',
