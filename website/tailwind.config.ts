@@ -14,7 +14,7 @@ const config = {
       'small': '650px',
       'homewidth': '1200px',
       'browsewidth': '820px',
-      'navwidth': '780px',
+      'navwidth': '800px',
       'lg': '1080px',
       'filterlg': '1200px',
       'tablet': '700px',
@@ -35,6 +35,7 @@ const config = {
       transitionDuration: {
         '250': '250ms',
         '150': '150ms',
+        '180': '180ms',
       },
       scale: {
         '103': '1.02',
@@ -67,7 +68,9 @@ const config = {
         'greyish': '#c9c9c9',
         'grey': '#7f7f7f',
         'lightmidnight': '#27272a',
+        'lightermidnight': '#35353a',
         'blue': '#1E90FF',
+        'darkerwhite': '#9b9b9b',
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
