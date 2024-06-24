@@ -68,7 +68,7 @@ const config = {
         'greyish': '#c9c9c9',
         'grey': '#7f7f7f',
         'lightmidnight': '#27272a',
-        'lightermidnight': '#35353a',
+        'lightermidnight': '#313135',
         'blue': '#1E90FF',
         'darkerwhite': '#9b9b9b',
         input: "hsl(var(--input))",
