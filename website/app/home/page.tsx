@@ -72,12 +72,12 @@ export default function HomePage() {
     <div className="homewidth:flex homewidth:justify-between h-[calc(100vh-65px)]">
       <div className={`homewidth:w-half homewidth:items-start homewidth:self-center homewidth:mt-0 mt-28 flex flex-col items-center mx-4`}
       style={screenWidth >= homewidth ? { minWidth: `${initialScreenWidth * 0.5}px` } : {}}>
-        <p className="text-offwhite text-center homewidth:text-start text-titlesmall font-inter homewidth:ml-10 homewidth:mb-1 mb-3 small:text-title">Spend less on games.</p>
+        <p className="text-offwhite text-center homewidth:text-start text-titlesmall font-inter homewidth:ml-10 homewidth:mb-1 mb-3 small:text-[60px]">Spend less on games.</p>
         <p className="text-offwhite text-center homewidth:text-start text-xl font-interlight homewidth:ml-10 homewidth:mb-8 mb-10 w-[540px] homewidth:w-desc">
           Find the lowest prices for thousands of games simply by searching, 
           or browse through games on the browse tab.
         </p>
-        <form className="homewidth:w-[365px] w-[400px] homewidth:ml-10 h-searchbox mb-40" onSubmit={handleSearchSubmit}>
+        <form className="homewidth:w-[420px] w-[400px] homewidth:ml-10 h-searchbox mb-40" onSubmit={handleSearchSubmit}>
             <div className="relative">
                 <IoIosSearch className="absolute text-offwhite w-auto h-search ml-4.5 top-1/2 transform -translate-y-1/2"/>
                 <input 

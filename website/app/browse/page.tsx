@@ -79,6 +79,10 @@ function BrowsePageContent() {
         router.push(`/browse?search=${searchTerm}`);
     };
 
+    const handleGame = (gameId: number) => {
+        router.push(`/game?id=${gameId}`);
+    };
+
     return (
         <div>
             <div className="flex pt-4 pb-5 ml-7 items-center">
@@ -190,7 +194,7 @@ function BrowsePageContent() {
                             if (gameName.length > 27) gameName = gameName.substring(0, 27) + '...', isLong = 1;
 
                             return (
-                                <a href="#" key={game.game_id}>
+                                <a href={`/game?id=${game.game_id}`} onClick={() => handleGame(game.game_id)} key={game.game_id}>
                                     <div className="w-card bg-lightmidnight rounded-searchbox hover:scale-103 
                                     transition-all duration-200 hover:ring-1 hover:ring-offwhite">
                                         <div className="flex items-end justify-center">
