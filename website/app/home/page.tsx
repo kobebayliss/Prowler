@@ -108,7 +108,7 @@ export default function HomePage() {
                           className="h-full w-full hover:brightness-80 transition-all duration-200"/>
                         <div 
                         className={`flex flex-col items-center absolute bottom-0 w-full h-popup 
-                        bg-lightmidnight rounded-b-carousel z-10 transition-all duration-200 justify-center
+                        bg-midnight z-10 transition-all duration-200 justify-center
                         ${isHovered ? 'animate-slideup' : 'animate-slidedown'}`}>
                           <p className="font-inter text-2xl text-offwhite mb-1">{carouselNames[index]}</p>
                           <div className="flex mb-1 items-center">

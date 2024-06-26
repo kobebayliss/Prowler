@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 
-function useTextOverflow(ref, lines, isExpanded) {
+function useTextOverflow(ref: React.RefObject<HTMLDivElement>, lines: number, isExpanded: boolean) {
     const [isOverflow, setIsOverflow] = useState(false);
 
     useEffect(() => {

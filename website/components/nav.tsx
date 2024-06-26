@@ -24,7 +24,7 @@ export default function Nav() {
             </ul>
           </div>
         </div>
-        <div className="flex mr-4.5 barwidth:mr-0">
+        <div className="flex mr-2.5 small:mr-4.5 barwidth:mr-0">
           <div className="hidden navwidth:flex mr-1 h-[40px]">
             <a className="font-intersemibold text-[15px] text-offwhite mr-3 px-3.5 flex flex-col justify-center h-full rounded-md bg-lightmidnight" href="#">Login</a>
             <a className="flex bg-offwhite hover:bg-darkwhite rounded-md h-[40px] my-auto items-center px-2 transition-all duration-200" href="#">
@@ -32,7 +32,7 @@ export default function Nav() {
               <img className="h-7 w-7 ml-1" src="/images/arrowtopright.png" alt="Arrow" />
             </a>
           </div>
-          <a className="px-1.5 py-1 mr-2 rounded-md hover:bg-lightmidnight transition-colors duration-200 cursor-pointer navwidth:hidden">
+          <a className="px-1.5 py-1 rounded-md hover:bg-lightmidnight transition-colors duration-200 cursor-pointer navwidth:hidden">
             <CgMenuRightAlt className="text-offwhite h-8 w-8 navwidth:hidden"/>
           </a>
         </div>
