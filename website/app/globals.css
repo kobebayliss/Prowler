@@ -90,7 +90,7 @@
   }
   @font-face {
     font-family: 'inter';
-    src: url('fonts/Inter-Medium.ttf');
+    src: url('fonts/InterTight-Medium.ttf');
   }
   @font-face {
     font-family: 'roboto';
@@ -98,11 +98,15 @@
   }
   @font-face {
     font-family: 'interbold';
-    src: url('fonts/Inter-Bold.ttf');
+    src: url('fonts/InterTight-Bold.ttf');
   }
   @font-face {
     font-family: 'interlight';
-    src: url('fonts/Inter-Light.ttf');
+    src: url('fonts/InterTight-Light.ttf');
+  }
+  @font-face {
+    font-family: 'intersemibold';
+    src: url('fonts/InterTight-SemiBold.ttf');
   }
 
   html, body {

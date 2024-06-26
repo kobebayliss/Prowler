@@ -69,19 +69,18 @@ export default function HomePage() {
   const homewidth = 1200;
 
   return (
-    <div className="homewidth:flex homewidth:justify-between h-[calc(100vh-57px)]">
-      <div className={`homewidth:w-half homewidth:items-start homewidth:self-center homewidth:mt-0 mt-28 flex flex-col items-center mx-4`}
-      style={screenWidth >= homewidth ? { minWidth: `${initialScreenWidth * 0.5}px` } : {}}>
-        <p className="text-offwhite text-center homewidth:text-start text-titlesmall font-inter homewidth:ml-10 homewidth:mb-1 mb-3 small:text-[60px]">Spend less on games.</p>
-        <p className="text-offwhite text-center homewidth:text-start text-xl font-interlight homewidth:ml-10 homewidth:mb-8 mb-10 w-[540px] homewidth:w-desc">
+    <div className="w-full largewidth:w-[1300px] mx-auto">
+      <div className={`w-full flex my-10 small:my-28 flex-col items-center mx-auto`}>
+        <p className="text-offwhite text-center text-[40px] font-intersemibold mb-3 mx-auto small:text-[70px]">Spend less on games.</p>
+        <p className="text-offwhite text-center text-[18px] font-inter mb-10 w-[500px]">
           Find the lowest prices for thousands of games simply by searching, 
           or browse through games on the browse tab.
         </p>
-        <form className="homewidth:w-[420px] w-[400px] homewidth:ml-10 h-searchbox mb-40" onSubmit={handleSearchSubmit}>
+        <form className="w-[400px]" onSubmit={handleSearchSubmit}>
             <div className="relative">
-                <IoIosSearch className="absolute text-offwhite w-auto h-search ml-4.5 top-1/2 transform -translate-y-1/2"/>
-                <input 
-                className="w-full pl-19 p-4.5 text-search placeholder:font-inter placeholder:text-grey text-offwhite font-inter 
+                <IoIosSearch className="absolute text-offwhite w-auto h-[70%] ml-3 top-1/2 transform -translate-y-1/2"/>
+                <input
+                className="w-full pl-19 p-4 text-[18px] placeholder:font-intersemibold placeholder:text-grey text-offwhite font-inter 
                 rounded-searchbox bg-lightmidnight focus:outline-none focus:ring-1 focus:ring-offwhite transition-all duration-100" 
                 placeholder="Search for a game..."
                 value={searchTerm}
@@ -90,9 +89,9 @@ export default function HomePage() {
             </div>
         </form>
       </div>
-      <div className="flex homewidth:w-half w-[80%] mx-auto homewidth:pr-10">
+      <div className="small:mt-44 mt-[84px] flex w-[90%] mx-auto">
         <Carousel plugins={plugin.current ? [plugin.current] : []}
-          className="w-full transition-all content-center homewidth:h-[calc(100vh-65px)] mb-10"
+          className="w-full transition-all content-center mb-10"
           onMouseEnter={() => { setIsHovered(true); plugin.current?.stop(); }}
           onMouseLeave={() => { setIsHovered(false); plugin.current?.reset(); }}
         >
@@ -102,7 +101,7 @@ export default function HomePage() {
                 <Card className="bg-transparent">
                   <CardContent className="flex p-0">
                     {image ? (
-                      <a className="relative w-full h-[calc(90vh-65px)] overflow-hidden rounded-carousel" href="#">
+                      <a className="relative w-full overflow-hidden rounded-carousel" href="#">
                         <img
                           src={`/images/${image}`}
                           alt="Game Image" 

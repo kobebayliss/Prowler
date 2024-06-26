@@ -34,8 +34,8 @@ export default function GamePageContent() {
         <div>
             <div className="grid-width:grid grid-width:grid-cols-2 grid-width:w-[94.890510948%] w-[92%] mx-auto game-width:w-[1300px]">
                 <div className="flex flex-col mt-2 grid-width:mt-5 grid-width:mr-8">
-                    <p className="text-offwhite font-inter text-[2.4em] mx-auto">Ghost of Tsushima</p>
-                    <p className="text-offwhite font-interlight text-[1.05em] mx-auto">Reviews: Mostly Positive (632,221)</p>
+                    <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0">Ghost of Tsushima</p>
+                    <p className="text-offwhite font-interlight text-[1.05em] mx-auto grid-width:mx-0">Reviews: Mostly Positive (632,221)</p>
                     <div className="h-px w-full bg-lightermidnight mt-3"/>
                     <div className="mt-3 w-full">
                         <p className="font-interlight text-offwhite text-[15px] mx-auto grid-width:mx-0">
@@ -44,7 +44,7 @@ export default function GamePageContent() {
                     </div>
                     <div className="h-px w-full bg-lightermidnight mt-3"/>
                     <div className="my-3 text-offwhite">
-                        <p className="flex justify-center font-inter text-[20px]">System Requirements</p>
+                        <p className="flex justify-center grid-width:justify-start font-inter text-[20px]">System Requirements</p>
                         <div className="w-full mt-2 text-[13.5px] bg-midnight items-start rounded-lg font-interlight">
                             <div className="flex">
                                 <p className="mb-[3px] text-darkerwhite font-inter">OS:</p>
