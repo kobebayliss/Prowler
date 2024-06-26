@@ -17,7 +17,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const carouselNames =[
+const carouselNames = [
   "Ghost of Tsushima",
   "Sea of Thieves",
   "Cyberpunk 2077",
@@ -34,8 +34,8 @@ const carouselImages = [
 ];
 
 export default function HomePage() {
-  const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
-  const [isHovered, setIsHovered] = useState(false);
+  const plugin = useRef(Autoplay({ delay: 1700, stopOnInteraction: true }));
+  const [isHovered, setIsHovered] = useState(Array(carouselImages.length).fill(false));
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
   const [screenWidth, setScreenWidth] = useState(0);
@@ -66,6 +66,18 @@ export default function HomePage() {
     router.push(`/browse?search=${searchTerm}`);
   };
 
+  const handleMouseEnter = (index: number) => {
+    const newHoverState = isHovered.map((hovered, i) => (i === index ? true : hovered));
+    setIsHovered(newHoverState);
+    plugin.current?.stop();
+  };
+
+  const handleMouseLeave = (index: number) => {
+    const newHoverState = isHovered.map((hovered, i) => (i === index ? false : hovered));
+    setIsHovered(newHoverState);
+    plugin.current?.reset();
+  };
+
   const homewidth = 1200;
 
   return (
@@ -89,38 +101,35 @@ export default function HomePage() {
             </div>
         </form>
       </div>
-      <div className="small:mt-44 mt-[84px] flex w-[90%] mx-auto">
+      <div className="small:mt-36 mt-[84px] w-[95.769230769%] largewidth:w-[1245px] mx-auto">
+        <div className="bg-lightermidnight w-full h-[2px]"/>
         <Carousel plugins={plugin.current ? [plugin.current] : []}
-          className="w-full transition-all content-center mb-10"
-          onMouseEnter={() => { setIsHovered(true); plugin.current?.stop(); }}
-          onMouseLeave={() => { setIsHovered(false); plugin.current?.reset(); }}
+          className="transition-all content-center mt-16"
         >
           <CarouselContent> 
             {carouselImages.map((image, index) => (
-              <CarouselItem key={index}>
+              <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3">
                 <Card className="bg-transparent">
                   <CardContent className="flex p-0">
                     {image ? (
-                      <a className="relative w-full overflow-hidden rounded-carousel" href="#">
+                      <a
+                        className="relative overflow-hidden rounded-[18px]"
+                        href="#"
+                        onMouseEnter={() => handleMouseEnter(index)}
+                        onMouseLeave={() => handleMouseLeave(index)}
+                      >
                         <img
                           src={`/images/${image}`}
                           alt="Game Image" 
-                          className="h-full w-full hover:brightness-80 transition-all duration-200"/>
+                          className="largewidth:w-[415px] h-auto hover:brightness-80 transition-all duration-200"
+                        />
                         <div 
-                        className={`flex flex-col items-center absolute bottom-0 w-full h-popup 
-                        bg-midnight z-10 transition-all duration-200 justify-center
-                        ${isHovered ? 'animate-slideup' : 'animate-slidedown'}`}>
+                        className={`flex flex-col items-center bottom-0 w-full h-[55px] 
+                        bg-lightmidnight z-10 transition-all duration-200 justify-center`}>
                           <p className="font-inter text-2xl text-offwhite mb-1">{carouselNames[index]}</p>
-                          <div className="flex mb-1 items-center">
-                            <FaSteam className="text-offwhite mr-seperate h-logos w-auto"/>
-                            <p className="font-interlight text-prices text-offwhite mt-em">$59.99</p>
-                            <div className="bg-grey h-line w-0.2 mt-em mx-linemargin"/>
-                            <p className="font-interlight text-prices text-offwhite mt-em">$59.99</p>
-                            <SiEpicgames className="text-offwhite ml-seperate h-logos w-auto"/>
-                          </div>
                         </div>
                       </a>
-                      ) : (
+                    ) : (
                       <div className="w-full h-full bg-gray-200 rounded-4xl" />
                     )}
                   </CardContent>
@@ -131,6 +140,10 @@ export default function HomePage() {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
+        <p className="text-offwhite font-inter text-center w-[380px] mx-auto text-[18px] mt-20">Our browse page offers thousands of games, able to be filtered and sorted to your needs.</p>
+        <a className="flex mt-5 bg-offwhite w-[140px] hover:bg-darkwhite rounded-md h-[42px] justify-center items-center transition-all duration-200 mx-auto mb-6" href="../browse">
+          <p className="font-intersemibold text-[16px]">Browse games</p>
+        </a>
       </div>
     </div>
   );

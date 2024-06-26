@@ -79,7 +79,7 @@ const config = {
         'darkwhite': '#bfbfbf',
         'greyish': '#c9c9c9',
         'grey': '#7f7f7f',
-        'lightmidnight': '#191d20',
+        'lightmidnight': '#232323',
         'lightermidnight': '#3c3c40',
         'blue': '#1E90FF',
         'darkerwhite': '#9b9b9b',
