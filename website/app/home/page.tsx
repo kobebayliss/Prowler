@@ -40,6 +40,7 @@ export default function HomePage() {
   const router = useRouter();
   const [screenWidth, setScreenWidth] = useState(0);
   const [initialScreenWidth, setInitialScreenWidth] = useState(0);
+  const [activated, setActivated] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -78,8 +79,6 @@ export default function HomePage() {
     plugin.current?.reset();
   };
 
-  const homewidth = 1200;
-
   return (
     <div className="w-full largewidth:w-[1300px] mx-auto">
       <div className={`w-full flex my-10 small:my-28 flex-col items-center mx-auto`}>
@@ -103,8 +102,7 @@ export default function HomePage() {
       </div>
       <div className="small:mt-40 mt-[84px] mb-7 w-[95.769230769%] largewidth:w-[1245px] mx-auto">
         <Carousel plugins={plugin.current ? [plugin.current] : []}
-          className="transition-all content-center"
-        >
+          className="transition-all content-center">
           <CarouselContent> 
             {carouselImages.map((image, index) => (
               <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3">
@@ -123,8 +121,9 @@ export default function HomePage() {
                           className="largewidth:w-[415px] h-auto hover:brightness-80 transition-all duration-200"
                         />
                         <div 
-                        className={`flex flex-col items-center bottom-0 w-full h-[55px] 
-                        bg-lightmidnight z-10 transition-all duration-200 justify-center`}>
+                        className={`flex flex-col items-center absolute bottom-0 w-full h-[60px] 
+                        bg-lightmidnight z-10 transition-all duration-200 justify-center
+                        ${isHovered[index] ? 'animate-slideup' : 'animate-slidedown'}`}>
                           <p className="font-inter small:text-2xl text-offwhite mb-1">{carouselNames[index]}</p>
                         </div>
                       </a>
