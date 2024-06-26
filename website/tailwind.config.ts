@@ -11,10 +11,15 @@ const config = {
   prefix: "",
   theme: {
     screens: {
+      'genre-width': '640px',
+      'grid-width': '840px',
+      'price-width': '1130px',
+      'desc-width': '780px',
+      'game-width': '1370px',
       'small': '650px',
       'homewidth': '1200px',
       'browsewidth': '820px',
-      'navwidth': '800px',
+      'navwidth': '880px',
       'lg': '1080px',
       'filterlg': '1200px',
       'tablet': '700px',
@@ -28,6 +33,10 @@ const config = {
       },
     },
     extend: {
+      lineClamp: {
+        10: '10',
+        8: '8',
+      },
       translate: {
         '250': '220px',
         '4.5': '18px',
@@ -68,7 +77,7 @@ const config = {
         'greyish': '#c9c9c9',
         'grey': '#7f7f7f',
         'lightmidnight': '#27272a',
-        'lightermidnight': '#313135',
+        'lightermidnight': '#3c3c40',
         'blue': '#1E90FF',
         'darkerwhite': '#9b9b9b',
         input: "hsl(var(--input))",

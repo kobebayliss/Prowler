@@ -120,8 +120,3 @@
     border-right: 10px solid transparent; 
     border-top: 10px solid #27272a;
   }
-  
-  .game_grid {
-    display: grid;
-    grid-template-columns: 54% 46%;
-  }

@@ -69,7 +69,7 @@ export default function HomePage() {
   const homewidth = 1200;
 
   return (
-    <div className="homewidth:flex homewidth:justify-between h-[calc(100vh-65px)]">
+    <div className="homewidth:flex homewidth:justify-between h-[calc(100vh-57px)]">
       <div className={`homewidth:w-half homewidth:items-start homewidth:self-center homewidth:mt-0 mt-28 flex flex-col items-center mx-4`}
       style={screenWidth >= homewidth ? { minWidth: `${initialScreenWidth * 0.5}px` } : {}}>
         <p className="text-offwhite text-center homewidth:text-start text-titlesmall font-inter homewidth:ml-10 homewidth:mb-1 mb-3 small:text-[60px]">Spend less on games.</p>
