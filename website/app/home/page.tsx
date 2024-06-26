@@ -101,10 +101,9 @@ export default function HomePage() {
             </div>
         </form>
       </div>
-      <div className="small:mt-36 mt-[84px] w-[95.769230769%] largewidth:w-[1245px] mx-auto">
-        <div className="bg-lightermidnight w-full h-[2px]"/>
+      <div className="small:mt-40 mt-[84px] mb-7 w-[95.769230769%] largewidth:w-[1245px] mx-auto">
         <Carousel plugins={plugin.current ? [plugin.current] : []}
-          className="transition-all content-center mt-16"
+          className="transition-all content-center"
         >
           <CarouselContent> 
             {carouselImages.map((image, index) => (
@@ -126,7 +125,7 @@ export default function HomePage() {
                         <div 
                         className={`flex flex-col items-center bottom-0 w-full h-[55px] 
                         bg-lightmidnight z-10 transition-all duration-200 justify-center`}>
-                          <p className="font-inter text-2xl text-offwhite mb-1">{carouselNames[index]}</p>
+                          <p className="font-inter small:text-2xl text-offwhite mb-1">{carouselNames[index]}</p>
                         </div>
                       </a>
                     ) : (
@@ -141,7 +140,7 @@ export default function HomePage() {
           <CarouselNext />
         </Carousel>
         <p className="text-offwhite font-inter text-center w-[380px] mx-auto text-[18px] mt-20">Our browse page offers thousands of games, able to be filtered and sorted to your needs.</p>
-        <a className="flex mt-5 bg-offwhite w-[140px] hover:bg-darkwhite rounded-md h-[42px] justify-center items-center transition-all duration-200 mx-auto mb-6" href="../browse">
+        <a className="flex mt-5 bg-offwhite w-[140px] hover:bg-darkwhite rounded-md h-[42px] justify-center items-center transition-all duration-200 mx-auto" href="../browse">
           <p className="font-intersemibold text-[16px]">Browse games</p>
         </a>
       </div>
