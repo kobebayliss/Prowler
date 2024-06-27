@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Autoplay from "embla-carousel-autoplay";
+import AutoScroll from "embla-carousel-auto-scroll";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from 'next/image';
 import { IoIosSearch } from "react-icons/io";
@@ -34,7 +35,7 @@ const carouselImages = [
 ];
 
 export default function HomePage() {
-  const plugin = useRef(Autoplay({ delay: 1700, stopOnInteraction: true }));
+  const plugin = useRef(AutoScroll({ speed: 3, stopOnMouseEnter: true, stopOnInteraction: false }));
   const [isHovered, setIsHovered] = useState(Array(carouselImages.length).fill(false));
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
@@ -100,9 +101,12 @@ export default function HomePage() {
             </div>
         </form>
       </div>
-      <div className="small:mt-40 mt-[84px] mb-7 w-[95.769230769%] largewidth:w-[1245px] mx-auto">
+      <div className="small:mt-40 mt-[84px] mb-16 w-[95.769230769%] largewidth:w-[1245px] mx-auto">
         <Carousel plugins={plugin.current ? [plugin.current] : []}
+          opts={{ align:"start", loop:true }}
           className="transition-all content-center">
+          <div className="absolute top-0 left-0 h-full w-[80px] bg-gradient-to-r from-midnight to-transparent z-10"></div>
+          <div className="absolute top-0 right-0 h-full w-[80px] bg-gradient-to-l from-midnight to-transparent z-10"></div>
           <CarouselContent> 
             {carouselImages.map((image, index) => (
               <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3">
@@ -121,7 +125,7 @@ export default function HomePage() {
                           className="largewidth:w-[415px] h-auto hover:brightness-80 transition-all duration-200"
                         />
                         <div 
-                        className={`flex flex-col items-center absolute bottom-0 w-full h-[60px] 
+                        className={`flex flex-col items-center absolute bottom-0 w-full h-[50px] 
                         bg-lightmidnight z-10 transition-all duration-200 justify-center
                         ${isHovered[index] ? 'animate-slideup' : 'animate-slidedown'}`}>
                           <p className="font-inter small:text-2xl text-offwhite mb-1">{carouselNames[index]}</p>

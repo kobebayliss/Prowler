@@ -62,7 +62,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             # if condition for when website should finish scrolling
-            if i > 8:
+            if i > 20:
                 break
         
         updated_html = driver.page_source
@@ -90,6 +90,10 @@ def scrape_steam_page(url):
             # retrieving and error handling price
             if price_tag.find('div', class_="discount_final_price"):
                 price = price_tag.find('div', class_="discount_final_price").text.strip()
+                if "$" in price:
+                    price = price.replace("NZ$", "$").strip()
+                    price = price.replace("$ ", "$")
+                print(price)
             else:
                 failed = True
                 price = f"Failed to find price"

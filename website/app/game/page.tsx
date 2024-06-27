@@ -4,6 +4,20 @@ import React, { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 
+interface Game {
+    game_id: number;
+    game_name: string;
+    steam_on_sale: string;
+    steam_price: string;
+    steam_normal_price: string;
+    epic_on_sale: string;
+    epic_price: string;
+    epic_normal_price: string;
+    game_developer: string;
+    game_description: string;
+    game_image: string;
+}
+
 function useTextOverflow(ref: React.RefObject<HTMLDivElement>, lines: number, isExpanded: boolean) {
     const [isOverflow, setIsOverflow] = useState(false);
 
@@ -26,15 +40,43 @@ function useTextOverflow(ref: React.RefObject<HTMLDivElement>, lines: number, is
 export default function GamePageContent() {
     const [isHovered, setIsHovered] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
-    const description = "For the very first time on PC, play through Jin Sakai’s journey and discover the complete Ghost of Tsushima experience in this Director’s Cut. In the late 13th century, the Mongol empire has laid waste to entire nations along their campaign to conquer the East. Tsushima Island is all that stands between mainland Japan and a massive Mongol invasion fleet led by the ruthless and cunning general, Khotun Khan. As the island burns in the wake of the first wave of the Mongol assault, courageous samurai warrior Jin Sakai stands resolute. As one of the last surviving members of his clan, Jin is resolved to do whatever it takes, at any cost, to protect his people and reclaim his home. He must set aside the traditions that have shaped him as a warrior to forge a new path, the path of the Ghost, and wage an unconventional war for the freedom of Tsushima. Experience Ghost of Tsushima with unlocked framerates and a variety of graphics options tailored to a wide range of hardware, ranging from high-end PCs to portable PC gaming devices. Get a view of even more of the action with support for Ultrawide (21:9), Super Ultrawide (32:9) and even 48:9 Triple Monitor support. Boost performance with upscaling and frame generation technologies like NVIDIA DLSS 3, AMD FSR 3 and Intel XeSS. NVIDIA Reflex and image quality-enhancing NVIDIA DLAA are also supported. Japanese lip sync – enjoy a more authentic experience with lip sync for Japanese voiceover, made possible by cinematics being rendered in real time by your PC.";
     const descriptionRef = useRef(null);
     const isOverflow = useTextOverflow(descriptionRef, 6, isExpanded);
+    const router = useRouter();
+    const [game, setGame] = useState<Game | null>(null);
+    const idQuery = useSearchParams();
+    const id = idQuery.get('id');
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("/api");
+                const games = response.data;
+                const selectedGame = games.find((g: Game) => g.game_id === parseInt(id as string, 10));
+                if (selectedGame) {
+                    setGame(selectedGame);
+                } else {
+                    console.error("game not found");
+                }
+            } catch (error) {
+                console.error("error fetching games:", error);
+            }
+        };
+
+        if (id) {
+            fetchData();
+        }
+    }, [id]);
+
+    if (!game) {
+        return <div>Loading...</div>; 
+    }
 
     return (
         <div>
-            <div className="grid-width:grid grid-width:grid-cols-[360px_auto] grid-width:w-[94.890510948%] w-[92%] mx-auto game-width:w-[1300px]">
+            <div className="grid-width:grid grid-width:grid-cols-[360px_auto] grid-width:w-[94.890510948%] w-[90%] mx-auto game-width:w-[1300px]">
                 <div className="flex flex-col grid-width:mt-5 grid-width:mr-8 justify-center">
-                    <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 line-clamp-4">Ghost of Tsushima</p>
+                    <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 mt-3 grid-width:mt-0 line-clamp-4">{game.game_name}</p>
                     <p className="text-offwhite font-interlight text-[1.05em] mx-auto grid-width:mx-0">Reviews: Mostly Positive (632,221)</p>
                     <div className="h-px w-full bg-lightermidnight mt-3"/>
                     <div className="flex bg-lightmidnight w-full mx-auto h-[92px] price-width:h-[110px] mt-[20px] rounded-lg">
@@ -43,10 +85,9 @@ export default function GamePageContent() {
                         onMouseLeave={() => { setIsHovered(false); }}>
                             <div className="flex justify-center items-center">
                                 <img src="/images/steam.png" alt="Steam logo" className="mr-3 w-auto h-[30px] price-width:h-[40px]"/>
-                                <p className="text-offwhite font-inter text-[18px] price-width:text-[23px]">$59.99</p>
+                                <p className="text-offwhite font-inter text-[18px] price-width:text-[23px]">{game.steam_price}</p>
                             </div>
-                            <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5 hidden price-width:block">Click to view Steam page</p>
-                            <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5 block price-width:hidden">View Steam page</p>
+                            <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5">View Steam page</p>
                         </a>
                         <div className={`w-[1.5px] bg-lightermidnight self-center transition-all duration-150 ${isHovered ? 'h-[100%]' : 'h-[50%]'}`}/>
                         <a href="#" className="w-[50%] rounded-r-2xl transition-all duration-150 hover:bg-lightermidnight flex flex-col justify-center"
@@ -54,10 +95,9 @@ export default function GamePageContent() {
                         onMouseLeave={() => { setIsHovered(false); }}>
                             <div className="flex justify-center items-center">
                                 <img src="/images/epic.png" alt="Epic Games logo" className="mr-3 w-auto h-[30px] price-width:h-[40px]"/>
-                                <p className="text-offwhite font-inter text-[18px] price-width:text-[23px]">$59.99</p>
+                                <p className="text-offwhite font-inter text-[18px] price-width:text-[23px]">{game.epic_price}</p>
                             </div>
-                            <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5 hidden price-width:block">Click to view Epic page</p>
-                            <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5 block price-width:hidden">View Epic page</p>
+                            <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5">View Epic page</p>
                         </a>
                     </div>
                     <div className="h-px w-full bg-lightermidnight mt-5"/>
@@ -72,12 +112,12 @@ export default function GamePageContent() {
                     <img src="/images/test.jpg" alt="Game picture" className="rounded-lg w-full h-auto"/>
                 </div>
             </div>
-            <div className="w-[94.890510948%] game-width:w-[1300px] mx-auto">
+            <div className="w-[90%] grid-width:w-[94.890510948%] game-width:w-[1300px] mx-auto">
                 <div className="h-px w-full mt-6 bg-lightermidnight"/>
-                <div className="flex">
+                <div className="grid-width:grid grid-width:grid-cols-[auto_480px]">
                     <div>
-                        <div ref={descriptionRef} className={`font-interlight text-offwhite w-[89.743589743%] desc-width:w-[600px] mr-20 mt-5 text-[15px] ${isExpanded ? 'line-clamp-none' : 'line-clamp-6'}`}>
-                            {description}
+                        <div className={`font-interlight text-offwhite grid-width:mr-20 mt-5 text-[15px]`}>
+                            {game.game_description}
                         </div>
                         {isOverflow && !isExpanded && (
                             <p className="font-inter mb-4 text-offwhite text-[15.5px] mt-1 cursor-pointer"
@@ -86,31 +126,31 @@ export default function GamePageContent() {
                             <p className="font-inter mb-4 text-offwhite text-[15.5px] mt-1 cursor-pointer"
                             onClick={() => setIsExpanded(false)}>Click to show less</p>)}
                     </div>
-                    <div className="grid grid-cols-3 gap-x-4 mt-6 mb-6 grid-width:mb-0">
+                    <div className="grid grid-cols-3 gap-x-4 mt-10 grid-width:mt-6 mb-12 grid-width:mb-0">
                             <div className="flex">
-                                <div className="w-[1.5px] h-[125px] bg-offwhite hidden genre-width:block"/>
-                                <div className="mt-2.5 ml-5 text-inter text-[20px]">
+                                <div className="w-[1.5px] h-[125px] bg-offwhite"/>
+                                <div className="mt-2.5 ml-4 text-inter text-[17px] grid-width:text-[20px]">
                                     <p className="text-darkerwhite">Genres</p>
                                     <p className="text-offwhite">Action, Multiplayer</p>
                                 </div>
                             </div>
                             <div className="flex">
-                                <div className="w-[1.5px] h-[125px] bg-offwhite hidden genre-width:block"/>
-                                <div className="mt-2.5 ml-5 text-inter text-[20px]">
+                                <div className="w-[1.5px] h-[125px] bg-offwhite"/>
+                                <div className="mt-2.5 ml-4 text-inter text-[17px] grid-width:text-[20px]">
                                     <p className="text-darkerwhite">Developer</p>
                                     <p className="text-offwhite line-clamp-2">Arrowhead Game Studios</p>
                                 </div>
                             </div>
                             <div className="flex">
-                                <div className="w-[1.5px] h-[125px] bg-offwhite hidden genre-width:block"/>
-                                <div className="mt-2.5 ml-5 mr-5 grid-width:mr-0 text-inter text-[20px]">
+                                <div className="w-[1.5px] h-[125px] bg-offwhite"/>
+                                <div className="mt-2.5 ml-4 text-inter text-[17px] grid-width:text-[20px]">
                                     <p className="text-darkerwhite">Publisher</p>
                                     <p className="text-offwhite">Playstation PC LLC</p>
                                 </div>
                             </div>
                         </div>
                 </div>
-                <div className="my-3 text-offwhite">
+                <div className="mt-3 mb-10 text-offwhite">
                     <p className="flex justify-center grid-width:justify-start font-inter text-[20px]">System Requirements</p>
                     <div className="w-full mt-2 text-[13.5px] bg-midnight items-start rounded-lg font-interlight">
                         <div className="flex">

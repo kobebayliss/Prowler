@@ -12,7 +12,7 @@ export default function Nav() {
       <div className="flex h-14 justify-between barwidth:justify-center items-center">
         <div className="flex items-center ml-4.5 mr-0 barwidth:ml-0 barwidth:mr-[700px]">
           <a className="flex items-center h-16 px-2 mr-6" href="../home">
-            <img className="h-[25px] w-auto mr-2.5" src="/images/prowlerlogo.png" alt="Prowler Logo" />
+            <img className="h-[26px] w-auto mr-2.5" src="/images/prowlerlogo.png" alt="Prowler Logo" />
             <p className="font-intersemibold text-[20px] text-offwhite">prowler</p>
           </a>
           <div className="hidden navwidth:block">

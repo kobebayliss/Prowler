@@ -6,17 +6,17 @@ import undetected_chromedriver as uc
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options 
-import mysql.connector
-from fuzzywuzzy import fuzz
+import psycopg2
 import time
 
 # connecting to the prowler_games database
-games_db = mysql.connector.connect(
-  host = "localhost",
-  user = "root",
-  password = "2WS8YL8hqh988NxaPVP2iufPv",
-  database = "prowler_games"
+games_db = psycopg2.connect(
+    host="ep-fancy-frost-a715bifg-pooler.ap-southeast-2.aws.neon.tech",
+    user="default",
+    password="18ObWTweLUqB",
+    database="verceldb"
 )
+
 mycursor = games_db.cursor()
 
 # dictionary of already existing games in database
