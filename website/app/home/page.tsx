@@ -34,6 +34,14 @@ const carouselImages = [
   "nomanssky.jpeg",
 ];
 
+const carouselLinks = [
+  "/game?id=36",
+  "/game?id=91",
+  "/game?id=5",
+  "/game?id=3",
+  "/game?id=175",
+];
+
 export default function HomePage() {
   const plugin = useRef(AutoScroll({ speed: 3, stopOnMouseEnter: true, stopOnInteraction: false }));
   const [isHovered, setIsHovered] = useState(Array(carouselImages.length).fill(false));
@@ -105,8 +113,8 @@ export default function HomePage() {
         <Carousel plugins={plugin.current ? [plugin.current] : []}
           opts={{ align:"start", loop:true }}
           className="transition-all content-center">
-          <div className="absolute top-0 left-0 h-full w-[80px] bg-gradient-to-r from-midnight to-transparent z-10"></div>
-          <div className="absolute top-0 right-0 h-full w-[80px] bg-gradient-to-l from-midnight to-transparent z-10"></div>
+          <div className="absolute top-0 left-0 h-full w-[60px] pointer-events-none bg-gradient-to-r from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
+          <div className="absolute top-0 right-0 h-full w-[60px] pointer-events-none bg-gradient-to-l from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
           <CarouselContent> 
             {carouselImages.map((image, index) => (
               <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3">
@@ -115,7 +123,7 @@ export default function HomePage() {
                     {image ? (
                       <a
                         className="relative overflow-hidden rounded-[18px]"
-                        href="#"
+                        href={carouselLinks[index]}
                         onMouseEnter={() => handleMouseEnter(index)}
                         onMouseLeave={() => handleMouseLeave(index)}
                       >

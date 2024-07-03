@@ -7,9 +7,9 @@ import psycopg2
 import time
 
 games_db = psycopg2.connect(
-    host="ep-fancy-frost-a715bifg-pooler.ap-southeast-2.aws.neon.tech",
+    host="ep-damp-bush-a7sbzyn1-pooler.ap-southeast-2.aws.neon.tech",
     user="default",
-    password="18ObWTweLUqB",
+    password="ZN1HlubFpS2j",
     database="verceldb"
 )
 

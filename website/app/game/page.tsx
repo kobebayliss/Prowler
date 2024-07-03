@@ -6,16 +6,21 @@ import axios from "axios";
 
 interface Game {
     game_id: number;
-    game_name: string;
+    name: string;
+    reviews: string;
     steam_on_sale: string;
     steam_price: string;
     steam_normal_price: string;
     epic_on_sale: string;
     epic_price: string;
     epic_normal_price: string;
-    game_developer: string;
-    game_description: string;
-    game_image: string;
+    developer: string;
+    publisher: string;
+    short_desc: string;
+    long_desc: string;
+    banner: string;
+    images: string;
+    specs: string;
 }
 
 function useTextOverflow(ref: React.RefObject<HTMLDivElement>, lines: number, isExpanded: boolean) {
@@ -72,12 +77,15 @@ export default function GamePageContent() {
         return <div>Loading...</div>; 
     }
 
+    let publisherFormatting = game.publisher.replace(/[{}"]/g, '').split(',');
+    let publisherFinal = publisherFormatting.join(', ');
+
     return (
         <div>
             <div className="grid-width:grid grid-width:grid-cols-[360px_auto] grid-width:w-[94.890510948%] w-[90%] mx-auto game-width:w-[1300px]">
                 <div className="flex flex-col grid-width:mt-5 grid-width:mr-8 justify-center">
-                    <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 mt-3 grid-width:mt-0 line-clamp-4">{game.game_name}</p>
-                    <p className="text-offwhite font-interlight text-[1.05em] mx-auto grid-width:mx-0">Reviews: Mostly Positive (632,221)</p>
+                    <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 mt-3 grid-width:mt-0 line-clamp-4">{game.name}</p>
+                    <p className="text-offwhite font-interlight text-[1.05em] mx-auto grid-width:mx-0">{game.reviews}</p>
                     <div className="h-px w-full bg-lightermidnight mt-3"/>
                     <div className="flex bg-lightmidnight w-full mx-auto h-[92px] price-width:h-[110px] mt-[20px] rounded-lg">
                         <a href="#" className="w-[49.8%] rounded-l-lg transition-all duration-150 hover:bg-lightermidnight flex flex-col justify-center"
@@ -103,7 +111,7 @@ export default function GamePageContent() {
                     <div className="h-px w-full bg-lightermidnight mt-5"/>
                     <div className="mt-5 w-full">
                         <p className="font-interlight text-offwhite text-[15px] mx-auto grid-width:mx-0 line-clamp-8">
-                        A storm is coming. Venture into the complete Ghost of Tsushima DIRECTOR’S CUT on PC; forge your own path through this open-world action adventure and uncover its hidden wonders. Brought to you by Sucker Punch Productions, Nixxes Software and PlayStation Studios.
+                            {game.short_desc}
                         </p>
                     </div>
                 </div>
@@ -117,7 +125,7 @@ export default function GamePageContent() {
                 <div className="grid-width:grid grid-width:grid-cols-[auto_480px]">
                     <div>
                         <div className={`font-interlight text-offwhite grid-width:mr-20 mt-5 text-[15px]`}>
-                            {game.game_description}
+                            {game.long_desc}
                         </div>
                         {isOverflow && !isExpanded && (
                             <p className="font-inter mb-4 text-offwhite text-[15.5px] mt-1 cursor-pointer"
@@ -138,14 +146,14 @@ export default function GamePageContent() {
                                 <div className="w-[1.5px] h-[125px] bg-offwhite"/>
                                 <div className="mt-2.5 ml-4 text-inter text-[17px] grid-width:text-[20px]">
                                     <p className="text-darkerwhite">Developer</p>
-                                    <p className="text-offwhite line-clamp-2">Arrowhead Game Studios</p>
+                                    <p className="text-offwhite line-clamp-2">{game.developer}</p>
                                 </div>
                             </div>
                             <div className="flex">
                                 <div className="w-[1.5px] h-[125px] bg-offwhite"/>
                                 <div className="mt-2.5 ml-4 text-inter text-[17px] grid-width:text-[20px]">
                                     <p className="text-darkerwhite">Publisher</p>
-                                    <p className="text-offwhite">Playstation PC LLC</p>
+                                    <p className="text-offwhite">{publisherFinal}</p>
                                 </div>
                             </div>
                         </div>

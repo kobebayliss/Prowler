@@ -17,8 +17,8 @@ import axios from "axios";
 
 interface Game {
     game_id: number;
-    game_name: string;
-    game_image: string;
+    name: string;
+    banner: string;
     steam_price: string;
     epic_price: string;
 }
@@ -62,7 +62,7 @@ function BrowsePageContent() {
             .then(response => {
                 if (searchQuery) {
                     const filteredGames = response.data.filter((game: Game) =>
-                        game.game_name.toLowerCase().includes(searchQuery.toLowerCase())
+                        game.name.toLowerCase().includes(searchQuery.toLowerCase())
                     );
                     setGames(filteredGames);
                 } else {
@@ -189,7 +189,7 @@ function BrowsePageContent() {
                     <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-8 w-full
                     ${showFilter ? 'filtertablet:grid-cols-2 filterlg:grid-cols-3': 'tablet:grid-cols-2 lg:grid-cols-3'}`}>
                         {games.map((game) => {
-                            let gameName = game.game_name as string || "";
+                            let gameName = game.name as string || "";
                             let isLong = 0;
                             if (gameName.length > 27) gameName = gameName.substring(0, 27) + '...', isLong = 1;
 
@@ -201,10 +201,10 @@ function BrowsePageContent() {
                                             <div className={`absolute flex py-2 px-4 bg-lightmidnight items-center rounded-popup 
                                             content-center transition-all duration-150 mb-3 triangle-div text-center 
                                             ${isLong === 1 && hoveredGameId === game.game_id ? 'opacity-100' : 'opacity-0'}`}>
-                                                <p className="text-offwhite font-inter">{game.game_name}</p>
+                                                <p className="text-offwhite font-inter">{game.name}</p>
                                             </div>
                                             <Image
-                                                src={game.game_image}
+                                                src={game.banner}
                                                 alt="Game image"
                                                 width={10000}
                                                 height={10000}

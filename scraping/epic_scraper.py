@@ -9,11 +9,11 @@ from selenium.webdriver.chrome.options import Options
 import psycopg2
 import time
 
-# connecting to the prowler_games database
+# connecting to the prowler-db database
 games_db = psycopg2.connect(
-    host="ep-fancy-frost-a715bifg-pooler.ap-southeast-2.aws.neon.tech",
+    host="ep-damp-bush-a7sbzyn1-pooler.ap-southeast-2.aws.neon.tech",
     user="default",
-    password="18ObWTweLUqB",
+    password="ZN1HlubFpS2j",
     database="verceldb"
 )
 
@@ -23,7 +23,7 @@ mycursor = games_db.cursor()
 steam_names = {}
 
 # sql to retrieve all names and prices
-sql = "SELECT game_id, game_name FROM games"
+sql = "SELECT game_id, name FROM games"
 # executing sql statement
 mycursor.execute(sql)
 results = mycursor.fetchall()

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "games" ALTER COLUMN "specs" SET DATA TYPE TEXT;

@@ -69,6 +69,9 @@ const config = {
         90: '.85',
         80: '.75',
       },
+      gradientColorStopPositions: {
+        70: '70%',
+      },
       spacing: {
         'restscreen': '95.2vh',
         'carouselsize': '1200px',

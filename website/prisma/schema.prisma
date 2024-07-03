@@ -8,26 +8,35 @@ datasource db {
 }
 
 model game_genre {
-  id       Int @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   game_id  Int
   genre_id Int
+  games    games  @relation(fields: [game_id], references: [game_id], onDelete: NoAction, onUpdate: NoAction)
+  genres   genres @relation(fields: [genre_id], references: [genre_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model games {
-  game_id            Int     @id @default(autoincrement())
-  game_name          String? @db.VarChar(100)
-  steam_on_sale      String? @db.VarChar(40)
-  steam_price        String? @db.VarChar(40)
-  steam_normal_price String? @db.VarChar(40)
-  epic_on_sale       String? @db.VarChar(40)
-  epic_price         String? @db.VarChar(40)
-  epic_normal_price  String? @db.VarChar(40)
-  game_developer     String? @db.VarChar(100)
-  game_description   String?
-  game_image         String? @db.VarChar(300)
+  game_id            Int          @id @default(autoincrement())
+  name               String?      @db.VarChar(200)
+  reviews            String?      @db.VarChar(40)
+  steam_on_sale      String?      @db.VarChar(40)
+  steam_price        String?      @db.VarChar(40)
+  steam_normal_price String?      @db.VarChar(40)
+  epic_on_sale       String?      @db.VarChar(40)
+  epic_price         String?      @db.VarChar(40)
+  epic_normal_price  String?      @db.VarChar(40)
+  developer          String?      @db.VarChar(200)
+  publisher          String?      @db.VarChar(200)
+  short_desc         String?
+  long_desc          String?
+  banner             String?      @db.VarChar(300)
+  images             String?
+  specs              String?
+  game_genre         game_genre[]
 }
 
 model genres {
-  genre_id Int    @id @default(autoincrement())
-  genre    String @db.VarChar(40)
+  genre_id   Int          @id @default(autoincrement())
+  genre      String?      @db.VarChar(40)
+  game_genre game_genre[]
 }
