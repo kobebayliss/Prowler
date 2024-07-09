@@ -65,11 +65,18 @@ def scrape_epic_page():
                 price_container = game.find('div', class_="css-1a6kj04")
                 price_container_2 = price_container.find('div', class_="css-o1hbmr")
                 price = price_container_2.find('span', class_="css-119zqif").text.strip()
+                price = price.replace("NZ$", "$").strip()
                 if price_container.find('div', class_="css-4jky3p"):
                     normal_price = price_container.find('div', class_="css-4jky3p").text.strip()
-                    on_sale = True
+                    normal_price = normal_price.replace("NZ$", "$").strip()
+                    on_sale = "1"
+                else:
+                    on_sale = "0"
+                    normal_price = "N/A"
             else:
                 price = "N/A"
+                on_sale = "N/A"
+                normal_price = "N/A"
             # getting link for game
             link_container = game.find('a', class_="css-g3jcms")
             link = f"https://store.epicgames.com{link_container.get('href')}"
@@ -81,14 +88,6 @@ def scrape_epic_page():
 
             matches = [index for index, game_name in steam_names.items() if name in game_name]
             if matches:
-                print(matches[0])
-                print("-------------")
-                print()
-                print()
-                print("Yes")
-                print()
-                print()
-                print("-------------")
                 # sql to update epic price
                 sql = "UPDATE games SET epic_on_sale = %s, epic_price = %s, epic_normal_price = %s WHERE game_id = %s"
                 val = (on_sale, price, normal_price, matches[0])

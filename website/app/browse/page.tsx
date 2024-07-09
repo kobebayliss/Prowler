@@ -207,17 +207,30 @@ function BrowsePageContent() {
                     {games.map((game) => {
                         let gameName = game.name || "";
                         let isLong = gameName.length > 27 ? 1 : 0;
-                        let gameOnSale = game.steam_on_sale === "1";
+                        let steamOnSale = game.steam_on_sale === "1";
                         let steamPrice = game.steam_price;
                         let steamNormalPrice = game.steam_normal_price;
-                        let discount = 0;
+                        let epicOnSale = game.epic_on_sale === "1";
+                        let epicPrice = game.epic_price;
+                        let epicNormalPrice = game.epic_normal_price;
+                        let steamDiscount = 0;
+                        let epicDiscount = 0;
 
-                        if (gameOnSale) {
-                            let normalPrice = parseFloat(steamNormalPrice.replace(/[^\d.-]/g, ''));
-                            let salePrice = parseFloat(steamPrice.replace(/[^\d.-]/g, ''));
+                        if (steamOnSale) {
+                            let normalPrice1 = parseFloat(steamNormalPrice.replace(/[^\d.-]/g, ''));
+                            let salePrice1 = parseFloat(steamPrice.replace(/[^\d.-]/g, ''));
                     
-                            if (normalPrice > 0) {
-                                discount = Math.round(((normalPrice - salePrice) / normalPrice) * 100);
+                            if (normalPrice1 > 0) {
+                                steamDiscount = Math.round(((normalPrice1 - salePrice1) / normalPrice1) * 100);
+                            }
+                        }
+
+                        if (epicOnSale) {
+                            let normalPrice2 = parseFloat(epicNormalPrice.replace(/[^\d.-]/g, ''));
+                            let salePrice2 = parseFloat(epicPrice.replace(/[^\d.-]/g, ''));
+                    
+                            if (normalPrice2 > 0) {
+                                epicDiscount = Math.round(((normalPrice2 - salePrice2) / normalPrice2) * 100);
                             }
                         }
 
@@ -249,20 +262,25 @@ function BrowsePageContent() {
                                         </div>
                                         <div className="flex mt-topper items-center pb-[16px]">
                                             <div className="flex w-40 justify-end items-center">
-                                                {gameOnSale && (
+                                                {steamOnSale && (
                                                     <p className="font-inter mr-3 text-[12px] bg-blue py-1 px-2 rounded-[4px] text-offwhite">
-                                                        - {discount}%
+                                                        - {steamDiscount}%
                                                     </p>
                                                 )}
-                                                <p className={`font-interlight text-prices text-offwhite`}>
+                                                <p className="font-interlight text-prices text-offwhite">
                                                     {steamPrice}
                                                 </p>
                                             </div>
                                             <div className="bg-grey h-line w-0.2 mt-em mx-linemargin" />
-                                            <div className="flex w-40">
-                                                <p className="font-interlight text-prices text-offwhite mt-em1 mr-pricesmargin">
+                                            <div className="flex w-40 justify-start items-center">
+                                                <p className="font-interlight text-prices text-offwhite">
                                                     {game.epic_price}
                                                 </p>
+                                                {epicOnSale && (
+                                                    <p className="font-inter ml-3 text-[12px] bg-blue py-1 px-2 rounded-[4px] text-offwhite">
+                                                        - {epicDiscount}%
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
