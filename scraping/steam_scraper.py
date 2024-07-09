@@ -84,6 +84,8 @@ def scrape_steam_page(url):
             price_tag = game.find('div', class_='col search_price_discount_combined responsive_secondrow')
             if price_tag.find('div', class_="discount_original_price"):
                 normal_price = price_tag.find('div', class_="discount_original_price").text.strip()
+                normal_price = normal_price.replace("NZ$", "$").strip()
+                normal_price = normal_price.replace("$ ", "$")
                 on_sale = "1"
             else:
                 normal_price = "N/A"

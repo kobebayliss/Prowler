@@ -18,9 +18,20 @@ import axios from "axios";
 interface Game {
     game_id: number;
     name: string;
-    banner: string;
+    reviews: string;
+    steam_on_sale: string;
     steam_price: string;
+    steam_normal_price: string;
+    epic_on_sale: string;
     epic_price: string;
+    epic_normal_price: string;
+    developer: string;
+    publisher: string;
+    short_desc: string;
+    long_desc: string;
+    banner: string;
+    images: string;
+    specs: string;
 }
 
 function BrowsePageContent() {
@@ -87,6 +98,11 @@ function BrowsePageContent() {
         <div>
             <div className="flex pt-4 pb-5 ml-7 items-center">
                 <p className="text-offwhite font-inter text-xll browsewidth:text-3xl">Browsing Games</p>
+                <div className="flex ml-14">
+                    <FaSteam className="text-offwhite h-logos w-auto"/>
+                    <div className="bg-grey h-line w-0.2 mt-em mx-linemargin" />
+                    <SiEpicgames className="text-offwhite h-logos w-auto"/>
+                </div>
                 <p className="text-grey hidden font-inter text-base ml-14 browsewidth:block mt-0.5">{games.length} {games.length === 1 ? 'Result' : 'Results'}</p>
                 <div className="hidden browsewidth:flex ml-auto mr-6">
                     <a href="#" 
@@ -188,58 +204,72 @@ function BrowsePageContent() {
                 <div className={`flex transition-all duration-200 ease-out w-full px-6 ${showFilter ? 'ml-showfilter pl-0' : ''}`}>
                     <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-8 w-full
                     ${showFilter ? 'filtertablet:grid-cols-2 filterlg:grid-cols-3': 'tablet:grid-cols-2 lg:grid-cols-3'}`}>
-                        {games.map((game) => {
-                            let gameName = game.name as string || "";
-                            let isLong = 0;
-                            if (gameName.length > 27) gameName = gameName.substring(0, 27) + '...', isLong = 1;
+                    {games.map((game) => {
+                        let gameName = game.name || "";
+                        let isLong = gameName.length > 27 ? 1 : 0;
+                        let gameOnSale = game.steam_on_sale === "1";
+                        let steamPrice = game.steam_price;
+                        let steamNormalPrice = game.steam_normal_price;
+                        let discount = 0;
 
-                            return (
-                                <a href={`/game?id=${game.game_id}`} onClick={() => handleGame(game.game_id)} key={game.game_id}>
-                                    <div className="w-card bg-lightmidnight rounded-searchbox hover:scale-103 
+                        if (gameOnSale) {
+                            let normalPrice = parseFloat(steamNormalPrice.replace(/[^\d.-]/g, ''));
+                            let salePrice = parseFloat(steamPrice.replace(/[^\d.-]/g, ''));
+                    
+                            if (normalPrice > 0) {
+                                discount = Math.round(((normalPrice - salePrice) / normalPrice) * 100);
+                            }
+                        }
+
+                        return (
+                            <a href={`/game?id=${game.game_id}`} onClick={() => handleGame(game.game_id)} key={game.game_id}>
+                                <div className="w-card bg-lightmidnight rounded-searchbox hover:scale-103 
                                     transition-all duration-200 hover:ring-1 hover:ring-offwhite">
-                                        <div className="flex items-end justify-center">
-                                            <div className={`absolute flex py-2 px-4 bg-lightmidnight items-center rounded-popup 
+                                    <div className="flex items-end justify-center">
+                                        <div className={`absolute flex py-2 px-4 bg-lightmidnight items-center rounded-popup 
                                             content-center transition-all duration-150 mb-3 triangle-div text-center 
-                                            ${isLong === 1 && hoveredGameId === game.game_id ? 'opacity-100' : 'opacity-0'}`}>
-                                                <p className="text-offwhite font-inter">{game.name}</p>
-                                            </div>
-                                            <Image
-                                                src={game.banner}
-                                                alt="Game image"
-                                                width={10000}
-                                                height={10000}
-                                                className="w-full h-auto rounded-t-searchbox"
-                                            />
+                                            ${isLong && hoveredGameId === game.game_id ? 'opacity-100' : 'opacity-0'}`}>
+                                            <p className="text-offwhite font-inter">{game.name}</p>
                                         </div>
-                                        <div className={`flex flex-col items-center transition-all duration-200 ${showFilter ? 'scale-86': ''}`}>
-                                            <div>
-                                                <p 
-                                                className="font-inter text-2xl text-offwhite mt-top max-w-sm overflow-hidden whitespace-nowrap"
+                                        <Image
+                                            src={game.banner}
+                                            alt="Game image"
+                                            width={10000}
+                                            height={10000}
+                                            className="w-full h-auto rounded-t-searchbox"
+                                        />
+                                    </div>
+                                    <div className={`flex flex-col items-center transition-all duration-200 ${showFilter ? 'scale-86' : ''}`}>
+                                        <div>
+                                            <p className="font-inter text-2xl text-offwhite mt-[0.6em] max-w-sm overflow-hidden whitespace-nowrap"
                                                 onMouseEnter={() => setHoveredGameId(game.game_id)}
                                                 onMouseLeave={() => setHoveredGameId(null)}>
                                                 {gameName}
+                                            </p>
+                                        </div>
+                                        <div className="flex mt-topper items-center pb-[16px]">
+                                            <div className="flex w-40 justify-end items-center">
+                                                {gameOnSale && (
+                                                    <p className="font-inter mr-3 text-[12px] bg-blue py-1 px-2 rounded-[4px] text-offwhite">
+                                                        - {discount}%
+                                                    </p>
+                                                )}
+                                                <p className={`font-interlight text-prices text-offwhite`}>
+                                                    {steamPrice}
                                                 </p>
                                             </div>
-                                            <div className="flex mt-topper items-center pb-topper">
-                                                <div className="flex w-40 justify-end">
-                                                    <FaSteam className="text-offwhite h-logos w-auto"/>
-                                                    <p className="font-interlight text-prices text-offwhite mt-em1 ml-pricesmargin">
-                                                        {game.steam_price}
-                                                    </p>
-                                                </div>
-                                                <div className="bg-grey h-line w-0.2 mt-em mx-linemargin"/>
-                                                <div className="flex w-40">
-                                                    <p className="font-interlight text-prices text-offwhite mt-em1 mr-pricesmargin">
-                                                        {game.epic_price}
-                                                    </p>
-                                                    <SiEpicgames className="text-offwhite h-logos w-auto"/>
-                                                </div>
+                                            <div className="bg-grey h-line w-0.2 mt-em mx-linemargin" />
+                                            <div className="flex w-40">
+                                                <p className="font-interlight text-prices text-offwhite mt-em1 mr-pricesmargin">
+                                                    {game.epic_price}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                                </a>
-                            );
-                        })}
+                                </div>
+                            </a>
+                        );
+                    })}
                     </div>
                 </div>
             </div>
