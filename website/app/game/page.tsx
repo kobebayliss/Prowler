@@ -1,8 +1,10 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 interface Game {
     game_id: number;
@@ -21,6 +23,7 @@ interface Game {
     banner: string;
     images: string;
     specs: string;
+    genres: string[];
 }
 
 function useTextOverflow(ref: React.RefObject<HTMLDivElement>, lines: number, isExpanded: boolean) {
@@ -42,7 +45,7 @@ function useTextOverflow(ref: React.RefObject<HTMLDivElement>, lines: number, is
     return isOverflow;
 }
 
-export default function GamePageContent() {
+function GamePageContent() {
     const [isHovered, setIsHovered] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const descriptionRef = useRef(null);
@@ -55,19 +58,19 @@ export default function GamePageContent() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("/api");
-                const games = response.data;
-                const selectedGame = games.find((g: Game) => g.game_id === parseInt(id as string, 10));
+                const response = await axios.get(`/api/games?id=${id}`);
+                const selectedGame = response.data;
+    
                 if (selectedGame) {
                     setGame(selectedGame);
                 } else {
-                    console.error("game not found");
+                    console.error("Game not found");
                 }
             } catch (error) {
-                console.error("error fetching games:", error);
+                console.error("Error fetching game:", error);
             }
         };
-
+    
         if (id) {
             fetchData();
         }
@@ -77,14 +80,17 @@ export default function GamePageContent() {
         return <div>Loading...</div>; 
     }
 
+    let imageUrls = game.images.replace(/[{}"]/g, '').split(',');
+    imageUrls = imageUrls.map(url => url.trim()).filter((url, index, self) => self.indexOf(url) === index);
+
     let publisherFormatting = game.publisher.replace(/[{}"]/g, '').split(',');
     let publisherFinal = publisherFormatting.join(', ');
 
     return (
         <div>
-            <div className="grid-width:grid grid-width:grid-cols-[360px_auto] grid-width:w-[94.890510948%] w-[90%] mx-auto game-width:w-[1300px]">
-                <div className="flex flex-col grid-width:mt-5 grid-width:mr-8 justify-center">
-                    <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 mt-3 grid-width:mt-0 line-clamp-4">{game.name}</p>
+            <div className="grid-width:grid grid-width:grid-cols-[360px_auto] my-8 mx-auto grid-width:w-[92.890510948%] w-[90%] game-width:w-[1300px]">
+                <div className="flex flex-col grid-width:mr-8 justify-center">
+                    <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 mt-3 grid-width:mt-0 line-clamp-2">{game.name}</p>
                     <p className="text-offwhite font-interlight text-[1.05em] mx-auto grid-width:mx-0">{game.reviews}</p>
                     <div className="h-px w-full bg-lightermidnight mt-3"/>
                     <div className="flex bg-lightmidnight w-full mx-auto h-[92px] price-width:h-[110px] mt-[20px] rounded-lg">
@@ -115,16 +121,28 @@ export default function GamePageContent() {
                         </p>
                     </div>
                 </div>
-                <div className="flex flex-col grid-width:ml-2 mt-6 justify-center">
+                <div className="flex flex-col grid-width:ml-[50px] justify-center">
                     <div className="h-px w-full bg-lightermidnight mb-8 block grid-width:hidden"/>
-                    <img src="/images/test.jpg" alt="Game picture" className="rounded-lg w-full h-auto"/>
+                    <Carousel plugins={[Autoplay({delay: 1800,}),]} opts={{loop: true,}}>
+                    <div className="absolute top-0 left-0 h-full w-[60px] pointer-events-none bg-gradient-to-r from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
+                    <div className="absolute top-0 right-0 h-full w-[60px] pointer-events-none bg-gradient-to-l from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
+                        <CarouselContent>
+                            {imageUrls.map((url, index) => (
+                                <CarouselItem key={index}>
+                                    <img src={url} alt={`Game screenshot ${index + 1}`} className="rounded-lg h-[411px] w-[732px]"/>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
                 </div>
             </div>
-            <div className="w-[90%] grid-width:w-[94.890510948%] game-width:w-[1300px] mx-auto">
-                <div className="h-px w-full mt-6 bg-lightermidnight"/>
-                <div className="grid-width:grid grid-width:grid-cols-[auto_480px]">
+            <div className="w-[90%] grid-width:w-[92.890510948%] game-width:w-[1300px] mx-auto">
+                <div className="h-px w-full bg-lightermidnight"/>
+                <div className="grid-width:grid grid-width:grid-cols-[auto_auto]">
                     <div>
-                        <div className={`font-interlight text-offwhite grid-width:mr-20 mt-5 text-[15px]`}>
+                        <div className={`font-interlight text-offwhite grid-width:mr-24 mt-5 text-[15px]`}>
                             {game.long_desc}
                         </div>
                         {isOverflow && !isExpanded && (
@@ -134,60 +152,44 @@ export default function GamePageContent() {
                             <p className="font-inter mb-4 text-offwhite text-[15.5px] mt-1 cursor-pointer"
                             onClick={() => setIsExpanded(false)}>Click to show less</p>)}
                     </div>
-                    <div className="grid grid-cols-3 gap-x-4 mt-10 grid-width:mt-6 mb-12 grid-width:mb-0">
-                            <div className="flex">
-                                <div className="w-[1.5px] h-[125px] bg-offwhite"/>
-                                <div className="mt-2.5 ml-4 text-inter text-[17px] grid-width:text-[20px]">
-                                    <p className="text-darkerwhite">Genres</p>
-                                    <p className="text-offwhite">Action, Multiplayer</p>
-                                </div>
+                    <div className="mt-10 grid-width:mt-6 mb-12 grid-width:mb-0 grid-width:ml-auto max-w-[320px]">
+                        <div className="flex">
+                            <div className="w-[1.5px] block grid-width:hidden h-[auto] mr-5 bg-offwhite"/>
+                            <div className="mt-2 text-inter grid-width:text-right mb-2.5 text-[17px] grid-width:text-[20px]">
+                                <p className="text-darkerwhite">Genres</p>
+                                <p className="text-offwhite mb-3.5">{game.genres.join(', ')}</p>
+                                <p className="text-darkerwhite">Developer</p>
+                                <p className="text-offwhite mb-3.5">{game.developer}</p>
+                                <p className="text-darkerwhite">Publisher</p>
+                                <p className="text-offwhite">{publisherFinal}</p>
                             </div>
-                            <div className="flex">
-                                <div className="w-[1.5px] h-[125px] bg-offwhite"/>
-                                <div className="mt-2.5 ml-4 text-inter text-[17px] grid-width:text-[20px]">
-                                    <p className="text-darkerwhite">Developer</p>
-                                    <p className="text-offwhite line-clamp-2">{game.developer}</p>
-                                </div>
-                            </div>
-                            <div className="flex">
-                                <div className="w-[1.5px] h-[125px] bg-offwhite"/>
-                                <div className="mt-2.5 ml-4 text-inter text-[17px] grid-width:text-[20px]">
-                                    <p className="text-darkerwhite">Publisher</p>
-                                    <p className="text-offwhite">{publisherFinal}</p>
-                                </div>
-                            </div>
+                            <div className="w-[1.5px] hidden grid-width:block h-[auto] ml-5 bg-offwhite"/>
                         </div>
+                    </div>
                 </div>
                 <div className="mt-3 mb-10 text-offwhite">
                     <p className="flex justify-center grid-width:justify-start font-inter text-[20px]">System Requirements</p>
                     <div className="w-full mt-2 text-[13.5px] bg-midnight items-start rounded-lg font-interlight">
-                        <div className="flex">
-                            <p className="mb-[3px] text-darkerwhite font-inter">OS:</p>
-                            <p className="font-interlight">&nbsp;Windows 10 64-bit</p>
-                        </div>
-                        <div className="flex">
-                            <p className="mb-[3px] text-darkerwhite font-inter">Processor:</p>
-                            <p className="font-interlight">&nbsp;Intel Core i3-7100 or AMD Ryzen 3 1200</p>
-                        </div>
-                        <div className="flex">
-                            <p className="mb-[3px] text-darkerwhite font-inter">Memory:</p>
-                            <p className="font-interlight">&nbsp;8 GB RAM</p>
-                        </div>
-                        <div className="flex">
-                            <p className="mb-[3px] text-darkerwhite font-inter">Graphics:</p>
-                            <p className="font-interlight">&nbsp;NVIDIA GeForce GTX 960 or AMD Radeon RX 5500 XT</p>
-                        </div>
-                        <div className="flex">
-                            <p className="mb-[3px] text-darkerwhite font-inter">Storage:</p>
-                            <p className="font-interlight">&nbsp;75 GB available space</p>
-                        </div>
-                        <div className="flex">
-                            <p className="mb-[3px] text-darkerwhite font-inter">Additional Notes:</p>
-                            <p className="font-interlight">&nbsp;SSD Recommended</p>
-                        </div>
+                    {game.specs.replace(/[{}"]/g, '').split(',').map((spec, index) => {
+                        const [key, value] = spec.split(':');
+                        return (
+                            <div key={index} className="flex">
+                                <p className="mb-[3px] text-darkerwhite font-inter">{key ? key.trim() : 'Unknown'}:</p>
+                                <p className="font-interlight">&nbsp;{value ? value.trim() : 'N/A'}</p>
+                            </div>
+                        );
+                    })}
                     </div>
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function GamePage() {
+    return (
+        <Suspense fallback={<div className="text-offwhite font-inter flex justify-center text-[16px] mt-10">Loading...</div>}>
+            <GamePageContent/>
+        </Suspense>
     );
 }

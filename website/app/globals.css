@@ -111,6 +111,7 @@
 
   html, body {
     background-color: #08090a;
+    scroll-behavior: smooth;
   }
   
   .triangle-div::after {

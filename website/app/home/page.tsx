@@ -89,9 +89,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="w-full largewidth:w-[1300px] mx-auto">
+    <div className="w-[94.545454545%] otherwidth:w-[1300px] mx-auto">
       <div className={`w-full flex my-10 small:my-28 flex-col items-center mx-auto`}>
-        <p className="text-offwhite text-center text-[40px] font-intersemibold mb-3 mx-auto small:text-[70px]">Spend less on games.</p>
+        <p className="text-offwhite text-center text-[55px] font-intersemibold mb-3 mx-auto small:text-[70px]">Spend less on games.</p>
         <p className="text-offwhite text-center text-[18px] font-inter mb-10 w-[500px]">
           Find the lowest prices for thousands of games simply by searching, 
           or browse through games on the browse tab.
@@ -109,7 +109,7 @@ export default function HomePage() {
             </div>
         </form>
       </div>
-      <div className="small:mt-40 mt-[84px] mb-16 w-[95.769230769%] largewidth:w-[1245px] mx-auto">
+      <div className="small:mt-40 mt-[84px] mb-16 w-[92.4%] otherwidth:w-[1200px] mx-auto">
         <Carousel plugins={plugin.current ? [plugin.current] : []}
           opts={{ align:"start", loop:true }}
           className="transition-all content-center">
@@ -117,7 +117,7 @@ export default function HomePage() {
           <div className="absolute top-0 right-0 h-full w-[60px] pointer-events-none bg-gradient-to-l from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
           <CarouselContent> 
             {carouselImages.map((image, index) => (
-              <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/3">
+              <CarouselItem key={index} className="basis-1/2 small:basis-1/3">
                 <Card className="bg-transparent">
                   <CardContent className="flex p-0">
                     {image ? (
@@ -130,7 +130,7 @@ export default function HomePage() {
                         <img
                           src={`/images/${image}`}
                           alt="Game Image" 
-                          className="largewidth:w-[415px] h-auto hover:brightness-80 transition-all duration-200"
+                          className="h-auto hover:brightness-80 transition-all duration-200"
                         />
                         <div 
                         className={`flex flex-col items-center absolute bottom-0 w-full h-[50px] 
