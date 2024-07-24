@@ -11,6 +11,7 @@ const config = {
   prefix: "",
   theme: {
     screens: {
+      'browse-width': '1384px',
       'genre-width': '640px',
       'grid-width': '840px',
       'price-width': '1130px',

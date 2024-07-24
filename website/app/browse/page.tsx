@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
-import { IoIosArrowBack } from "react-icons/io";
-import { IoIosArrowForward } from "react-icons/io";
+import { RxDoubleArrowLeft } from "react-icons/rx";
+import { RxDoubleArrowRight } from "react-icons/rx";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import axios from "axios";
 
@@ -111,7 +111,7 @@ function BrowsePageContent() {
     };
 
     const isFirstPage = pageNumber === 1;
-    const isLastPage = Math.ceil(totalResults / 10) === pageNumber;
+    const isLastPage = Math.ceil(totalResults / 48) === pageNumber;
 
     const paginationItems = [];
 
@@ -121,7 +121,7 @@ function BrowsePageContent() {
 
     paginationItems.push(pageNumber);
 
-    if (pageNumber < Math.ceil(totalResults / 10)) {
+    if (pageNumber < Math.ceil(totalResults / 48)) {
         paginationItems.push(pageNumber + 1);
     }
 
@@ -133,8 +133,8 @@ function BrowsePageContent() {
         }}
 
     return (
-        <div>
-            <div className="flex pt-4 pb-5 ml-7 items-center">
+        <div className="relative browse-width:w-[1320px] browse-width:mx-auto overflow-hidden w-auto mx-8">
+            <div className="flex pt-4 pb-5 items-center">
                 <p className="text-offwhite font-inter text-xll browsewidth:text-3xl">Browsing Games</p>
                 <div className="flex ml-14">
                     <FaSteam className="text-offwhite h-logos w-auto"/>
@@ -144,7 +144,7 @@ function BrowsePageContent() {
                 <p className="text-grey hidden font-inter text-base ml-14 browsewidth:block mt-0.5">
                     {totalResults} {totalResults === 1 ? 'Result' : 'Results'}
                 </p>
-                <div className="hidden browsewidth:flex ml-auto mr-6">
+                <div className="hidden browsewidth:flex ml-auto">
                     <a href="#" 
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
                     h-10 w-10 rounded-lg justify-center items-center mr-2.5">
@@ -243,7 +243,7 @@ function BrowsePageContent() {
                 </div>
                 {loading ? (
                     <div className="mx-auto flex flex-col items-center text-offwhite text-[18px] mb-10 mt-8">
-                        <p className="text-center mb-2">Fetching games..</p>
+                        <p className="text-center mb-4">Fetching games..</p>
                         <ScaleLoader 
                         color="#EFEFEF"
                         height={20}
@@ -253,12 +253,12 @@ function BrowsePageContent() {
                         />
                     </div>
                 ) : (
-                <div className={`flex transition-all duration-200 ease-out w-full mx-6 ${showFilter ? 'ml-showfilter pl-0' : ''}`}>
+                <div className={`flex transition-all duration-200 ease-out w-full ${showFilter ? 'ml-showfilter pl-0' : ''}`}>
                     <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-2 w-full
                     ${showFilter ? 'filtertablet:grid-cols-2 filterlg:grid-cols-3': 'tablet:grid-cols-2 lg:grid-cols-3'}`}>
                     {games.map((game) => {
                         let gameName = game.name || "";
-                        let isLong = gameName.length > 27 ? 1 : 0;
+                        let isLong = 0;
                         let steamOnSale = game.steam_on_sale === "1";
                         let steamPrice = game.steam_price;
                         let steamNormalPrice = game.steam_normal_price;
@@ -267,6 +267,8 @@ function BrowsePageContent() {
                         let epicNormalPrice = game.epic_normal_price;
                         let steamDiscount = 0;
                         let epicDiscount = 0;
+
+                        if (gameName.length > 30) gameName = gameName.substring(0, 30) + '...', isLong = 1;
 
                         if (steamOnSale) {
                             let normalPrice1 = parseFloat(steamNormalPrice.replace(/[^\d.-]/g, ''));
@@ -341,13 +343,13 @@ function BrowsePageContent() {
                     })}
                     </div>
                 </div>
-                )};
+                )}
             </div>
             <div className="flex mx-6 text-offwhite justify-center font-inter mt-3.5 mb-6">
                 <a href="#" className={`flex mr-3.5 items-center font-inter transition-colors duration-200 text-[16px] px-3.5 h-[38px] rounded-md 
-                ${isFirstPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(pageNumber - 1)} >
-                    <IoIosArrowBack/>
-                    <p className="ml-1 mr-2">Previous</p>
+                ${isFirstPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(1)} >
+                    <RxDoubleArrowLeft />
+                    <p className="ml-1 mr-2">First</p>
                 </a>
                 {paginationItems.map((page, index) => (
                     <a key={index} href="#" className={`text-offwhite flex mr-1.5 items-center hover:bg-lightmidnight 
@@ -356,18 +358,11 @@ function BrowsePageContent() {
                         <p>{page}</p>
                     </a>
                 ))}
-                <a className={`flex transition-colors duration-200 text-[16px] justify-center h-[38px] w-[38px] rounded-md cursor-pointer
-                ${customPage ? 'bg-lightmidnight' : 'hover:bg-lightmidnight'}`} onClick={() => { setCustomPage(true) }}>
-                    <p className={`mt-[3px] ${customPage ? 'hidden': 'block'}`}>...</p>
-                    <input className={`w-[60%] h-[60%] self-center outline-none bg-lightmidnight ${customPage ? 'block': 'hidden'}`}/>
+                <a href="#" className={`flex ml-3.5 items-center font-inter transition-colors duration-200 text-[16px] px-3.5 h-[38px] rounded-md
+                ${isLastPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(Math.ceil(totalResults / 48))}>
+                    <p className="mr-1 ml-1.5">Last</p>
+                    <RxDoubleArrowRight />
                 </a>
-                {!isLastPage && (
-                    <a href="#" className="text-offwhite flex ml-3.5 items-center font-inter hover:bg-lightmidnight transition-colors 
-                    duration-200 text-[16px] px-3.5 h-[38px] rounded-md" onClick={() => goToPage(pageNumber + 1)}>
-                        <p className="mr-1 ml-1.5">Next</p>
-                        <IoIosArrowForward/>
-                    </a>
-                )}
             </div>
         </div>
     );

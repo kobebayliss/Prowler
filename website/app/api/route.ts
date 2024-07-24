@@ -14,8 +14,8 @@ export async function GET(req: NextRequest) {
         }
 
         const games = await prisma.games.findMany({
-            take: 30,
-            skip: 30 * (pageNumber-1),
+            take: 45,
+            skip: 45 * (pageNumber-1),
         });
 
         return NextResponse.json({ games: games, totalResults });

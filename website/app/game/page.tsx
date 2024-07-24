@@ -87,8 +87,8 @@ function GamePageContent() {
     let publisherFinal = publisherFormatting.join(', ');
 
     return (
-        <div>
-            <div className="grid-width:grid grid-width:grid-cols-[360px_auto] my-8 mx-auto grid-width:w-[92.890510948%] w-[90%] game-width:w-[1300px]">
+        <div className="w-auto mx-8 browse-width:mx-auto browse-width:w-[1320px]">
+            <div className="grid-width:grid grid-width:grid-cols-[360px_auto] my-8 grid-width:w-[92.890510948%] w-full">
                 <div className="flex flex-col grid-width:mr-8 justify-center">
                     <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 mt-3 grid-width:mt-0 line-clamp-2">{game.name}</p>
                     <p className="text-offwhite font-interlight text-[1.05em] mx-auto grid-width:mx-0">{game.reviews}</p>
@@ -115,7 +115,7 @@ function GamePageContent() {
                         </a>
                     </div>
                     <div className="h-px w-full bg-lightermidnight mt-5"/>
-                    <div className="mt-5 w-full">
+                    <div className="mt-5 mb-5 grid-width:mb-0 w-full">
                         <p className="font-interlight text-offwhite text-[15px] mx-auto grid-width:mx-0 line-clamp-8">
                             {game.short_desc}
                         </p>
@@ -138,11 +138,11 @@ function GamePageContent() {
                     </Carousel>
                 </div>
             </div>
-            <div className="w-[90%] grid-width:w-[92.890510948%] game-width:w-[1300px] mx-auto">
+            <div className="w-full">
                 <div className="h-px w-full bg-lightermidnight"/>
-                <div className="grid-width:grid grid-width:grid-cols-[auto_auto]">
+                <div className="grid-width:grid grid-width:grid-cols-[auto_auto] mt-7">
                     <div>
-                        <div className={`font-interlight text-offwhite grid-width:mr-24 mt-5 text-[15px]`}>
+                        <div className={`font-interlight text-offwhite grid-width:mr-24 text-[15px]`}>
                             {game.long_desc}
                         </div>
                         {isOverflow && !isExpanded && (
@@ -152,9 +152,9 @@ function GamePageContent() {
                             <p className="font-inter mb-4 text-offwhite text-[15.5px] mt-1 cursor-pointer"
                             onClick={() => setIsExpanded(false)}>Click to show less</p>)}
                     </div>
-                    <div className="mt-10 grid-width:mt-6 mb-12 grid-width:mb-0 grid-width:ml-auto max-w-[320px]">
+                    <div className="mt-10 grid-width:mt-0 mb-12 grid-width:mb-0 grid-width:justify-end max-w-[320px]">
                         <div className="flex">
-                            <div className="w-[1.5px] block grid-width:hidden h-[auto] mr-5 bg-offwhite"/>
+                            <div className="w-[1.5px] block grid-width:hidden h-[auto] mr-4 bg-offwhite"/>
                             <div className="mt-2 text-inter grid-width:text-right mb-2.5 text-[17px] grid-width:text-[20px]">
                                 <p className="text-darkerwhite">Genres</p>
                                 <p className="text-offwhite mb-3.5">{game.genres.join(', ')}</p>
@@ -163,7 +163,7 @@ function GamePageContent() {
                                 <p className="text-darkerwhite">Publisher</p>
                                 <p className="text-offwhite">{publisherFinal}</p>
                             </div>
-                            <div className="w-[1.5px] hidden grid-width:block h-[auto] ml-5 bg-offwhite"/>
+                            <div className="w-[1.5px] hidden grid-width:block h-[auto] ml-4 bg-offwhite"/>
                         </div>
                     </div>
                 </div>
