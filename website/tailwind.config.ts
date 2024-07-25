@@ -11,6 +11,8 @@ const config = {
   prefix: "",
   theme: {
     screens: {
+      'tinywidth': '600px',
+      'phone-width': '520px',
       'browse-width': '1384px',
       'genre-width': '640px',
       'grid-width': '840px',
@@ -18,9 +20,9 @@ const config = {
       'desc-width': '780px',
       'game-width': '1399.49709258px',
       'small': '800px',
-      'homewidth': '1200px',
+      'homewidth': '1360px',
       'otherwidth': '1375px',
-      'browsewidth': '820px',
+      'browsewidth': '1030px',
       'navwidth': '800px',
       'barwidth': '1408px',
       'lg': '1080px',
@@ -207,6 +209,14 @@ const config = {
           '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(100%)' },
         },
+        menudown: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        menuup: {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(-100%)' }
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -223,6 +233,8 @@ const config = {
         slidedown: 'slidedown 0.2s ease-out forwards',
         slideout: 'slideright 0.2s ease-out forwards',
         slideback: 'slideleft 0.2s ease-out forwards',
+        menudown: 'menudown 0.25s ease-in-out forwards',
+        menuup: 'menuup 0.25s ease-in-out forwards',
       },
     },
     fontFamily: {

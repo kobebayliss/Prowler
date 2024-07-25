@@ -88,18 +88,18 @@ function GamePageContent() {
 
     return (
         <div className="w-auto mx-8 browse-width:mx-auto browse-width:w-[1320px]">
-            <div className="grid-width:grid grid-width:grid-cols-[360px_auto] my-8 grid-width:w-[92.890510948%] w-full">
+            <div className="grid-width:grid grid-width:grid-cols-[360px_auto] grid-width:mb-6 grid-width:mt-5 grid-width:w-[92.890510948%] w-full">
                 <div className="flex flex-col grid-width:mr-8 justify-center">
                     <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 mt-3 grid-width:mt-0 line-clamp-2">{game.name}</p>
                     <p className="text-offwhite font-interlight text-[1.05em] mx-auto grid-width:mx-0">{game.reviews}</p>
                     <div className="h-px w-full bg-lightermidnight mt-3"/>
-                    <div className="flex bg-lightmidnight w-full mx-auto h-[92px] price-width:h-[110px] mt-[20px] rounded-lg">
+                    <div className="flex bg-lightmidnight w-full mx-auto h-[96px] mt-[20px] rounded-lg">
                         <a href="#" className="w-[49.8%] rounded-l-lg transition-all duration-150 hover:bg-lightermidnight flex flex-col justify-center"
                         onMouseEnter={() => { setIsHovered(true); }}
                         onMouseLeave={() => { setIsHovered(false); }}>
                             <div className="flex justify-center items-center">
-                                <img src="/images/steam.png" alt="Steam logo" className="mr-3 w-auto h-[30px] price-width:h-[40px]"/>
-                                <p className="text-offwhite font-inter text-[18px] price-width:text-[23px]">{game.steam_price}</p>
+                                <img src="/images/steam.png" alt="Steam logo" className="mr-3 w-auto h-[32px]"/>
+                                <p className="text-offwhite font-inter text-[23px]">{game.steam_price}</p>
                             </div>
                             <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5">View Steam page</p>
                         </a>
@@ -108,8 +108,8 @@ function GamePageContent() {
                         onMouseEnter={() => { setIsHovered(true); }}
                         onMouseLeave={() => { setIsHovered(false); }}>
                             <div className="flex justify-center items-center">
-                                <img src="/images/epic.png" alt="Epic Games logo" className="mr-3 w-auto h-[30px] price-width:h-[40px]"/>
-                                <p className="text-offwhite font-inter text-[18px] price-width:text-[23px]">{game.epic_price}</p>
+                                <img src="/images/epic.png" alt="Epic Games logo" className="mr-3 w-auto h-[32px]"/>
+                                <p className="text-offwhite font-inter text-[23px]">{game.epic_price}</p>
                             </div>
                             <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5">View Epic page</p>
                         </a>

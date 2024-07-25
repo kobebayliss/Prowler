@@ -89,15 +89,15 @@ export default function HomePage() {
   };
 
   return (
-    <div className="w-[94.545454545%] otherwidth:w-[1300px] mx-auto">
-      <div className={`w-full flex my-10 small:my-28 flex-col items-center mx-auto`}>
-        <p className="text-offwhite text-center text-[55px] font-intersemibold mb-3 mx-auto small:text-[70px]">Spend less on games.</p>
-        <p className="text-offwhite text-center text-[18px] font-inter mb-10 w-[500px]">
+    <div className="homewidth:w-[1320px] homewidth:mx-auto w-auto mx-5">
+      <div className={`w-full flex my-[34px] small:my-28 flex-col items-center mx-auto`}>
+        <p className="text-offwhite text-center text-[55px] font-intersemibold mb-3 mx-4 small:text-[70px]">Spend less on games.</p>
+        <p className="text-offwhite text-center text-[18px] font-inter mb-10 max-w-[500px] mx-5">
           Find the lowest prices for thousands of games simply by searching, 
           or browse through games on the browse tab.
         </p>
-        <form className="w-[400px]" onSubmit={handleSearchSubmit}>
-            <div className="relative">
+        <form className="w-full max-w-[380px] mx-auto" onSubmit={handleSearchSubmit}>
+            <div className="relative w-auto mx-5">
                 <IoIosSearch className="absolute text-offwhite w-auto h-[70%] ml-3 top-1/2 transform -translate-y-1/2"/>
                 <input
                 className="w-full pl-19 p-4 text-[18px] placeholder:font-intersemibold placeholder:text-grey text-offwhite font-inter 
@@ -109,7 +109,7 @@ export default function HomePage() {
             </div>
         </form>
       </div>
-      <div className="small:mt-40 mt-[84px] mb-16 w-[92.4%] otherwidth:w-[1200px] mx-auto">
+      <div className="small:mt-40 mt-[84px] mb-16 mx-5">
         <Carousel plugins={plugin.current ? [plugin.current] : []}
           opts={{ align:"start", loop:true }}
           className="transition-all content-center">
@@ -150,7 +150,7 @@ export default function HomePage() {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-        <p className="text-offwhite font-inter text-center w-[380px] mx-auto text-[18px] mt-20">Our browse page offers thousands of games, able to be filtered and sorted to your needs.</p>
+        <p className="text-offwhite font-inter text-center max-w-[380px] text-[18px] mt-20 mx-auto">Our browse page offers thousands of games, able to be filtered and sorted to your needs.</p>
         <a className="flex mt-5 bg-offwhite w-[140px] hover:bg-darkwhite rounded-md h-[42px] justify-center items-center transition-all duration-200 mx-auto" href="../browse">
           <p className="font-intersemibold text-[16px]">Browse games</p>
         </a>

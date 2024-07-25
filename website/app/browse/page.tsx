@@ -135,8 +135,8 @@ function BrowsePageContent() {
     return (
         <div className="relative browse-width:w-[1320px] browse-width:mx-auto overflow-hidden w-auto mx-8">
             <div className="flex pt-4 pb-5 items-center">
-                <p className="text-offwhite font-inter text-xll browsewidth:text-3xl">Browsing Games</p>
-                <div className="flex ml-14">
+                <p className="text-offwhite font-inter text-[27px] tinywidth:text-[30px] browsewidth:text-[34px]">Browsing Games</p>
+                <div className="ml-14 tinywidth:flex hidden">
                     <FaSteam className="text-offwhite h-logos w-auto"/>
                     <div className="bg-grey h-[32px] w-0.2 mt-em mx-linemargin" />
                     <SiEpicgames className="text-offwhite h-logos w-auto"/>
@@ -165,10 +165,10 @@ function BrowsePageContent() {
                         <FaSortAlphaDown className="text-offwhite h-6 w-auto"/>
                     </a>
                 </div>
-                <div className="flex browsewidth:hidden ml-auto mr-3">
+                <div className="flex browsewidth:hidden ml-auto">
                     <button
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
-                    h-10 w-26 rounded-lg justify-center items-center mr-3">
+                    h-10 w-26 rounded-lg justify-center items-center">
                         <p className="text-offwhite font-inter text-filter mr-2.5">Filter</p>
                         <FaFilter className="text-offwhite h-5.5 w-auto"/>
                     </button>
