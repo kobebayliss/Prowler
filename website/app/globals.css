@@ -125,3 +125,47 @@
     border-right: 10px solid transparent; 
     border-top: 10px solid #27272a;
   }
+
+  .underline-animation {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+  }
+  
+  .underline-animation::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1.5px;
+    bottom: 1px;
+    left: 50%;
+    background-color: #ffffff;
+    transition: width 0.3s ease, left 0.3s ease;
+  }
+  
+  .underline-animation:hover::after {
+    width: 65%;
+    left: 17.5%;
+  }
+
+  .underline-animation1 {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+  }
+  
+  .underline-animation1::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: 1px;
+    left: 50%;
+    background-color: #ffffff;
+    transition: width 0.3s ease, left 0.3s ease;
+  }
+  
+  .underline-animation1:hover::after {
+    width: 95%;
+    left: 2.5%;
+  }

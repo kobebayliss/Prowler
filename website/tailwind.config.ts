@@ -48,9 +48,16 @@ const config = {
         '4.5': '18px',
       },
       transitionDuration: {
+        '600': '600ms',
         '250': '250ms',
         '150': '150ms',
         '180': '180ms',
+      },
+      transitionDelay: {
+        '180': '160ms',
+        '220': '200ms',
+        '260': '240ms',
+        '300': '280ms',
       },
       scale: {
         '103': '1.025',
@@ -86,7 +93,7 @@ const config = {
         'darkwhite': '#bfbfbf',
         'greyish': '#c9c9c9',
         'grey': '#7f7f7f',
-        'lightmidnight': '#1f1f1f',
+        'lightmidnight': '#2a2a2a',
         'lightermidnight': '#3c3c40',
         'blue': '#1E90FF',
         'darkerwhite': '#9b9b9b',
@@ -215,7 +222,7 @@ const config = {
         },
         menuup: {
           '0%': { transform: 'translateY(0)' },
-          '100%': { transform: 'translateY(-100%)' }
+          '100%': { transform: 'translateY(-101%)' }
         },
         "accordion-down": {
           from: { height: "0" },

@@ -96,7 +96,7 @@ export default function HomePage() {
           Find the lowest prices for thousands of games simply by searching, 
           or browse through games on the browse tab.
         </p>
-        <form className="w-full max-w-[380px] mx-auto" onSubmit={handleSearchSubmit}>
+        <form className="w-full z-20 max-w-[380px] mx-auto" onSubmit={handleSearchSubmit}>
             <div className="relative w-auto mx-5">
                 <IoIosSearch className="absolute text-offwhite w-auto h-[70%] ml-3 top-1/2 transform -translate-y-1/2"/>
                 <input
