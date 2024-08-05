@@ -140,7 +140,7 @@
     bottom: 1px;
     left: 50%;
     background-color: #ffffff;
-    transition: width 0.3s ease, left 0.3s ease;
+    transition: width 0.2s ease, left 0.2s ease;
   }
   
   .underline-animation:hover::after {
@@ -162,7 +162,7 @@
     bottom: 1px;
     left: 50%;
     background-color: #ffffff;
-    transition: width 0.3s ease, left 0.3s ease;
+    transition: width 0.2s ease, left 0.2s ease;
   }
   
   .underline-animation1:hover::after {

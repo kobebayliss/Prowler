@@ -20,10 +20,10 @@ model games {
   name               String?      @db.VarChar(200)
   reviews            String?      @db.VarChar(40)
   steam_on_sale      String?      @db.VarChar(40)
-  steam_price        String?      @db.VarChar(40)
+  steam_price        Float?
   steam_normal_price String?      @db.VarChar(40)
   epic_on_sale       String?      @db.VarChar(40)
-  epic_price         String?      @db.VarChar(40)
+  epic_price         Float?
   epic_normal_price  String?      @db.VarChar(40)
   developer          String?      @db.VarChar(200)
   publisher          String?      @db.VarChar(200)

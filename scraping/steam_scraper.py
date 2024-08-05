@@ -63,7 +63,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             # if condition for when website should finish scrolling
-            if i > 70:
+            if i > 10:
                 break
         
         updated_html = driver.page_source
@@ -85,7 +85,7 @@ def scrape_steam_page(url):
             if price_tag.find('div', class_="discount_original_price"):
                 normal_price = price_tag.find('div', class_="discount_original_price").text.strip()
                 normal_price = normal_price.replace("NZ$", "$").strip()
-                normal_price = normal_price.replace("$ ", "$")
+                normal_price = normal_price.replace("$ ", "")
                 on_sale = "1"
             else:
                 normal_price = "N/A"
@@ -95,7 +95,12 @@ def scrape_steam_page(url):
                 price = price_tag.find('div', class_="discount_final_price").text.strip()
                 if "$" in price:
                     price = price.replace("NZ$", "$").strip()
-                    price = price.replace("$ ", "$")
+                    price = price.replace("$ ", "")
+                elif price == "Free To Play" or price == "Free":
+                    price = 0
+                else:
+                    price = "Failed"
+                    failed = True
                 print(price)
             else:
                 failed = True
@@ -214,7 +219,7 @@ def scrape_steam_page(url):
                     sql = """INSERT INTO games (name, reviews, steam_on_sale, steam_price, steam_normal_price, epic_on_sale, epic_price, epic_normal_price, developer, publisher, short_desc, long_desc, banner, images, specs) 
                             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
                     # values to insert
-                    val = (name, reviews, on_sale, price, normal_price, "N/A", "N/A", "N/A", developer, publishers, short_description, long_description, banner_image, images, specs)
+                    val = (name, reviews, on_sale, price, normal_price, -1, -1, -1, developer, publishers, short_description, long_description, banner_image, images, specs)
                     # adding values and saving them
                     mycursor.execute(sql, val)
                     games_db.commit()
@@ -225,6 +230,7 @@ def scrape_steam_page(url):
                         mycursor.execute(sql, val)
                         game_id = mycursor.fetchone()
                         genres_id_list = []
+
                         # iterate through the genres
                         for a in range(len(genres_list)):
                             # add the id for the genre by searching for the genre in the dictionary

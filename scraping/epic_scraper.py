@@ -65,10 +65,12 @@ def scrape_epic_page():
                 price_container = game.find('div', class_="css-1a6kj04")
                 price_container_2 = price_container.find('div', class_="css-o1hbmr")
                 price = price_container_2.find('span', class_="css-119zqif").text.strip()
-                price = price.replace("NZ$", "$").strip()
+                price = price.replace("NZ$", "").strip()
+                if price == "Free":
+                    price = 0
                 if price_container.find('div', class_="css-4jky3p"):
                     normal_price = price_container.find('div', class_="css-4jky3p").text.strip()
-                    normal_price = normal_price.replace("NZ$", "$").strip()
+                    normal_price = normal_price.replace("NZ$", "").strip()
                     on_sale = "1"
                 else:
                     on_sale = "0"
