@@ -1,10 +1,12 @@
 "use client"
 
+
 import React, { useState, useRef, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 interface Game {
     game_id: number;
@@ -54,30 +56,49 @@ function GamePageContent() {
     const [game, setGame] = useState<Game | null>(null);
     const idQuery = useSearchParams();
     const id = idQuery.get('id');
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
                 const response = await axios.get(`/api/games?id=${id}`);
                 const selectedGame = response.data;
-    
+
                 if (selectedGame) {
                     setGame(selectedGame);
                 } else {
                     console.error("Game not found");
                 }
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching game:", error);
+                setLoading(false);
             }
         };
-    
+
         if (id) {
             fetchData();
         }
     }, [id]);
 
+    if (loading) {
+        return (
+            <div className="mx-auto flex flex-col items-center text-offwhite text-[20px] mb-10 mt-28">
+                <p className="text-center mb-4">Fetching game details...</p>
+                <ScaleLoader 
+                    color="#EFEFEF"
+                    height={20}
+                    margin={2}
+                    width={3}
+                    loading
+                />
+            </div>
+        );
+    }
+
     if (!game) {
-        return <div>Loading...</div>; 
+        return <div>Game not found</div>;
     }
 
     let imageUrls = game.images.replace(/[{}"]/g, '').split(',');
@@ -85,6 +106,8 @@ function GamePageContent() {
 
     let publisherFormatting = game.publisher.replace(/[{}"]/g, '').split(',');
     let publisherFinal = publisherFormatting.join(', ');
+    
+    let steamPrice = parseFloat(game.steam_price)
 
     return (
         <div className="w-auto mx-8 browse-width:mx-auto browse-width:w-[1320px]">
@@ -99,7 +122,7 @@ function GamePageContent() {
                         onMouseLeave={() => { setIsHovered(false); }}>
                             <div className="flex justify-center items-center">
                                 <img src="/images/steam.png" alt="Steam logo" className="mr-3 w-auto h-[32px]"/>
-                                <p className="text-offwhite font-inter text-[23px]">{game.steam_price}</p>
+                                <p className="text-offwhite font-inter text-[23px]">{steamPrice == 0 ? ( <p>Free</p> ) : ( <p>${steamPrice}</p> )}</p>
                             </div>
                             <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5">View Steam page</p>
                         </a>
@@ -182,7 +205,7 @@ function GamePageContent() {
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
     );
 }
 

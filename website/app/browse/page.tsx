@@ -45,7 +45,7 @@ function BrowsePageContent() {
     const [buttonName, setButtonName] = useState('Show');
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('search') || '';
-    const [extraGenres, setExtraGenres] = useState(false);
+    const [showExtraGenres, setShowExtraGenres] = useState(false);
     const [genreButton, setGenreButton] = useState('More');
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
@@ -55,14 +55,19 @@ function BrowsePageContent() {
     const [loading, setLoading] = useState<boolean>(true);
     const [onlyDiscount, setOnlyDiscount] =useState<boolean>(false);
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+    const genres = ["Indie", "Action", "Adventure", "Casual", "RPG"];
+    const extraGenres = ["Simulation", "Singleplayer", "Strategy", "Racing", "Free To Play"];
+    const [showSortMenu, setShowSortMenu] = useState(false);
+    const [clickedButton2, setClickedButton2] = useState(false);
+    const [orderBy, setOrderBy] = useState(1);
 
     useEffect(() => {
         setButtonName(showFilter ? 'Hide' : 'Show');
     }, [showFilter]);
 
     useEffect(() => {
-        setGenreButton(extraGenres ? 'Less' : 'More');
-    }, [extraGenres]);
+        setGenreButton(showExtraGenres ? 'Less' : 'More');
+    }, [showExtraGenres]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -79,7 +84,7 @@ function BrowsePageContent() {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`/api?pageNumber=${pageNumber}&discount=${onlyDiscount}&genres=${selectedGenres.join(',')}`)
+        axios.get(`/api?pageNumber=${pageNumber}&discount=${onlyDiscount}&genres=${selectedGenres.join(',')}&order=${orderBy}`)
             .then(response => {
                 const { games, totalResults } = response.data;
                 if (searchQuery) {
@@ -97,7 +102,7 @@ function BrowsePageContent() {
                 console.error("There was an error fetching the game's information: ", error);
                 setLoading(false);
             });
-    }, [searchQuery, pageNumber, onlyDiscount, selectedGenres]);
+    }, [searchQuery, pageNumber, onlyDiscount, selectedGenres, orderBy]);
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -162,23 +167,40 @@ function BrowsePageContent() {
                 <div className="hidden browsewidth:flex ml-auto">
                     <a href="#" 
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
-                    h-10 w-10 rounded-lg justify-center items-center mr-2.5">
+                    h-10 w-10 rounded-lg justify-center items-center mr-3">
                         <IoIosSearch className="text-offwhite h-8 w-auto"/>
                     </a>
                     <button
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
-                    h-10 w-38 rounded-lg justify-center items-center mr-3"
-                    onClick={() => { setShowFilter(!showFilter); setClickedButton(true); }}
-                    >
+                    h-10 w-40 rounded-md justify-center items-center mr-3"
+                    onClick={() => { setShowFilter(!showFilter); setClickedButton(true); }}>
                         <p className="text-offwhite font-inter text-filter mr-2.5">{buttonName} Filters</p>
                         <FaFilter className="text-offwhite h-5.5 w-auto"/>
                     </button>
-                    <a href="#" 
-                    className="flex hover:bg-lightmidnight transition-colors duration-200 
-                    h-10 w-26 rounded-lg justify-center items-center">
+                    <button
+                    className={`flex hover:bg-lightmidnight transition-colors duration-200 
+                    h-10 px-4 rounded-md justify-center items-center ${showSortMenu? 'rounded-t-md rounded-b-none bg-lightmidnight' : 'rounded-md'}`}
+                    onClick={() => { setShowSortMenu(!showSortMenu); setClickedButton2(true); }}>
                         <p className="text-offwhite font-inter text-filter mr-2.5">Sort</p>
                         <FaSortAlphaDown className="text-offwhite h-6 w-auto"/>
-                    </a>
+                    </button>
+                    {showSortMenu && (
+                        <div className="bg-lightmidnight mt-10 rounded-tl-md rounded-b-md right-0 flex flex-col absolute 
+                        text-[16px] text-right font-inter px-4 py-2.5 gap-y-[1px] z-50">
+                            <p className={`underline-animation2 transition-all duration-150 cursor-pointer
+                            ${orderBy == 1 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
+                            onClick={() => { setOrderBy(1) }}>Most Popular</p>
+                            <p className={`underline-animation2 transition-all duration-150 cursor-pointer
+                            ${orderBy == 2 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
+                            onClick={() => { setOrderBy(2) }}>Alphabetical</p>
+                            <p className={`underline-animation2 transition-all duration-150 cursor-pointer
+                            ${orderBy == 3 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
+                            onClick={() => { setOrderBy(3) }}>Price: Low to High</p>
+                            <p className={`underline-animation2 transition-all duration-150 cursor-pointer
+                            ${orderBy == 4 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
+                            onClick={() => { setOrderBy(4) }}>Price: High to Low</p>
+                        </div>
+                    )}
                 </div>
                 <div className="flex browsewidth:hidden ml-auto">
                     <button
@@ -190,7 +212,7 @@ function BrowsePageContent() {
                 </div>
             </div>
             <div className="flex min-h-[640px]">
-                <div className={`absolute z-100 ${clickedButton ? 'block' : 'hidden'}`}>
+                <div className={`absolute z-100 ${clickedButton ? 'block' : 'hidden'} ${loading ? 'pointer-events-none' : 'pointer-events-auto'}`}>
                     <div className={`w-filters h-full
                     ${showFilter ? 'animate-slideout' : 'animate-slideback -translate-x-220'}`}>
                         <div className="flex justify-center mt-5">
@@ -221,57 +243,33 @@ function BrowsePageContent() {
                                 <label htmlFor="range5" className="text-offwhite text-base font-interlight self-center ml-2.5">$100+</label>
                             </div>
                         </div>
-                        <div className="w-80% mt-6 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                        <div className="w-80% mt-4 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="text-offwhite font-inter text-2xl mt-3 ml-5 mb-2">Genres</p>
-                        <div className="flex flex-col gap-y-[11px] ml-5 mt-3">
-                            <div className="flex items-center mr-5">
-                                <Checkbox id="Action" onClick={() => handleGenreToggle("Action")} />
-                                <label htmlFor="Action" className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Action</label>
-                            </div>
-                            <div className="flex items-center mr-5">
-                                <Checkbox id="Adventure" onClick={() => handleGenreToggle("Adventure")} />
-                                <label htmlFor="Adventure" className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Adventure</label>
-                            </div>
-                            <div className="flex items-center mr-5">
-                                <Checkbox id="RPG" onClick={() => handleGenreToggle("RPG")} />
-                                <label htmlFor="RPG" className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">RPG</label>
-                            </div>
-                            <div className="flex items-center mr-5">
-                                <Checkbox id="Shooter" onClick={() => handleGenreToggle("Shooter")} />
-                                <label htmlFor="Shooter" className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Shooter</label>
-                            </div>
-                            {extraGenres && (
-                                <>
-                                    <div className="flex items-center mr-5">
-                                        <Checkbox id="Simulation" onClick={() => handleGenreToggle("Simulation")} />
-                                        <label htmlFor="Simulation" className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Simulation</label>
-                                    </div>
-                                    <div className="flex items-center mr-5">
-                                        <Checkbox id="Strategy" onClick={() => handleGenreToggle("Strategy")} />
-                                        <label htmlFor="Strategy" className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Strategy</label>
-                                    </div>
-                                    <div className="flex items-center mr-5">
-                                        <Checkbox id="Sports" onClick={() => handleGenreToggle("Sports")} />
-                                        <label htmlFor="Sports" className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Sports</label>
-                                    </div>
-                                    <div className="flex items-center mr-5">
-                                        <Checkbox id="Racing" onClick={() => handleGenreToggle("Racing")} />
-                                        <label htmlFor="Racing" className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Racing</label>
-                                    </div>
-                                    <div className="flex items-center mr-5">
-                                        <Checkbox id="Puzzle" onClick={() => handleGenreToggle("Puzzle")} />
-                                        <label htmlFor="Puzzle" className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Puzzle</label>
-                                    </div>
-                                </>
-                            )}
+                        <div className="flex flex-col gap-y-[10px] ml-5 mt-3">
+                            {genres.map((genre) => (
+                                <div key={genre} className="flex items-center mr-5">
+                                    <Checkbox id={genre} onClick={() => handleGenreToggle(genre)} />
+                                    <label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                        {genre}
+                                    </label>
+                                </div>
+                            ))}
+                            {showExtraGenres && extraGenres.map((genre) => (
+                                <div key={genre} className="flex items-center mr-5">
+                                    <Checkbox id={genre} onClick={() => handleGenreToggle(genre)} />
+                                    <label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                        {genre}
+                                    </label>
+                                </div>
+                            ))}
                         </div>
                         <div className={`w-full transition-all duration-100`}>
                             <div className="ml-6 mt-3">
                                 <button className="text-offwhite text-base font-inter hover:underline cursor-pointer"
-                                onClick={() => { setExtraGenres(!extraGenres) }}>
+                                onClick={() => { setShowExtraGenres(!showExtraGenres) }}>
                                 Show {genreButton}</button>
                             </div>
-                            <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                            <div className="w-80% mt-4 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         </div>
                     </div>
                 </div>
@@ -294,10 +292,10 @@ function BrowsePageContent() {
                             let gameName = game.name || "";
                             let isLong = 0;
                             let steamOnSale = game.steam_on_sale === "1";
-                            let steamPrice = game.steam_price;
+                            let steamPrice = parseFloat(game.steam_price);
                             let steamNormalPrice = game.steam_normal_price;
                             let epicOnSale = game.epic_on_sale === "1";
-                            let epicPrice = game.epic_price;
+                            let epicPrice = parseFloat(game.epic_price);
                             let epicNormalPrice = game.epic_normal_price;
                             let steamDiscount = 0;
                             let epicDiscount = 0;
@@ -355,7 +353,7 @@ function BrowsePageContent() {
                                                         </p>
                                                     )}
                                                     <p className="font-interlight text-prices text-offwhite">
-                                                        ${steamPrice}
+                                                        {steamPrice == 0 ? ( <p>Free</p> ) : ( <p>${steamPrice}</p> )}
                                                     </p>
                                                 </div>
                                                 <div className="bg-grey h-[32px] w-0.2 mt-0.5 mx-[22px]" />

@@ -5,14 +5,27 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
     const url = new URL(req.url);
-    const pageNumber = parseInt(url.searchParams.get('pageNumber') || '0', 10);
+    const pageNumber = parseInt(url.searchParams.get('pageNumber') || '1', 10);
     const itemsPerPage = 48;
     const discountParam = url.searchParams.get('discount');
     const discount = discountParam === 'true';
     const genresParam = url.searchParams.get('genres') || '';
     const genreArray = genresParam.split(',').filter(Boolean);
+    const order = parseInt(url.searchParams.get('order') || '0', 10);
 
     const whereClause: any = {};
+
+    let orderBy: any = {};
+
+    if (order === 1) {
+        orderBy = { game_id: 'asc' };
+    } else if (order === 2) {
+        orderBy = { name: 'asc' };
+    } else if (order === 3) {
+        orderBy = { steam_price: 'asc' };
+    } else if (order === 4) {
+        orderBy = { steam_price: 'desc' };
+    }
 
     if (discount) {
         whereClause.OR = [
@@ -45,6 +58,7 @@ export async function GET(req: NextRequest) {
                     },
                 },
             },
+            orderBy: orderBy, 
         });
 
         const totalResults = await prisma.games.count({
