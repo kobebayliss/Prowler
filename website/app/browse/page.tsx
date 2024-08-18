@@ -7,16 +7,20 @@ import Image from 'next/image';
 import { FaSteam } from "react-icons/fa";
 import { SiEpicgames } from "react-icons/si";
 import { IoIosSearch } from "react-icons/io";
-import { FaSortAlphaDown } from "react-icons/fa";
 import { FaFilter } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
 import { RxDoubleArrowLeft } from "react-icons/rx";
 import { RxDoubleArrowRight } from "react-icons/rx";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import { FaSortAmountDownAlt } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
+import { Radio } from "lucide-react";
 
 interface Game {
     game_id: number;
@@ -53,13 +57,29 @@ function BrowsePageContent() {
     const [totalResults, setTotalResults] = useState(0);
     const [customPage, setCustomPage] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
-    const [onlyDiscount, setOnlyDiscount] =useState<boolean>(false);
+    const [onlyDiscount, setOnlyDiscount] = useState<boolean>(false);
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const genres = ["Indie", "Action", "Adventure", "Casual", "RPG"];
     const extraGenres = ["Simulation", "Singleplayer", "Strategy", "Racing", "Free To Play"];
+    const allGenres = ["Indie", "Action", "Adventure", "Casual", "RPG", "Simulation", "Singleplayer", "Strategy", "Racing", "Free To Play"];
     const [showSortMenu, setShowSortMenu] = useState(false);
     const [clickedButton2, setClickedButton2] = useState(false);
     const [orderBy, setOrderBy] = useState(1);
+    const [selectedRanges, setSelectedRanges] = useState<number[]>([]);
+    const ranges = [
+        { id: 1, label: "Free - $15" },
+        { id: 2, label: "$15 - $40" },
+        { id: 3, label: "$40 - $70" },
+        { id: 4, label: "$70 - $100" },
+        { id: 5, label: "$100+" },
+    ];
+    const sorting = [
+        { id: 1, label: "Most Popular" },
+        { id: 2, label: "Alphabetical" },
+        { id: 3, label: "Price: Low to High" },
+        { id: 4, label: "Price: High to Low" },
+    ];
+    const [respMenu, setRespMenu] = useState(false);
 
     useEffect(() => {
         setButtonName(showFilter ? 'Hide' : 'Show');
@@ -83,8 +103,21 @@ function BrowsePageContent() {
     }, []);
 
     useEffect(() => {
+        const handleResize = () => {
+            if (typeof window !== "undefined" && window.innerWidth > 821) {
+                setRespMenu(false);
+            }
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
         setLoading(true);
-        axios.get(`/api?pageNumber=${pageNumber}&discount=${onlyDiscount}&genres=${selectedGenres.join(',')}&order=${orderBy}`)
+        axios.get(`/api?pageNumber=${pageNumber}&discount=${onlyDiscount}&genres=${selectedGenres.join(',')}&priceranges=${selectedRanges.join(',')}&order=${orderBy}`)
             .then(response => {
                 const { games, totalResults } = response.data;
                 if (searchQuery) {
@@ -102,7 +135,7 @@ function BrowsePageContent() {
                 console.error("There was an error fetching the game's information: ", error);
                 setLoading(false);
             });
-    }, [searchQuery, pageNumber, onlyDiscount, selectedGenres, orderBy]);
+    }, [searchQuery, pageNumber, onlyDiscount, selectedGenres, selectedRanges, orderBy]);
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -119,6 +152,14 @@ function BrowsePageContent() {
             prevGenres.includes(genre)
                 ? prevGenres.filter((g) => g !== genre)
                 : [...prevGenres, genre]
+        );
+    };
+
+    const handleRangeToggle = (rangeId: number) => {
+        setSelectedRanges((prevRanges) =>
+            prevRanges.includes(rangeId)
+                ? prevRanges.filter((id) => id !== rangeId)
+                : [...prevRanges, rangeId]
         );
     };
 
@@ -153,18 +194,84 @@ function BrowsePageContent() {
     }}
 
     return (
-        <div className="relative browse-width:w-[1320px] browse-width:mx-auto overflow-hidden w-auto mx-8">
+        <div>
+        <div className={`w-full h-full z-50 top-[100vh] mt-[1px] fixed bg-midnight transition-transform ease-in-out duration-400
+            ${respMenu ? 'translate-y-[-100%]' : ''}`}>
+            <div className="absolute left-4 top-[11px]">
+                <div className="flex justify-start">
+                    <Switch className="mt-0.5" onClick={handleDiscountToggle} checked={onlyDiscount}/>
+                    <p className="ml-3 text-[19px] text-offwhite font-inter">On Sale</p>
+                </div>
+            </div>
+            <div className="flex justify-center mt-[11px] text-[19px] font-inter text-offwhite">
+                <p>Filters</p>
+            </div>
+            {loading && (
+                <div className="top-3 right-[56px] absolute">
+                    <ScaleLoader color="#EFEFEF" height={20} margin={2} width={3} loading/>
+                </div>
+            )}
+            <div className="absolute right-2.5 top-[9px] text-offwhite w-auto text-[24px] hover:bg-lightmidnight cursor-pointer p-1 
+            rounded-[5px] transition-all duration-150" onClick={() => {setRespMenu(false)}}>
+                <RxCross2/>
+            </div>
+            <div className={`${loading ? 'pointer-events-none' : 'pointer-events-auto'}`}>
+                <div className="w-full mt-3 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                    <div className="flex flex-col ml-6 my-3 gap-y-[12px]">
+                        <p className="text-[19px] font-inter text-offwhite">Sort By</p>
+                        <RadioGroup defaultValue={orderBy.toString()} onValueChange={(value) => setOrderBy(parseInt(value))} className="flex flex-col gap-[8px]">
+                            {sorting.map((sort) => (
+                                <div key={sort.id} className="flex items-center">
+                                    <RadioGroupItem value={sort.id.toString()} id={sort.id.toString()} className="h-5 w-5 text-offwhite" />
+                                    <Label htmlFor={sort.id.toString()} className="text-offwhite font-interlight ml-3 text-base leading-none">
+                                        {sort.label}
+                                    </Label>
+                                </div>
+                            ))}
+                        </RadioGroup>
+                    </div>
+                <div className="w-full mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                <div className="my-3 ml-6">
+                    <p className="text-offwhite font-inter text-[19px] mb-3">Price Range</p>
+                    <div className="flex flex-col gap-y-[10px] mb-4">
+                        {ranges.map((range) => (
+                            <div key={range.id} className="flex items-center mr-5">
+                                <Checkbox id={range.label} onClick={() => handleRangeToggle(range.id)}/>
+                                <label htmlFor={range.label} className="text-offwhite font-interlight ml-3 text-base leading-none">
+                                    {range.label}
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="w-full mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                <div className="ml-6 my-3">
+                    <p className="text-offwhite font-inter text-[19px] mb-3">Genres</p>
+                    <div className="flex flex-col gap-y-[10px]">
+                        {allGenres.map((genre) => (
+                            <div key={genre} className="flex items-center mr-5">
+                                <Checkbox id={genre} onClick={() => handleGenreToggle(genre)} />
+                                <label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    {genre}
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="relative browse-width:w-[1320px] browse-width:mx-auto w-auto mx-8">
             <div className="flex pt-4 pb-5 items-center">
                 <p className="text-offwhite font-inter text-[27px] tinywidth:text-[30px] browsewidth:text-[34px]">Browsing Games</p>
-                <div className="ml-14 tinywidth:flex hidden">
+                <div className="ml-12 tinywidth:flex hidden">
                     <FaSteam className="text-offwhite h-logos w-auto"/>
                     <div className="bg-grey h-[32px] w-0.2 mt-em mx-linemargin" />
                     <SiEpicgames className="text-offwhite h-logos w-auto"/>
                 </div>
-                <p className="text-grey hidden font-inter text-base ml-14 browsewidth:block mt-0.5">
+                <p className="text-grey hidden font-inter text-base ml-12 browsewidth:block mt-0.5">
                     {totalResults} {totalResults === 1 ? 'Result' : 'Results'}
                 </p>
-                <div className="hidden browsewidth:flex ml-auto">
+                <div className="hidden filter2width:flex ml-auto">
                     <a href="#" 
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
                     h-10 w-10 rounded-lg justify-center items-center mr-3">
@@ -182,7 +289,7 @@ function BrowsePageContent() {
                     h-10 px-4 rounded-md justify-center items-center ${showSortMenu? 'rounded-t-md rounded-b-none bg-lightmidnight' : 'rounded-md'}`}
                     onClick={() => { setShowSortMenu(!showSortMenu); setClickedButton2(true); }}>
                         <p className="text-offwhite font-inter text-filter mr-2.5">Sort</p>
-                        <FaSortAlphaDown className="text-offwhite h-6 w-auto"/>
+                        <FaSortAmountDownAlt className="text-offwhite h-6 w-auto"/>
                     </button>
                     {showSortMenu && (
                         <div className="bg-lightmidnight mt-10 rounded-tl-md rounded-b-md right-0 flex flex-col absolute 
@@ -202,10 +309,10 @@ function BrowsePageContent() {
                         </div>
                     )}
                 </div>
-                <div className="flex browsewidth:hidden ml-auto">
+                <div className="flex filter2width:hidden ml-auto">
                     <button
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
-                    h-10 w-26 rounded-lg justify-center items-center">
+                    h-10 w-26 rounded-lg justify-center items-center" onClick={() => {setRespMenu(!respMenu)}}>
                         <p className="text-offwhite font-inter text-filter mr-2.5">Filter</p>
                         <FaFilter className="text-offwhite h-5.5 w-auto"/>
                     </button>
@@ -220,30 +327,21 @@ function BrowsePageContent() {
                             <p className="ml-3 text-2xl text-offwhite font-inter">On Sale</p>
                         </div>
                         <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
-                        <p className="flex font-inter text-xl text-offwhite ml-5 mt-3">Price Range</p>
-                        <div className="flex flex-col justify-center mt-3 ml-5">
-                            <div className="flex items-center">
-                                <Checkbox id="range1"/>
-                                <label htmlFor="range1" className="text-offwhite text-base font-interlight self-center ml-2.5">Free - $15</label>
-                            </div>
-                            <div className="flex mt-1 items-center">
-                                <Checkbox id="range2"/>
-                                <label htmlFor="range2" className="text-offwhite text-base font-interlight self-center ml-2.5">$15 - $40</label>
-                            </div>
-                            <div className="flex mt-1 items-center">
-                                <Checkbox id="range3"/>
-                                <label htmlFor="range3" className="text-offwhite text-base font-interlight self-center ml-2.5">$40 - $70</label>
-                            </div>
-                            <div className="flex mt-1 items-center">
-                                <Checkbox id="range4"/>
-                                <label htmlFor="range4" className="text-offwhite text-base font-interlight self-center ml-2.5">$70 - $100</label>
-                            </div>
-                            <div className="flex mt-1 items-center">
-                                <Checkbox id="range5"/>
-                                <label htmlFor="range5" className="text-offwhite text-base font-interlight self-center ml-2.5">$100+</label>
-                            </div>
+                        <p className="text-offwhite font-inter text-2xl mt-3 ml-5 mb-2">Price Range</p>
+                        <div className="flex flex-col gap-y-[10px] ml-5 mt-3">
+                            {ranges.map((range) => (
+                                <div key={range.id} className="flex items-center mr-5">
+                                    <Checkbox
+                                        id={range.label}
+                                        onClick={() => handleRangeToggle(range.id)}
+                                    />
+                                    <label htmlFor={range.label} className="text-offwhite font-interlight ml-3 text-base leading-none">
+                                        {range.label}
+                                    </label>
+                                </div>
+                            ))}
                         </div>
-                        <div className="w-80% mt-4 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                        <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="text-offwhite font-inter text-2xl mt-3 ml-5 mb-2">Genres</p>
                         <div className="flex flex-col gap-y-[10px] ml-5 mt-3">
                             {genres.map((genre) => (
@@ -274,18 +372,13 @@ function BrowsePageContent() {
                     </div>
                 </div>
                 <div className={`transition-all duration-200 ease-out w-full ${showFilter ? 'ml-showfilter pl-0' : ''}`}>
-                     {loading ? (
+                    {loading ? (
                         <div className="mx-auto flex flex-col items-center text-offwhite text-[18px] mb-10 mt-8">
                             <p className="text-center mb-4">Fetching games..</p>
-                            <ScaleLoader 
-                            color="#EFEFEF"
-                            height={20}
-                            margin={2}
-                            width={3}
-                            loading
-                            />
+                            <ScaleLoader color="#EFEFEF" height={20} margin={2} width={3} loading/>
                         </div>
                     ) : (
+                        <>
                         <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-2 w-full
                         ${showFilter ? 'filtertablet:grid-cols-2 filterlg:grid-cols-3': 'tablet:grid-cols-2 lg:grid-cols-3'}`}>
                         {games.map((game) => {
@@ -374,28 +467,32 @@ function BrowsePageContent() {
                             );
                         })}
                         </div>
+                        {totalResults == 0 ? 
+                            ( <p className="text-offwhite flex justify-center mt-5 text-[20px]">No Results.</p> ) :
+                            (<div className="flex mx-6 text-offwhite justify-center font-inter mt-3.5 mb-6">
+                                <a href="#" className={`flex mr-3.5 items-center font-inter transition-colors duration-200 text-[16px] px-3.5 h-[38px] rounded-md 
+                                ${isFirstPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(1)} >
+                                    <RxDoubleArrowLeft />
+                                    <p className="ml-1 mr-2">First</p>
+                                </a>
+                                {paginationItems.map((page, index) => (
+                                    <a key={index} href="#" className={`text-offwhite flex mr-1.5 items-center hover:bg-lightmidnight 
+                                    transition-colors duration-200 text-[16px] justify-center h-[38px] w-[38px] rounded-md 
+                                    ${page === pageNumber ? 'outline outline-[1.5px] outline-lightermidnight' : ''}`} onClick={() => goToPage(page)}>
+                                        <p>{page}</p>
+                                    </a>
+                                ))}
+                                <a href="#" className={`flex ml-3.5 items-center font-inter transition-colors duration-200 text-[16px] px-3.5 h-[38px] rounded-md
+                                ${isLastPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(Math.ceil(totalResults / 48))}>
+                                    <p className="mr-1 ml-1.5">Last</p>
+                                    <RxDoubleArrowRight />
+                                </a>
+                            </div>)}
+                        </>
                     )};
-                    <div className="flex mx-6 text-offwhite justify-center font-inter mt-3.5 mb-6">
-                        <a href="#" className={`flex mr-3.5 items-center font-inter transition-colors duration-200 text-[16px] px-3.5 h-[38px] rounded-md 
-                        ${isFirstPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(1)} >
-                            <RxDoubleArrowLeft />
-                            <p className="ml-1 mr-2">First</p>
-                        </a>
-                        {paginationItems.map((page, index) => (
-                            <a key={index} href="#" className={`text-offwhite flex mr-1.5 items-center hover:bg-lightmidnight 
-                            transition-colors duration-200 text-[16px] justify-center h-[38px] w-[38px] rounded-md 
-                            ${page === pageNumber ? 'outline outline-[1.5px] outline-lightermidnight' : ''}`} onClick={() => goToPage(page)}>
-                                <p>{page}</p>
-                            </a>
-                        ))}
-                        <a href="#" className={`flex ml-3.5 items-center font-inter transition-colors duration-200 text-[16px] px-3.5 h-[38px] rounded-md
-                        ${isLastPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(Math.ceil(totalResults / 48))}>
-                            <p className="mr-1 ml-1.5">Last</p>
-                            <RxDoubleArrowRight />
-                        </a>
-                    </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 }

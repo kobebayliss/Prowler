@@ -11,6 +11,8 @@ export async function GET(req: NextRequest) {
     const discount = discountParam === 'true';
     const genresParam = url.searchParams.get('genres') || '';
     const genreArray = genresParam.split(',').filter(Boolean);
+    const priceRangesParam = url.searchParams.get('priceranges') || "1, 2, 3, 4, 5";
+    const priceRangesArray = priceRangesParam.split(',').map(Number);
     const order = parseInt(url.searchParams.get('order') || '0', 10);
 
     const whereClause: any = {};
@@ -44,6 +46,21 @@ export async function GET(req: NextRequest) {
                 },
             },
         };
+    }
+
+    if (priceRangesArray.length > 0) {
+        whereClause.AND = whereClause.AND || [];
+        const priceConditions = priceRangesArray.map((range) => {
+            switch (range) {
+                case 1: return { OR: [{ steam_price: { gte: 0, lte: 15 } }, { epic_price: { gte: 0, lte: 15 } }] };
+                case 2: return { OR: [{ steam_price: { gte: 15, lte: 40 } }, { epic_price: { gte: 15, lte: 40 } }] };
+                case 3: return { OR: [{ steam_price: { gte: 40, lte: 70 } }, { epic_price: { gte: 40, lte: 70 } }] };
+                case 4: return { OR: [{ steam_price: { gte: 70, lte: 100 } }, { epic_price: { gte: 70, lte: 100 } }] };
+                case 5: return { OR: [{ steam_price: { gte: 100 } }, { epic_price: { gte: 100 } }] };
+                default: return null;
+            }
+        }).filter(Boolean);
+        whereClause.AND.push({ OR: priceConditions });
     }
 
     try {

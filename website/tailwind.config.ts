@@ -30,6 +30,7 @@ const config = {
       'tablet': '700px',
       'filtertablet': '900px',
       'largewidth': '1300px',
+      'filter2width': '821px',
     },
     container: {
       center: true,
@@ -52,6 +53,7 @@ const config = {
         '250': '250ms',
         '150': '150ms',
         '180': '180ms',
+        '400': '360ms',
       },
       transitionDelay: {
         '180': '160ms',

@@ -11,9 +11,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@nextui-org/radio": "^2.1.4",
+    "@nextui-org/react": "^2.4.6",
     "@prisma/client": "^5.15.1",
     "@radix-ui/react-checkbox": "^1.1.0",
     "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-radio-group": "^1.2.0",
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
