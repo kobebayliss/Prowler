@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const pageNumber = parseInt(url.searchParams.get('pageNumber') || '1', 10);
     const itemsPerPage = 48;
+    const searchQuery = url.searchParams.get('search');
     const discountParam = url.searchParams.get('discount');
     const discount = discountParam === 'true';
     const genresParam = url.searchParams.get('genres') || '';
@@ -46,6 +47,16 @@ export async function GET(req: NextRequest) {
                 },
             },
         };
+    }
+
+    if (searchQuery) {
+        whereClause.AND = whereClause.AND || [];
+        whereClause.AND.push({
+            name: {
+                contains: searchQuery.toLowerCase(),
+                mode: "insensitive"
+            }
+        });
     }
 
     if (priceRangesArray.length > 0) {

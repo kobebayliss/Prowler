@@ -58,6 +58,7 @@ function BrowsePageContent() {
     const [customPage, setCustomPage] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [onlyDiscount, setOnlyDiscount] = useState<boolean>(false);
+    const [showSearch, setShowSearch] = useState<boolean>(false);
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const genres = ["Indie", "Action", "Adventure", "Casual", "RPG"];
     const extraGenres = ["Simulation", "Singleplayer", "Strategy", "Racing", "Free To Play"];
@@ -91,7 +92,7 @@ function BrowsePageContent() {
 
     useEffect(() => {
         const handleResize = () => {
-            if (typeof window !== "undefined" && window.innerWidth < 821) {
+            if (typeof window !== "undefined" && window.innerWidth < 914) {
                 setShowFilter(false);
             }
         };
@@ -104,7 +105,7 @@ function BrowsePageContent() {
 
     useEffect(() => {
         const handleResize = () => {
-            if (typeof window !== "undefined" && window.innerWidth > 821) {
+            if (typeof window !== "undefined" && window.innerWidth > 914) {
                 setRespMenu(false);
             }
         };
@@ -117,17 +118,10 @@ function BrowsePageContent() {
 
     useEffect(() => {
         setLoading(true);
-        axios.get(`/api?pageNumber=${pageNumber}&discount=${onlyDiscount}&genres=${selectedGenres.join(',')}&priceranges=${selectedRanges.join(',')}&order=${orderBy}`)
+        axios.get(`/api?pageNumber=${pageNumber}&search=${searchTerm}&discount=${onlyDiscount}&genres=${selectedGenres.join(',')}&priceranges=${selectedRanges.join(',')}&order=${orderBy}`)
             .then(response => {
                 const { games, totalResults } = response.data;
-                if (searchQuery) {
-                    const filteredGames = games.filter((game: Game) =>
-                        game.name.toLowerCase().includes(searchQuery.toLowerCase())
-                    );
-                    setGames(filteredGames);
-                } else {
-                    setGames(games);
-                }
+                setGames(games);
                 setTotalResults(totalResults);
                 setLoading(false);
             })
@@ -135,7 +129,7 @@ function BrowsePageContent() {
                 console.error("There was an error fetching the game's information: ", error);
                 setLoading(false);
             });
-    }, [searchQuery, pageNumber, onlyDiscount, selectedGenres, selectedRanges, orderBy]);
+    }, [searchQuery, pageNumber, searchTerm, onlyDiscount, selectedGenres, selectedRanges, orderBy]);
 
     const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -174,7 +168,9 @@ function BrowsePageContent() {
     const isFirstPage = pageNumber === 1;
     const isLastPage = Math.ceil(totalResults / 48) === pageNumber;
 
-    const paginationItems = [];
+    let paginationItems = [];
+
+    const totalPages = Math.ceil(totalResults / 48);
 
     if (pageNumber > 1) {
         paginationItems.push(pageNumber - 1);
@@ -182,64 +178,75 @@ function BrowsePageContent() {
 
     paginationItems.push(pageNumber);
 
-    if (pageNumber < Math.ceil(totalResults / 48)) {
+    if (pageNumber < totalPages) {
         paginationItems.push(pageNumber + 1);
     }
 
-    while (paginationItems.length < 3) {
-        if (paginationItems[0] > 1) {
-            paginationItems.unshift(paginationItems[0] - 1);
-        } else {
-            paginationItems.push(paginationItems[paginationItems.length - 1] + 1);
-    }}
+    paginationItems.sort((a, b) => a - b);
+
+    paginationItems = paginationItems.filter(page => page > 0 && page <= totalPages);
+
 
     return (
         <div>
         <div className={`w-full h-full z-50 top-[100vh] mt-[1px] fixed bg-midnight transition-transform ease-in-out duration-400
             ${respMenu ? 'translate-y-[-100%]' : ''}`}>
-            <div className="absolute left-4 top-[11px]">
-                <div className="flex justify-start">
-                    <Switch className="mt-0.5" onClick={handleDiscountToggle} checked={onlyDiscount}/>
-                    <p className="ml-3 text-[19px] text-offwhite font-inter">On Sale</p>
-                </div>
-            </div>
-            <div className="flex justify-center mt-[11px] text-[19px] font-inter text-offwhite">
-                <p>Filters</p>
-            </div>
             {loading && (
-                <div className="top-3 right-[56px] absolute">
+                <div className="top-[13px] left-[20px] absolute">
                     <ScaleLoader color="#EFEFEF" height={20} margin={2} width={3} loading/>
                 </div>
             )}
+            <div className="flex justify-center mt-[11px] text-[19px] font-inter text-offwhite">
+                <p>Filters</p>
+            </div>
             <div className="absolute right-2.5 top-[9px] text-offwhite w-auto text-[24px] hover:bg-lightmidnight cursor-pointer p-1 
             rounded-[5px] transition-all duration-150" onClick={() => {setRespMenu(false)}}>
                 <RxCross2/>
             </div>
             <div className={`${loading ? 'pointer-events-none' : 'pointer-events-auto'}`}>
                 <div className="w-full mt-3 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
-                    <div className="flex flex-col ml-6 my-3 gap-y-[12px]">
-                        <p className="text-[19px] font-inter text-offwhite">Sort By</p>
-                        <RadioGroup defaultValue={orderBy.toString()} onValueChange={(value) => setOrderBy(parseInt(value))} className="flex flex-col gap-[8px]">
-                            {sorting.map((sort) => (
-                                <div key={sort.id} className="flex items-center">
-                                    <RadioGroupItem value={sort.id.toString()} id={sort.id.toString()} className="h-5 w-5 text-offwhite" />
-                                    <Label htmlFor={sort.id.toString()} className="text-offwhite font-interlight ml-3 text-base leading-none">
-                                        {sort.label}
-                                    </Label>
-                                </div>
-                            ))}
-                        </RadioGroup>
+                <div className="grid grid-cols-2">
+                    <div className="flex ml-6">
+                        <div>
+                            <p className="text-[19px] font-inter text-offwhite my-3">Sort By</p>
+                            <RadioGroup defaultValue={orderBy.toString()} onValueChange={(value) => setOrderBy(parseInt(value))} className="flex flex-col gap-[8px] mb-4.5">
+                                {sorting.map((sort) => (
+                                    <div key={sort.id} className="flex items-center">
+                                        <RadioGroupItem value={sort.id.toString()} id={sort.id.toString()} className="h-5 w-5 text-offwhite" />
+                                        <Label htmlFor={sort.id.toString()} className="text-offwhite font-interlight ml-3 text-base leading-none">
+                                            {sort.label}
+                                        </Label>
+                                    </div>
+                                ))}
+                            </RadioGroup>
+                        </div>
+                        <div className="h-full w-[2px] bg-lightmidnight ml-auto"/>
                     </div>
-                <div className="w-full mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                    <div className="flex flex-col justify-center h-full items-center">
+                        <div className="flex items-center">
+                            <Switch onClick={handleDiscountToggle} checked={onlyDiscount}/>
+                            <p className="ml-3 text-[19px] text-offwhite font-inter">On Sale</p>
+                        </div>
+                        <input 
+                            type="text"
+                            value={searchTerm}
+                            placeholder="Search..."
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className={`ease-in-out transition-all duration-200 h-10 px-3 rounded-md bg-lightmidnight text-offwhite 
+                            font-inter placeholder:text-grey focus:outline-none focus:ring-1 focus:ring-offwhite w-[180px] mt-5`}
+                        />
+                    </div>
+                </div>
+                <div className="w-full h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                 <div className="my-3 ml-6">
                     <p className="text-offwhite font-inter text-[19px] mb-3">Price Range</p>
                     <div className="flex flex-col gap-y-[10px] mb-4">
                         {ranges.map((range) => (
                             <div key={range.id} className="flex items-center mr-5">
                                 <Checkbox id={range.label} onClick={() => handleRangeToggle(range.id)}/>
-                                <label htmlFor={range.label} className="text-offwhite font-interlight ml-3 text-base leading-none">
+                                <Label htmlFor={range.label} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                     {range.label}
-                                </label>
+                                </Label>
                             </div>
                         ))}
                     </div>
@@ -251,9 +258,9 @@ function BrowsePageContent() {
                         {allGenres.map((genre) => (
                             <div key={genre} className="flex items-center mr-5">
                                 <Checkbox id={genre} onClick={() => handleGenreToggle(genre)} />
-                                <label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                <Label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                     {genre}
-                                </label>
+                                </Label>
                             </div>
                         ))}
                     </div>
@@ -261,9 +268,9 @@ function BrowsePageContent() {
             </div>
         </div>
         <div className="relative browse-width:w-[1320px] browse-width:mx-auto w-auto mx-8">
-            <div className="flex pt-4 pb-5 items-center">
-                <p className="text-offwhite font-inter text-[27px] tinywidth:text-[30px] browsewidth:text-[34px]">Browsing Games</p>
-                <div className="ml-12 tinywidth:flex hidden">
+            <div className="flex py-5 items-center">
+                <p className="text-offwhite font-inter text-[27px] tinywidth:text-[26px] browsewidth:text-[32px]">Browsing Games</p>
+                <div className="ml-8 browsewidth:ml-12 tinywidth:flex hidden">
                     <FaSteam className="text-offwhite h-logos w-auto"/>
                     <div className="bg-grey h-[32px] w-0.2 mt-em mx-linemargin" />
                     <SiEpicgames className="text-offwhite h-logos w-auto"/>
@@ -272,11 +279,22 @@ function BrowsePageContent() {
                     {totalResults} {totalResults === 1 ? 'Result' : 'Results'}
                 </p>
                 <div className="hidden filter2width:flex ml-auto">
-                    <a href="#" 
-                    className="flex hover:bg-lightmidnight transition-colors duration-200 
-                    h-10 w-10 rounded-lg justify-center items-center mr-3">
+                    <button
+                    className={`flex hover:bg-lightmidnight transition-colors duration-200 
+                    h-10 w-10 rounded-lg justify-center items-center mr-2 ${showSearch ? 'hidden' : 'block'}`} 
+                    onClick={() => { setShowSearch(true) }}>
                         <IoIosSearch className="text-offwhite h-8 w-auto"/>
-                    </a>
+                    </button>
+                    <input 
+                        type="text"
+                        value={searchTerm}
+                        placeholder="Search..."
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onBlur={() => setShowSearch(false)}
+                        className={`ease-in-out h-10 px-3 rounded-md bg-lightmidnight text-offwhite font-inter
+                        placeholder:text-grey focus:outline-none focus:ring-1 focus:ring-offwhite
+                        ${showSearch ? 'w-[180px] duration-250 relative mr-2' : 'w-0 h-0 duration-0 absolute opacity-0 pointer-events-none'}`}
+                    />
                     <button
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
                     h-10 w-40 rounded-md justify-center items-center mr-3"
@@ -322,24 +340,21 @@ function BrowsePageContent() {
                 <div className={`absolute z-100 ${clickedButton ? 'block' : 'hidden'} ${loading ? 'pointer-events-none' : 'pointer-events-auto'}`}>
                     <div className={`w-filters h-full
                     ${showFilter ? 'animate-slideout' : 'animate-slideback -translate-x-220'}`}>
-                        <div className="flex justify-center mt-5">
-                            <Switch className="mt-0.5" onClick={handleDiscountToggle} checked={onlyDiscount}/>
+                        <div className="flex justify-center items-center mt-5">
+                            <Switch onClick={handleDiscountToggle} checked={onlyDiscount}/>
                             <p className="ml-3 text-2xl text-offwhite font-inter">On Sale</p>
                         </div>
                         <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="text-offwhite font-inter text-2xl mt-3 ml-5 mb-2">Price Range</p>
                         <div className="flex flex-col gap-y-[10px] ml-5 mt-3">
-                            {ranges.map((range) => (
-                                <div key={range.id} className="flex items-center mr-5">
-                                    <Checkbox
-                                        id={range.label}
-                                        onClick={() => handleRangeToggle(range.id)}
-                                    />
-                                    <label htmlFor={range.label} className="text-offwhite font-interlight ml-3 text-base leading-none">
-                                        {range.label}
-                                    </label>
-                                </div>
-                            ))}
+                        {ranges.map((range) => (
+                            <div key={range.id} className="flex items-center mr-5">
+                                <Checkbox id={range.label} onClick={() => handleRangeToggle(range.id)}/>
+                                <Label htmlFor={range.label} className="text-offwhite font-interlight ml-3 text-base leading-none">
+                                    {range.label}
+                                </Label>
+                            </div>
+                        ))}
                         </div>
                         <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="text-offwhite font-inter text-2xl mt-3 ml-5 mb-2">Genres</p>
@@ -347,22 +362,22 @@ function BrowsePageContent() {
                             {genres.map((genre) => (
                                 <div key={genre} className="flex items-center mr-5">
                                     <Checkbox id={genre} onClick={() => handleGenreToggle(genre)} />
-                                    <label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    <Label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                         {genre}
-                                    </label>
+                                    </Label>
                                 </div>
                             ))}
                             {showExtraGenres && extraGenres.map((genre) => (
                                 <div key={genre} className="flex items-center mr-5">
                                     <Checkbox id={genre} onClick={() => handleGenreToggle(genre)} />
-                                    <label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                                    <Label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                         {genre}
-                                    </label>
+                                    </Label>
                                 </div>
                             ))}
                         </div>
                         <div className={`w-full transition-all duration-100`}>
-                            <div className="ml-6 mt-3">
+                            <div className="ml-5 mt-3">
                                 <button className="text-offwhite text-base font-inter hover:underline cursor-pointer"
                                 onClick={() => { setShowExtraGenres(!showExtraGenres) }}>
                                 Show {genreButton}</button>

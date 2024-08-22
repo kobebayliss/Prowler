@@ -22,7 +22,7 @@ const config = {
       'small': '800px',
       'homewidth': '1360px',
       'otherwidth': '1375px',
-      'browsewidth': '1030px',
+      'browsewidth': '1100px',
       'navwidth': '800px',
       'barwidth': '1408px',
       'lg': '1080px',
@@ -30,7 +30,7 @@ const config = {
       'tablet': '700px',
       'filtertablet': '900px',
       'largewidth': '1300px',
-      'filter2width': '821px',
+      'filter2width': '914px',
     },
     container: {
       center: true,

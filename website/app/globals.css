@@ -169,3 +169,7 @@
     width: 95%;
     left: 2.5%;
   }
+
+  .search-bar {
+    transition: width 0.3s ease;
+  }
