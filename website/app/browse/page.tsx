@@ -209,7 +209,7 @@ function BrowsePageContent() {
                     <div className="flex ml-6">
                         <div>
                             <p className="text-[19px] font-inter text-offwhite my-3">Sort By</p>
-                            <RadioGroup defaultValue={orderBy.toString()} onValueChange={(value) => setOrderBy(parseInt(value))} className="flex flex-col gap-[8px] mb-4.5">
+                            <RadioGroup value={orderBy.toString()} onValueChange={(value) => setOrderBy(parseInt(value))} className="flex flex-col gap-[8px] mb-4.5">
                                 {sorting.map((sort) => (
                                     <div key={sort.id} className="flex items-center">
                                         <RadioGroupItem value={sort.id.toString()} id={sort.id.toString()} className="h-5 w-5 text-offwhite" />
@@ -243,7 +243,7 @@ function BrowsePageContent() {
                     <div className="flex flex-col gap-y-[10px] mb-4">
                         {ranges.map((range) => (
                             <div key={range.id} className="flex items-center mr-5">
-                                <Checkbox id={range.label} onClick={() => handleRangeToggle(range.id)}/>
+                                <Checkbox id={range.label} checked={selectedRanges.includes(range.id)} onClick={() => handleRangeToggle(range.id)}/>
                                 <Label htmlFor={range.label} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                     {range.label}
                                 </Label>
@@ -257,7 +257,7 @@ function BrowsePageContent() {
                     <div className="flex flex-col gap-y-[10px]">
                         {allGenres.map((genre) => (
                             <div key={genre} className="flex items-center mr-5">
-                                <Checkbox id={genre} onClick={() => handleGenreToggle(genre)} />
+                                <Checkbox id={genre} checked={selectedGenres.includes(genre)} onClick={() => handleGenreToggle(genre)} />
                                 <Label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                     {genre}
                                 </Label>
@@ -267,7 +267,7 @@ function BrowsePageContent() {
                 </div>
             </div>
         </div>
-        <div className="relative browse-width:w-[1320px] browse-width:mx-auto w-auto mx-8">
+        <div className="relative browse-width:w-[1320px] browse-width:mx-auto w-auto mx-8 overflow-hidden">
             <div className="flex py-5 items-center">
                 <p className="text-offwhite font-inter text-[27px] tinywidth:text-[26px] browsewidth:text-[32px]">Browsing Games</p>
                 <div className="ml-8 browsewidth:ml-12 tinywidth:flex hidden">
@@ -339,7 +339,7 @@ function BrowsePageContent() {
             <div className="flex min-h-[640px]">
                 <div className={`absolute z-100 ${clickedButton ? 'block' : 'hidden'} ${loading ? 'pointer-events-none' : 'pointer-events-auto'}`}>
                     <div className={`w-filters h-full
-                    ${showFilter ? 'animate-slideout' : 'animate-slideback -translate-x-220'}`}>
+                    ${showFilter ? 'animate-slideout' : 'animate-slideback'}`}>
                         <div className="flex justify-center items-center mt-5">
                             <Switch onClick={handleDiscountToggle} checked={onlyDiscount}/>
                             <p className="ml-3 text-2xl text-offwhite font-inter">On Sale</p>
@@ -349,8 +349,8 @@ function BrowsePageContent() {
                         <div className="flex flex-col gap-y-[10px] ml-5 mt-3">
                         {ranges.map((range) => (
                             <div key={range.id} className="flex items-center mr-5">
-                                <Checkbox id={range.label} onClick={() => handleRangeToggle(range.id)}/>
-                                <Label htmlFor={range.label} className="text-offwhite font-interlight ml-3 text-base leading-none">
+                                <Checkbox id={`range-${range.id}`} checked={selectedRanges.includes(range.id)} onClick={() => handleRangeToggle(range.id)} />
+                                <Label htmlFor={`range-${range.id}`} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                     {range.label}
                                 </Label>
                             </div>
@@ -359,22 +359,27 @@ function BrowsePageContent() {
                         <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="text-offwhite font-inter text-2xl mt-3 ml-5 mb-2">Genres</p>
                         <div className="flex flex-col gap-y-[10px] ml-5 mt-3">
-                            {genres.map((genre) => (
-                                <div key={genre} className="flex items-center mr-5">
-                                    <Checkbox id={genre} onClick={() => handleGenreToggle(genre)} />
-                                    <Label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none">
-                                        {genre}
-                                    </Label>
-                                </div>
-                            ))}
-                            {showExtraGenres && extraGenres.map((genre) => (
-                                <div key={genre} className="flex items-center mr-5">
-                                    <Checkbox id={genre} onClick={() => handleGenreToggle(genre)} />
-                                    <Label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none">
-                                        {genre}
-                                    </Label>
-                                </div>
-                            ))}
+                            {allGenres.map((genre, index) => {
+                                const isExtraGenre = index >= 5;
+                                if (!isExtraGenre || (isExtraGenre && showExtraGenres)) {
+                                    return (
+                                        <div key={genre} className="flex items-center mr-5">
+                                            <Checkbox 
+                                                id={`genre-${index}`} 
+                                                checked={selectedGenres.includes(genre)} 
+                                                onClick={() => handleGenreToggle(genre)} 
+                                            />
+                                            <Label 
+                                                htmlFor={`genre-${index}`} 
+                                                className="text-offwhite font-interlight ml-3 text-base leading-none"
+                                            >
+                                                {genre}
+                                            </Label>
+                                        </div>
+                                    );
+                                }
+                                return null;
+                            })}
                         </div>
                         <div className={`w-full transition-all duration-100`}>
                             <div className="ml-5 mt-3">

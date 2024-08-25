@@ -35,7 +35,7 @@ const carouselImages = [
 ];
 
 const carouselLinks = [
-  "/game?id=36",
+  "/game?id=1033",
   "/game?id=1048",
   "/game?id=5",
   "/game?id=3",
