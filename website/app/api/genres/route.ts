@@ -1,14 +1,13 @@
-// pages/api/genres.ts
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest) {
     try {
         const genres = await prisma.genres.findMany();
-        res.status(200).json(genres);
+        return NextResponse.json(genres);
     } catch (error) {
-        res.status(500).json({ error: "Failed to fetch genres" });
+        return NextResponse.json({ error: "Failed to fetch genres" }, { status: 500 });
     }
 }
