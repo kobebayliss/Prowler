@@ -13,6 +13,7 @@ const config = {
     screens: {
       'tinywidth': '600px',
       'phone-width': '520px',
+      'arrowwidth': '450px',
       'browse-width': '1384px',
       'genre-width': '640px',
       'grid-width': '840px',
@@ -31,6 +32,7 @@ const config = {
       'filtertablet': '900px',
       'largewidth': '1300px',
       'filter2width': '914px',
+      'FAQwidth': '840px',
     },
     container: {
       center: true,

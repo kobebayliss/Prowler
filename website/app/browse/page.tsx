@@ -205,7 +205,7 @@ function BrowsePageContent() {
             </div>
             <div className={`${loading ? 'pointer-events-none' : 'pointer-events-auto'}`}>
                 <div className="w-full mt-3 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
-                <div className="grid grid-cols-2">
+                <div className="grid grid-cols-[56%_auto]">
                     <div className="flex ml-6">
                         <div>
                             <p className="text-[19px] font-inter text-offwhite my-3">Sort By</p>
@@ -233,7 +233,7 @@ function BrowsePageContent() {
                             placeholder="Search..."
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className={`ease-in-out transition-all duration-200 h-10 px-3 rounded-md bg-lightmidnight text-offwhite 
-                            font-inter placeholder:text-grey focus:outline-none focus:ring-1 focus:ring-offwhite w-[180px] mt-5`}
+                            font-inter placeholder:text-grey focus:outline-none focus:ring-1 focus:ring-offwhite w-[140px] mt-5`}
                         />
                     </div>
                 </div>
@@ -269,7 +269,7 @@ function BrowsePageContent() {
         </div>
         <div className="relative browse-width:w-[1320px] browse-width:mx-auto w-auto mx-8 overflow-hidden">
             <div className="flex py-5 items-center">
-                <p className="text-offwhite font-inter text-[27px] tinywidth:text-[26px] browsewidth:text-[32px]">Browsing Games</p>
+                <p className="text-offwhite font-inter text-[24px] tinywidth:text-[27px] browsewidth:text-[32px]">Browsing Games</p>
                 <div className="ml-8 browsewidth:ml-12 tinywidth:flex hidden">
                     <FaSteam className="text-offwhite h-logos w-auto"/>
                     <div className="bg-grey h-[32px] w-0.2 mt-em mx-linemargin" />
@@ -406,28 +406,28 @@ function BrowsePageContent() {
                             let isLong = 0;
                             let steamOnSale = game.steam_on_sale === "1";
                             let steamPrice = parseFloat(game.steam_price);
-                            let steamNormalPrice = game.steam_normal_price;
+                            let steamNormalPrice = parseFloat(game.steam_normal_price.replace(/[^\d.-]/g, ''));
                             let epicOnSale = game.epic_on_sale === "1";
                             let epicPrice = parseFloat(game.epic_price);
-                            let epicNormalPrice = game.epic_normal_price;
+                            let epicNormalPrice = parseFloat(game.epic_normal_price.replace(/[^\d.-]/g, ''));
                             let steamDiscount = 0;
                             let epicDiscount = 0;
 
                             if (gameName.length > 30) gameName = gameName.substring(0, 30) + '...', isLong = 1;
 
                             if (steamOnSale) {
-                                let normalPrice1 = steamNormalPrice
-                                let salePrice1 = steamPrice
-                        
+                                let normalPrice1 = steamNormalPrice;
+                                let salePrice1 = steamPrice;
+                                
                                 if (normalPrice1 > 0) {
                                     steamDiscount = Math.round(((normalPrice1 - salePrice1) / normalPrice1) * 100);
                                 }
                             }
 
                             if (epicOnSale) {
-                                let normalPrice2 = parseFloat(epicNormalPrice.replace(/[^\d.-]/g, ''));
-                                let salePrice2 = parseFloat(epicPrice.replace(/[^\d.-]/g, ''));
-                        
+                                let normalPrice2 = epicNormalPrice;
+                                let salePrice2 = epicPrice;
+                                
                                 if (normalPrice2 > 0) {
                                     epicDiscount = Math.round(((normalPrice2 - salePrice2) / normalPrice2) * 100);
                                 }
@@ -472,7 +472,7 @@ function BrowsePageContent() {
                                                 <div className="bg-grey h-[32px] w-0.2 mt-0.5 mx-[22px]" />
                                                 <div className="flex w-40 justify-start items-center">
                                                     <p className="font-interlight text-prices text-offwhite">
-                                                        ${game.epic_price}
+                                                        {epicPrice == -1 ? ( <p>N/A</p> ) : epicPrice == 0 ? ( <p>Free</p> ) : ( <p>${epicPrice}</p> )}
                                                     </p>
                                                     {epicOnSale && (
                                                         <p className="font-inter ml-3 text-[12px] bg-blue py-1 px-2 rounded-[4px] text-offwhite">

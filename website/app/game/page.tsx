@@ -108,6 +108,7 @@ function GamePageContent() {
     let publisherFinal = publisherFormatting.join(', ');
     
     let steamPrice = parseFloat(game.steam_price)
+    let epicPrice = parseFloat(game.epic_price)
 
     return (
         <div className="w-auto mx-8 browse-width:mx-auto browse-width:w-[1320px]">
@@ -132,7 +133,7 @@ function GamePageContent() {
                         onMouseLeave={() => { setIsHovered(false); }}>
                             <div className="flex justify-center items-center">
                                 <img src="/images/epic.png" alt="Epic Games logo" className="mr-3 w-auto h-[32px]"/>
-                                <p className="text-offwhite font-inter text-[23px]">{game.epic_price}</p>
+                                <p className="text-offwhite font-inter text-[23px]">{epicPrice == -1 ? ( <p>N/A</p> ) : epicPrice == 0 ? ( <p>Free</p> ) : ( <p>${epicPrice}</p> )}</p>
                             </div>
                             <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5">View Epic page</p>
                         </a>

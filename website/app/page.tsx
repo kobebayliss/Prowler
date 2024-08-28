@@ -1,113 +1,202 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import * as React from "react";
+import { useRef, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Autoplay from "embla-carousel-autoplay";
+import AutoScroll from "embla-carousel-auto-scroll";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from 'next/image';
+import { IoIosSearch } from "react-icons/io";
+import { FaSteam } from "react-icons/fa";
+import { SiEpicgames } from "react-icons/si";
+import Nav from "@/components/nav";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
+const carouselNames = [
+  "Ghost of Tsushima",
+  "Sea of Thieves",
+  "Cyberpunk 2077",
+  "Elden Ring",
+  "No Man's Sky",
+];
+
+const carouselImages = [
+  "tsushima.jpg",
+  "seaofthieves.jpg",
+  "cyberpunk.jpeg",
+  "eldenring.jpeg",
+  "nomanssky.jpeg",
+];
+
+const carouselLinks = [
+  "/game?id=1033",
+  "/game?id=1048",
+  "/game?id=5",
+  "/game?id=3",
+  "/game?id=175",
+];
+
+export default function HomePage() {
+  const plugin = useRef(AutoScroll({ speed: 3, stopOnMouseEnter: true, stopOnInteraction: false }));
+  const [isHovered, setIsHovered] = useState(Array(carouselImages.length).fill(false));
+  const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+  const [screenWidth, setScreenWidth] = useState(0);
+  const [initialScreenWidth, setInitialScreenWidth] = useState(0);
+  const [activated, setActivated] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setScreenWidth(window.innerWidth);
+      setInitialScreenWidth(window.screen.width);
+    }
+
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setScreenWidth(window.innerWidth);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    router.push(`/browse?search=${searchTerm}`);
+  };
+
+  const handleMouseEnter = (index: number) => {
+    const newHoverState = isHovered.map((hovered, i) => (i === index ? true : hovered));
+    setIsHovered(newHoverState);
+    plugin.current?.stop();
+  };
+
+  const handleMouseLeave = (index: number) => {
+    const newHoverState = isHovered.map((hovered, i) => (i === index ? false : hovered));
+    setIsHovered(newHoverState);
+    plugin.current?.reset();
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
+    <>
+    <Nav/>
+    <div className="homewidth:w-[1320px] homewidth:mx-auto w-auto mx-5">
+      <div className={`w-full flex my-[34px] small:my-28 flex-col items-center mx-auto`}>
+        <p className="text-offwhite text-center text-[52px] font-intersemibold mb-3 mx-4 small:text-[70px]">Spend less on games.</p>
+        <p className="text-offwhite text-center text-[18px] font-inter mb-10 max-w-[500px] mx-5">
+          Find the lowest prices for thousands of games simply by searching, 
+          or browse through games on the browse tab.
         </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+        <form className="w-full z-20 max-w-[380px] mx-auto" onSubmit={handleSearchSubmit}>
+            <div className="relative w-auto mx-5">
+                <IoIosSearch className="absolute text-offwhite w-auto h-[70%] ml-3 top-1/2 transform -translate-y-1/2"/>
+                <input
+                className="w-full pl-19 p-4 text-[18px] placeholder:font-intersemibold placeholder:text-grey text-offwhite font-inter 
+                rounded-searchbox bg-lightmidnight focus:outline-none focus:ring-1 focus:ring-offwhite transition-all duration-100" 
+                placeholder="Search for a game..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+        </form>
       </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
+      <div className="small:mt-40 mt-[84px] mx-5">
+        <Carousel plugins={plugin.current ? [plugin.current] : []}
+          opts={{ align:"start", loop:true }}
+          className="transition-all content-center">
+          <div className="absolute top-0 left-0 h-full w-[60px] pointer-events-none bg-gradient-to-r from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
+          <div className="absolute top-0 right-0 h-full w-[60px] pointer-events-none bg-gradient-to-l from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
+          <CarouselContent> 
+            {carouselImages.map((image, index) => (
+              <CarouselItem key={index} className="basis-1/2 small:basis-1/3">
+                <Card className="bg-transparent">
+                  <CardContent className="flex p-0">
+                    {image ? (
+                      <a
+                        className="relative overflow-hidden rounded-[18px]"
+                        href={carouselLinks[index]}
+                        onMouseEnter={() => handleMouseEnter(index)}
+                        onMouseLeave={() => handleMouseLeave(index)}
+                      >
+                        <img
+                          src={`/images/${image}`}
+                          alt="Game Image" 
+                          className="h-auto hover:brightness-80 transition-all duration-200"
+                        />
+                        <div 
+                        className={`flex flex-col items-center absolute bottom-0 w-full h-[50px] 
+                        bg-lightmidnight z-10 transition-all duration-200 justify-center
+                        ${isHovered[index] ? 'animate-slideup' : 'animate-slidedown'}`}>
+                          <p className="font-inter small:text-2xl text-offwhite mb-1">{carouselNames[index]}</p>
+                        </div>
+                      </a>
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 rounded-4xl" />
+                    )}
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+        <p className="text-offwhite font-inter text-center max-w-[380px] text-[18px] mt-16 mx-auto">Our browse page offers thousands of games, able to be filtered and sorted to your needs.</p>
+        <a className="flex mt-5 bg-offwhite w-[140px] hover:bg-darkwhite rounded-md h-[42px] justify-center items-center transition-all duration-200 mx-auto" href="../browse">
+          <p className="font-intersemibold text-[16px]">Browse games</p>
         </a>
       </div>
-    </main>
+      <div className="FAQwidth:max-w-[720px] FAQwidth:mx-auto small:mt-[134px] mt-[108px] mx-10">
+        <p className="text-offwhite text-[32px] small:text-[40px] text-center flex justify-center font-inter mb-10">Frequently Asked Questions</p>
+        <Accordion type="single" collapsible className="w-full text-offwhite">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>What is Prowler?</AccordionTrigger>
+            <AccordionContent>
+              Prowler is a react-based website developed with one purpose: to help users spend less on games. Currently, Prowler
+              can provide the prices of thousands of games on Steam and Epic Games, as well as useful details about them. My goal
+              is to make the process of purchasing games easier for all. All services are free.
+            </AccordionContent>
+          </AccordionItem>
+          <div className="w-full h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>How does Prowler work?</AccordionTrigger>
+            <AccordionContent>
+              Prowler uses a robust and automated web scraping program to scrape Steam and Epic Games' respective websites, storing
+              thousands of games and their details in a database. This information is then pulled from the database to be displayed
+              on this website.
+            </AccordionContent>
+          </AccordionItem>
+          <div className="w-full h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>What are some upcoming features?</AccordionTrigger>
+            <AccordionContent>
+              My plans for upcoming features include account functionality with a customisable wishlist (including an option to 
+              recieve emails when games go on sale) and adding more sellers.
+            </AccordionContent>
+          </AccordionItem>
+          <div className="w-full h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+        </Accordion>
+        <p className="mx-auto text-grey text-center text-[14px] font-interbold mt-32 small:mt-40 mb-20">Developed by Kobe Bayliss</p>
+      </div>
+    </div>
+    </>
   );
 }

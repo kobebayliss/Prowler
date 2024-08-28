@@ -5,13 +5,17 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { CgMenuRightAlt } from "react-icons/cg";
 import { TiArrowRightThick } from "react-icons/ti";
+import { useToast } from "@/components/ui/use-toast"
+import { ToastAction } from "@/components/ui/toast"
+import { Toaster } from "@/components/ui/toaster"
 
 export default function Nav() {
   const [showMenu, setShowMenu] = useState(false);
   const [pressedMenu, setPressedMenu] = useState(false);
   const [hoveredLink, setHoveredLink] = useState("");
+  const { toast } = useToast()
 
-  const handleMouseOver = (link) => {
+  const handleMouseOver = (link: string) => {
     setHoveredLink(link);
   };
 
@@ -20,11 +24,12 @@ export default function Nav() {
   };
 
   return (
+    <>
     <div className="sticky top-0 z-50">
       <div className="z-50 bg-midnight w-full backdrop-blur supports-[backdrop-filter]:bg-midnight/80 relative">
         <div className="flex h-14 justify-between barwidth:justify-center items-center">
           <div className="flex items-center ml-4.5 mr-0 barwidth:ml-0 barwidth:mr-[700px]">
-            <a className="flex items-center h-16 px-2 mr-6" href="../home">
+            <a className="flex items-center h-16 px-2 mr-6" href="../">
               <img className="h-[26px] w-auto mr-2.5" src="/images/prowlerlogo.png" alt="Prowler Logo" />
               <p className="font-intersemibold text-[20px] text-offwhite">Prowler</p>
             </a>
@@ -39,11 +44,14 @@ export default function Nav() {
           </div>
           <div className="flex mr-3 small:mr-4.5 barwidth:mr-0">
             <div className="flex mr-1 h-[40px]">
-              <a className="font-intersemibold text-[15px] text-offwhite mr-3 px-3.5 flex flex-col justify-center h-full rounded-md bg-lightmidnight hover:bg-[#252525]" href="#">Login</a>
-              <a className="flex bg-offwhite hover:bg-darkwhite rounded-md h-[40px] my-auto items-center px-2 transition-all duration-200" href="#">
-                <p className="ml-1.5 font-intersemibold text-[15px]">Sign Up</p>
-                <img className="h-7 w-7 ml-1" src="/images/arrowtopright.png" alt="Arrow" />
-              </a>
+              <button className="font-intersemibold text-[14px] text-offwhite mr-3 px-3.5 flex flex-col justify-center h-full rounded-md bg-lightmidnight hover:bg-[#252525]"
+              onClick={() => { toast({title: "Coming Soon...", description: "Account functionality will be implemented soon"
+              })}}>Login</button>
+              <button className="flex bg-offwhite hover:bg-darkwhite rounded-md h-[40px] my-auto items-center px-2 transition-all duration-200"
+              onClick={() => { toast({title: "Coming Soon...", description: "Account functionality will be implemented soon"})}}>
+                <p className="ml-1 arrowwidth:mr-0 mr-1 font-intersemibold text-[14px]">Sign Up</p>
+                <img className="h-7 w-7 ml-1 hidden arrowwidth:block" src="/images/arrowtopright.png" alt="Arrow" />
+              </button>
             </div>
             <a className="ml-2 w-8 rounded-md hover:bg-lightmidnight transition-colors duration-200 cursor-pointer navwidth:hidden relative flex flex-col items-center justify-center"
               onClick={() => { setShowMenu(!showMenu); setPressedMenu(true) }}>
@@ -80,5 +88,9 @@ export default function Nav() {
         </div>
       </div>
     </div>
+    <div>
+      <Toaster/>
+    </div>
+    </>
   );
 }
