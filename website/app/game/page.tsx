@@ -1,6 +1,5 @@
 "use client"
 
-
 import React, { useState, useRef, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
@@ -8,6 +7,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import Autoplay from "embla-carousel-autoplay";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
+// I need to define data types for variables from api here due to typescript specific error
 interface Game {
     game_id: number;
     name: string;
@@ -51,7 +51,7 @@ function GamePageContent() {
     const [isHovered, setIsHovered] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
     const descriptionRef = useRef(null);
-    const isOverflow = useTextOverflow(descriptionRef, 6, isExpanded);
+    const isOverflow = useTextOverflow(descriptionRef, 4, isExpanded);
     const router = useRouter();
     const [game, setGame] = useState<Game | null>(null);
     const idQuery = useSearchParams();

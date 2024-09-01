@@ -28,7 +28,7 @@ export default function Nav() {
     <div className="sticky top-0 z-50">
       <div className="z-50 bg-midnight w-full backdrop-blur supports-[backdrop-filter]:bg-midnight/80 relative">
         <div className="flex h-14 justify-between barwidth:justify-center items-center">
-          <div className="flex items-center ml-4.5 mr-0 barwidth:ml-0 barwidth:mr-[700px]">
+          <div className="flex items-center ml-4.5 mr-0 barwidth:ml-0 barwidth:mr-[782px]">
             <a className="flex items-center h-16 px-2 mr-6" href="../">
               <img className="h-[26px] w-auto mr-2.5" src="/images/prowlerlogo.png" alt="Prowler Logo" />
               <p className="font-intersemibold text-[20px] text-offwhite">Prowler</p>
@@ -36,8 +36,7 @@ export default function Nav() {
             <div className="hidden navwidth:block">
               <ul className="flex items-center gap-8 ml-5 mt-0.5">
                 <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="../browse">Browse</a>
-                <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="#">FAQs</a>
-                <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="#">Contact</a>
+                <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="../contact">Contact</a>
                 <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="#">GitHub</a>
               </ul>
             </div>

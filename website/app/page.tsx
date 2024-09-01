@@ -25,6 +25,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
+// 3 Arrays for carousel images so I can map in the carousel function
 const carouselNames = [
   "Ghost of Tsushima",
   "Sea of Thieves",
@@ -50,45 +51,25 @@ const carouselLinks = [
 ];
 
 export default function HomePage() {
+  // Carousel settings
   const plugin = useRef(AutoScroll({ speed: 3, stopOnMouseEnter: true, stopOnInteraction: false }));
+
   const [isHovered, setIsHovered] = useState(Array(carouselImages.length).fill(false));
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
-  const [screenWidth, setScreenWidth] = useState(0);
-  const [initialScreenWidth, setInitialScreenWidth] = useState(0);
-  const [activated, setActivated] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setScreenWidth(window.innerWidth);
-      setInitialScreenWidth(window.screen.width);
-    }
-
-    const handleResize = () => {
-      if (typeof window !== 'undefined') {
-        setScreenWidth(window.innerWidth);
-      }
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
+  // When user submits a search, this function sends that variable via URL to browse page for search filtering
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     router.push(`/browse?search=${searchTerm}`);
   };
 
+  // Functions for checking if user's mouse is over carousel images (to show extra details at bottom)
   const handleMouseEnter = (index: number) => {
     const newHoverState = isHovered.map((hovered, i) => (i === index ? true : hovered));
     setIsHovered(newHoverState);
     plugin.current?.stop();
   };
-
   const handleMouseLeave = (index: number) => {
     const newHoverState = isHovered.map((hovered, i) => (i === index ? false : hovered));
     setIsHovered(newHoverState);
@@ -97,6 +78,7 @@ export default function HomePage() {
 
   return (
     <>
+    {/* I need to manually place nav component here as root layout won't apply */}
     <Nav/>
     <div className="homewidth:w-[1320px] homewidth:mx-auto w-auto mx-5">
       <div className={`w-full flex my-[34px] small:my-28 flex-col items-center mx-auto`}>
@@ -105,13 +87,15 @@ export default function HomePage() {
           Find the lowest prices for thousands of games simply by searching, 
           or browse through games on the browse tab.
         </p>
-        <form className="w-full z-20 max-w-[380px] mx-auto" onSubmit={handleSearchSubmit}>
+        
+        <form className="w-full z-20 max-w-[380px] mx-auto" /* Calling search function upon search submit */ onSubmit={handleSearchSubmit}>
             <div className="relative w-auto mx-5">
                 <IoIosSearch className="absolute text-offwhite w-auto h-[70%] ml-3 top-1/2 transform -translate-y-1/2"/>
                 <input
-                className="w-full pl-19 p-4 text-[18px] placeholder:font-intersemibold placeholder:text-grey text-offwhite font-inter 
-                rounded-searchbox bg-lightmidnight focus:outline-none focus:ring-1 focus:ring-offwhite transition-all duration-100" 
+                className="w-full pl-19 p-4 text-[18px] placeholder:font-inter text-offwhite font-inter bg-lmidnight
+                rounded-searchbox placeholder:text-grey ring-[1px] ring-lightermidnight placeholder:text-[16px] transition-all duration-100" 
                 placeholder="Search for a game..."
+                /* Setting the search term */
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -119,12 +103,14 @@ export default function HomePage() {
         </form>
       </div>
       <div className="small:mt-40 mt-[84px] mx-5">
+        {/* Carousel settings from above and ensuring that it infinitely loops */}
         <Carousel plugins={plugin.current ? [plugin.current] : []}
           opts={{ align:"start", loop:true }}
           className="transition-all content-center">
           <div className="absolute top-0 left-0 h-full w-[60px] pointer-events-none bg-gradient-to-r from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
           <div className="absolute top-0 right-0 h-full w-[60px] pointer-events-none bg-gradient-to-l from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
-          <CarouselContent> 
+          <CarouselContent>
+            {/* Mapping the carousel arrays from above */}
             {carouselImages.map((image, index) => (
               <CarouselItem key={index} className="basis-1/2 small:basis-1/3">
                 <Card className="bg-transparent">
@@ -144,6 +130,7 @@ export default function HomePage() {
                         <div 
                         className={`flex flex-col items-center absolute bottom-0 w-full h-[50px] 
                         bg-lightmidnight z-10 transition-all duration-200 justify-center
+                        // When user hovers carousel image, details slide up
                         ${isHovered[index] ? 'animate-slideup' : 'animate-slidedown'}`}>
                           <p className="font-inter small:text-2xl text-offwhite mb-1">{carouselNames[index]}</p>
                         </div>
@@ -166,6 +153,7 @@ export default function HomePage() {
       </div>
       <div className="FAQwidth:max-w-[720px] FAQwidth:mx-auto small:mt-[134px] mt-[108px] mx-10">
         <p className="text-offwhite text-[32px] small:text-[40px] text-center flex justify-center font-inter mb-10">Frequently Asked Questions</p>
+        {/* Accordion component from ui folder */}
         <Accordion type="single" collapsible className="w-full text-offwhite">
           <AccordionItem value="item-1">
             <AccordionTrigger>What is Prowler?</AccordionTrigger>

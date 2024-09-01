@@ -291,8 +291,8 @@ function BrowsePageContent() {
                         placeholder="Search..."
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onBlur={() => setShowSearch(false)}
-                        className={`ease-in-out h-10 px-3 rounded-md bg-lightmidnight text-offwhite font-inter
-                        placeholder:text-grey focus:outline-none focus:ring-1 focus:ring-offwhite
+                        className={`ease-in-out py-1 px-3 rounded-md bg-lmidnight text-offwhite font-inter
+                        placeholder:text-grey ring-[1px] ring-lightermidnight placeholder:text-[13px]
                         ${showSearch ? 'w-[180px] duration-250 relative mr-2' : 'w-0 h-0 duration-0 absolute opacity-0 pointer-events-none'}`}
                     />
                     <button

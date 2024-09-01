@@ -11,6 +11,7 @@ const config = {
   prefix: "",
   theme: {
     screens: {
+      'contactwidth': '530px',
       'tinywidth': '600px',
       'phone-width': '520px',
       'arrowwidth': '450px',
@@ -64,7 +65,7 @@ const config = {
         '300': '280ms',
       },
       scale: {
-        '103': '1.025',
+        '103': '1.02',
         '86': '0.88',
         '120': '1.20',
       },
@@ -93,10 +94,11 @@ const config = {
       },
       colors: {
         'midnight': '#08090a',
+        'lmidnight': '#131518',
         'offwhite': '#EFEFEF',
         'darkwhite': '#bfbfbf',
         'greyish': '#c9c9c9',
-        'grey': '#7f7f7f',
+        'grey': '#6c6c6c',
         'lightmidnight': '#2a2a2a',
         'lightermidnight': '#3c3c40',
         'blue': '#1E90FF',
