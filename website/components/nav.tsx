@@ -15,6 +15,7 @@ export default function Nav() {
   const [hoveredLink, setHoveredLink] = useState("");
   const { toast } = useToast()
 
+  // Keeping track of user's mouse for hover effects
   const handleMouseOver = (link: string) => {
     setHoveredLink(link);
   };
@@ -29,12 +30,14 @@ export default function Nav() {
       <div className="z-50 bg-midnight w-full backdrop-blur supports-[backdrop-filter]:bg-midnight/80 relative">
         <div className="flex h-14 justify-between barwidth:justify-center items-center">
           <div className="flex items-center ml-4.5 mr-0 barwidth:ml-0 barwidth:mr-[782px]">
+            {/* Wrap logo and text in a link for easier navigation */}
             <a className="flex items-center h-16 px-2 mr-6" href="../">
               <img className="h-[26px] w-auto mr-2.5" src="/images/prowlerlogo.png" alt="Prowler Logo" />
               <p className="font-intersemibold text-[20px] text-offwhite">Prowler</p>
             </a>
             <div className="hidden navwidth:block">
               <ul className="flex items-center gap-8 ml-5 mt-0.5">
+                {/* All page links */}
                 <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="../browse">Browse</a>
                 <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="../contact">Contact</a>
                 <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="#">GitHub</a>
@@ -43,6 +46,7 @@ export default function Nav() {
           </div>
           <div className="flex mr-3 small:mr-4.5 barwidth:mr-0">
             <div className="flex mr-1 h-[40px]">
+              {/* Simple login and signup buttons which activate a toast (component from shadcn) */}
               <button className="font-intersemibold text-[14px] text-offwhite mr-3 px-3.5 flex flex-col justify-center h-full rounded-md bg-lightmidnight hover:bg-[#252525]"
               onClick={() => { toast({title: "Coming Soon...", description: "Account functionality will be implemented soon"
               })}}>Login</button>
@@ -52,6 +56,8 @@ export default function Nav() {
                 <img className="h-7 w-7 ml-1 hidden arrowwidth:block" src="/images/arrowtopright.png" alt="Arrow" />
               </button>
             </div>
+
+            {/* Responsive navigation menu button */}
             <a className="ml-2 w-8 rounded-md hover:bg-lightmidnight transition-colors duration-200 cursor-pointer navwidth:hidden relative flex flex-col items-center justify-center"
               onClick={() => { setShowMenu(!showMenu); setPressedMenu(true) }}>
               <div
@@ -70,11 +76,14 @@ export default function Nav() {
       <div className="w-full flex justify-center relative">
         <div className={`h-navwidth:hidden absolute text-offwhite w-[84%] z-40 h-[280px] navwidth:hidden block
         rounded-b-xl outline outline-1 outline-lightmidnight bg-midnight backdrop-blur supports-[backdrop-filter]:bg-midnight/80 
+        // Responsive navigation menu animations (presets in tailwind.config file)
         ${showMenu ? 'animate-menudown pointer-events-auto' : 'animate-menuup pointer-events-none'} ${pressedMenu ? 'block' : 'hidden'}`}
           style={{ top: 0 }}>
           <div className="flex mt-4 flex-col w-full absolute">
+            {/* Mapping the different links in responsive navigation menu to make code more concise */}
             {["../browse", "../faq", "../contact", "../github"].map((href, index) => (
-              <a className="flex items-center self-center px-4 mt-4.5 underline-animation" key={index} href={href}  onMouseOver={() => handleMouseOver(href)} onMouseOut={handleMouseOut}>
+              <a className="flex items-center self-center px-4 mt-4.5 underline-animation" key={index} href={href}  
+              onMouseOver={() => handleMouseOver(href)} onMouseOut={handleMouseOut}>
                 <p
                   className={`font-inter text-offwhite text-[20px] px-2 py-1 z-20 transition-opacity
                   ${showMenu ? 'opacity-100' : 'opacity-0'} ${hoveredLink === href ? 'duration-200' : 'duration-200'}`}

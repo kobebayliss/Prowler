@@ -21,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+      {/* This ensures that the entire screen will be midnight (beyond limits of page) */}
       <section className="min-h-screen bg-midnight">
         {children}
       </section>

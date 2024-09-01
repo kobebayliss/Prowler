@@ -63,7 +63,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             # if condition for when website should finish scrolling
-            if i > 35:
+            if i > 10:
                 break
         
         updated_html = driver.page_source
@@ -112,7 +112,7 @@ def scrape_steam_page(url):
                 # getting website for each individual game and parsing it
                 game_page = requests.get(link)
                 soup2 = BeautifulSoup(game_page.content, 'html.parser')
-                
+
                 # error handling for if the game is actually a DLC
                 if soup2.find('div', class_="game_area_bubble game_area_dlc_bubble"):
                     dlc_container = soup2.find('div', class_="game_area_bubble game_area_dlc_bubble")
@@ -216,10 +216,12 @@ def scrape_steam_page(url):
                 if not failed:
                     # here, the game isn't in the database so we insert a new record for it
                     # SQL statement to insert the game's information into the prowler_games database
-                    sql = """INSERT INTO games (name, reviews, steam_on_sale, steam_price, steam_normal_price, epic_on_sale, epic_price, epic_normal_price, developer, publisher, short_desc, long_desc, banner, images, specs) 
-                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                    sql = """INSERT INTO games (name, reviews, steam_on_sale, steam_price, steam_normal_price, epic_on_sale, epic_price, 
+                    epic_normal_price, developer, publisher, short_desc, long_desc, banner, images, specs, steam_link, epic_link) 
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
                     # values to insert
-                    val = (name, reviews, on_sale, price, normal_price, -1, -1, -1, developer, publishers, short_description, long_description, banner_image, images, specs)
+                    val = (name, reviews, on_sale, price, normal_price, -1, -1, -1, developer, publishers, short_description, 
+                           long_description, banner_image, images, specs, link, -1)
                     # adding values and saving them
                     mycursor.execute(sql, val)
                     games_db.commit()

@@ -189,7 +189,7 @@ function BrowsePageContent() {
 
     return (
         <div>
-        <div className={`w-full h-full z-50 top-[100vh] mt-[1px] fixed bg-midnight transition-transform ease-in-out duration-400
+        <div className={`w-full z-50 top-[100vh] h-[100vh] overflow-y-auto fixed bg-midnight transition-transform ease-in-out duration-400
             ${respMenu ? 'translate-y-[-100%]' : ''}`}>
             {loading && (
                 <div className="top-[13px] left-[20px] absolute">
@@ -254,7 +254,7 @@ function BrowsePageContent() {
                 <div className="w-full mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                 <div className="ml-6 my-3">
                     <p className="text-offwhite font-inter text-[19px] mb-3">Genres</p>
-                    <div className="flex flex-col gap-y-[10px]">
+                    <div className="flex flex-col gap-y-[10px] pb-3">
                         {allGenres.map((genre) => (
                             <div key={genre} className="flex items-center mr-5">
                                 <Checkbox id={genre} checked={selectedGenres.includes(genre)} onClick={() => handleGenreToggle(genre)} />

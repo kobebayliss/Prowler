@@ -42,7 +42,7 @@ def scrape_epic_page():
     start_value = 0
     index = 1
     # determining how many games to scrape
-    max_games = int(input("Enter number of games : "))
+    max_games = 20000
     while start_value < max_games:
         # dynamic link to go to next page when done
         epic_url = f"https://store.epicgames.com/en-US/browse?sortBy=title&sortDir=ASC&category=Game&count=100&start={start_value}"
@@ -64,7 +64,7 @@ def scrape_epic_page():
             if game.find('div', class_="css-l24hbj"):
                 price_container = game.find('div', class_="css-1a6kj04")
                 price_container_2 = price_container.find('div', class_="css-o1hbmr")
-                price = price_container_2.find('span', class_="css-119zqif").text.strip()
+                price = price_container_2.find('span', class_="css-12s1vua").text.strip()
                 price = price.replace("NZ$", "").strip()
                 if price == "Free":
                     price = 0
@@ -91,8 +91,8 @@ def scrape_epic_page():
             matches = [index for index, game_name in steam_names.items() if name in game_name]
             if matches:
                 # sql to update epic price
-                sql = "UPDATE games SET epic_on_sale = %s, epic_price = %s, epic_normal_price = %s WHERE game_id = %s"
-                val = (on_sale, price, normal_price, matches[0])
+                sql = "UPDATE games SET epic_on_sale = %s, epic_price = %s, epic_normal_price = %s, epic_link = %s WHERE game_id = %s"
+                val = (on_sale, price, normal_price, link, matches[0])
                 mycursor.execute(sql, val)
                 games_db.commit()
                 print(mycursor.rowcount, "details updated")

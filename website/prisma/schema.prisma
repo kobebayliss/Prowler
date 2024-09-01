@@ -22,9 +22,11 @@ model games {
   steam_on_sale      String?      @db.VarChar(40)
   steam_price        Float?
   steam_normal_price String?      @db.VarChar(40)
+  steam_link         String?      @db.VarChar(200)
   epic_on_sale       String?      @db.VarChar(40)
   epic_price         Float?
   epic_normal_price  String?      @db.VarChar(40)
+  epic_link          String?      @db.VarChar(200)
   developer          String?      @db.VarChar(200)
   publisher          String?      @db.VarChar(200)
   short_desc         String?
