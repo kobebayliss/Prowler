@@ -60,6 +60,7 @@ function GamePageContent() {
     const id = idQuery.get('id');
     const [loading, setLoading] = useState<boolean>(true);
 
+    // Axios statement to retrieve data from games api page (in /api/games) for the specific game's id, with loading logic too
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -102,7 +103,8 @@ function GamePageContent() {
     if (!game) {
         return <div>Game not found</div>;
     }
-
+    
+    // Formatting some fields from database so I can use them correctly, eg. changing prices from strings to floats
     let imageUrls = game.images.replace(/[{}"]/g, '').split(',');
     imageUrls = imageUrls.map(url => url.trim()).filter((url, index, self) => self.indexOf(url) === index);
 
@@ -122,17 +124,20 @@ function GamePageContent() {
                     <p className="text-offwhite font-interlight text-[1.05em] mx-auto grid-width:mx-0">{game.reviews}</p>
                     <div className="h-px w-full bg-lightermidnight mt-3"/>
                     <div className="flex bg-lightmidnight w-full mx-auto h-[96px] mt-[20px] rounded-lg">
+                        {/* Prices box */}
                         <a href={game.steam_link} target="_blank" rel="noopener noreferrer" className="w-[49.8%] rounded-l-lg 
                         transition-all duration-150 hover:bg-lightermidnight flex flex-col justify-center"
                         onMouseEnter={() => { setIsHovered(true); }}
                         onMouseLeave={() => { setIsHovered(false); }}>
                             <div className="flex justify-center items-center">
                                 <img src="/images/steam.png" alt="Steam logo" className="mr-3 w-auto h-[32px]"/>
+                                {/* Conditionally rendering free if price is 0 */}
                                 <p className="text-offwhite font-inter text-[23px]">{steamPrice == 0 ? ( <p>Free</p> ) : ( <p>${steamPrice}</p> )}</p>
                             </div>
                             <p className="font-interlight text-center text-darkerwhite text-[13px] mt-2.5">View Steam page</p>
                         </a>
                         <div className={`w-[1.5px] bg-lightermidnight self-center transition-all duration-150 ${isHovered ? 'h-[100%]' : 'h-[50%]'}`}/>
+                        {/* Conditional epic link if it exists, otherwise # and unclickable */}
                         <a href={epicExists ? game.epic_link : "#"} target="_blank" rel="noopener noreferrer" 
                         className={`w-[50%] rounded-r-2xl transition-all duration-150 hover:bg-lightermidnight flex flex-col 
                         justify-center ${epicExists ? 'pointer-events-auto' : 'pointer-events-none' }`}
@@ -141,6 +146,7 @@ function GamePageContent() {
                             <div className="flex justify-center items-center">
                                 <img src="/images/epic.png" alt="Epic Games logo" className="mr-3 w-auto h-[32px]"/>
                                 <p className="text-offwhite font-inter text-[23px]">
+                                    {/* Conditionally rendering N/A if game doesn't exist on epic, or free if price = 0 */}
                                     {epicExists ? epicPrice == 0 ? ( <p>Free</p> ) : ( <p>${epicPrice}</p> ) : ( <p>N/A</p> )}
                                 </p>
                             </div>
@@ -150,6 +156,7 @@ function GamePageContent() {
                     </div>
                     <div className="h-px w-full bg-lightermidnight mt-5"/>
                     <div className="mt-5 mb-5 grid-width:mb-0 w-full">
+                        {/* Here I clamp the maximum vertical number of lines to 8 so that the formatting of this section remains consistent */}
                         <p className="font-interlight text-offwhite text-[15px] mx-auto grid-width:mx-0 line-clamp-8">
                             {game.short_desc}
                         </p>
@@ -157,10 +164,12 @@ function GamePageContent() {
                 </div>
                 <div className="flex flex-col grid-width:ml-[50px] justify-center">
                     <div className="h-px w-full bg-lightermidnight mb-8 block grid-width:hidden"/>
+                    {/* Autoplaying carousel of game's images */}
                     <Carousel plugins={[Autoplay({delay: 1800,}),]} opts={{loop: true,}}>
                     <div className="absolute top-0 left-0 h-full w-[60px] pointer-events-none bg-gradient-to-r from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
                     <div className="absolute top-0 right-0 h-full w-[60px] pointer-events-none bg-gradient-to-l from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
                         <CarouselContent>
+                            {/* Mapping game images to carousel items to infinitely loop through them */}
                             {imageUrls.map((url, index) => (
                                 <CarouselItem key={index}>
                                     <img src={url} alt={`Game screenshot ${index + 1}`} className="rounded-lg h-[411px] w-[732px]"/>
@@ -179,6 +188,7 @@ function GamePageContent() {
                         <div className={`font-interlight text-offwhite grid-width:mr-24 text-[15px]`}>
                             {game.long_desc}
                         </div>
+                        {/* If the description is too long, adding a read more button so that the page isn't automatically filled with a huge amount of text */}
                         {isOverflow && !isExpanded && (
                             <p className="font-inter mb-4 text-offwhite text-[15.5px] mt-1 cursor-pointer"
                             onClick={() => setIsExpanded(true)}>Click to read more</p>)}
@@ -204,6 +214,9 @@ function GamePageContent() {
                 <div className="mt-3 mb-10 text-offwhite">
                     <p className="flex justify-center grid-width:justify-start font-inter text-[20px]">System Requirements</p>
                     <div className="w-full mt-2 text-[13.5px] bg-midnight items-start rounded-lg font-interlight">
+                    {/* Mapping the specs array and splitting it at each colon. This means that I can apply custom css classes to each side
+                    so that the user can easily read this section and isn't overwhelmed. This can cause issues if the specs have a colon
+                    which isn't corresponding to a field (look at website too see what I mean if this is confusing) but that's very rare */}
                     {game.specs.replace(/[{}"]/g, '').split(',').map((spec, index) => {
                         const [key, value] = spec.split(':');
                         return (

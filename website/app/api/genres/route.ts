@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
     try {
+        // Getting all genres from the genres table, then simple error handling and returning them as JSON
         const genres = await prisma.genres.findMany();
         return NextResponse.json(genres);
     } catch (error) {

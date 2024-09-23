@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
     const url = new URL(req.url);
+    // Assigning variables to each of the values passed through api request on browse page, also splitting some into lists
     const pageNumber = parseInt(url.searchParams.get('pageNumber') || '1', 10);
     const itemsPerPage = 48;
     const searchQuery = url.searchParams.get('search');
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest) {
     const whereClause: any = {};
 
     let orderBy: any = {};
-
+    // Set orderBy based on the value of 'order', using index for ordering ie 1 = popularity 2 = alphabetical etc.
     if (order === 1) {
         orderBy = { game_id: 'asc' };
     } else if (order === 2) {
@@ -30,6 +31,7 @@ export async function GET(req: NextRequest) {
         orderBy = { steam_price: 'desc' };
     }
 
+    // Apply discount filter if discount is true, checks if either 'steam_on_sale' or 'epic_on_sale' is set to "1" (being on sale)
     if (discount) {
         whereClause.OR = [
             { steam_on_sale: "1" },
@@ -37,6 +39,7 @@ export async function GET(req: NextRequest) {
         ];
     }
 
+    // If genreArray is not empty, then filters games by matching any genres in the 'genreArray'
     if (genreArray.length > 0) {
         whereClause.game_genre = {
             some: {
@@ -49,6 +52,7 @@ export async function GET(req: NextRequest) {
         };
     }
 
+    // Filters games by checking if the 'name' contains the search query, case-insensitive
     if (searchQuery) {
         whereClause.AND = whereClause.AND || [];
         whereClause.AND.push({
@@ -59,6 +63,8 @@ export async function GET(req: NextRequest) {
         });
     }
 
+    // Apply price range filters if 'priceRangesArray' is not empty, each case corresponds to different price ranges, 
+    // filtering based on 'steam_price' or 'epic_price'
     if (priceRangesArray.length > 0) {
         whereClause.AND = whereClause.AND || [];
         const priceConditions = priceRangesArray.map((range) => {
@@ -70,34 +76,40 @@ export async function GET(req: NextRequest) {
                 case 5: return { OR: [{ steam_price: { gte: 100 } }, { epic_price: { gte: 100 } }] };
                 default: return null;
             }
-        }).filter(Boolean);
+        }).filter(Boolean); // Filter out null values
         whereClause.AND.push({ OR: priceConditions });
     }
 
+    // Try to fetch games data from the database using the Prisma client
+    // It applies filters, pagination, and sorting as defined above
     try {
         const games = await prisma.games.findMany({
             where: whereClause,
+            // Paginating based on how many games I want per page (48 now)
             skip: (pageNumber - 1) * itemsPerPage,
             take: itemsPerPage,
             include: {
                 game_genre: {
                     include: {
-                        genres: true,
+                        genres: true, // Include genres related to each game
                     },
                 },
             },
             orderBy: orderBy, 
         });
 
+        // Count total results for 'x Results' on browse page
         const totalResults = await prisma.games.count({
             where: whereClause,
         });
-
+        // Return the games and total results as a JSON response
         return NextResponse.json({ games, totalResults });
     } catch (error) {
+        // Log any errors that occur during the database operation
         console.error(error);
         return NextResponse.error();
     } finally {
+        // Ensure the Prisma client disconnects after the query
         await prisma.$disconnect();
     }
 }

@@ -42,6 +42,7 @@ interface Game {
 }
 
 function BrowsePageContent() {
+    // Defining all variables
     const [games, setGames] = useState<Game[]>([]);
     const [hoveredGameId, setHoveredGameId] = useState<number | null>(null);
     const [showFilter, setShowFilter] = useState(false);
@@ -60,6 +61,7 @@ function BrowsePageContent() {
     const [onlyDiscount, setOnlyDiscount] = useState<boolean>(false);
     const [showSearch, setShowSearch] = useState<boolean>(false);
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+    // I use these to dynamically map the genres (and price and sorting later down)
     const genres = ["Indie", "Action", "Adventure", "Casual", "RPG"];
     const extraGenres = ["Simulation", "Singleplayer", "Strategy", "Racing", "Free To Play"];
     const allGenres = ["Indie", "Action", "Adventure", "Casual", "RPG", "Simulation", "Singleplayer", "Strategy", "Racing", "Free To Play"];
@@ -115,7 +117,8 @@ function BrowsePageContent() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
+    
+    // Retrieving information from api page, also sending specificities like filters etc
     useEffect(() => {
         setLoading(true);
         axios.get(`/api?pageNumber=${pageNumber}&search=${searchTerm}&discount=${onlyDiscount}&genres=${selectedGenres.join(',')}&priceranges=${selectedRanges.join(',')}&order=${orderBy}`)
@@ -165,6 +168,7 @@ function BrowsePageContent() {
         setPageNumber(page);
     };
 
+    // Pagination backend
     const isFirstPage = pageNumber === 1;
     const isLastPage = Math.ceil(totalResults / 48) === pageNumber;
 
@@ -209,6 +213,7 @@ function BrowsePageContent() {
                     <div className="flex ml-6">
                         <div>
                             <p className="text-[19px] font-inter text-offwhite my-3">Sort By</p>
+                            {/* Responsive radio menu for sorting */}
                             <RadioGroup value={orderBy.toString()} onValueChange={(value) => setOrderBy(parseInt(value))} className="flex flex-col gap-[8px] mb-4.5">
                                 {sorting.map((sort) => (
                                     <div key={sort.id} className="flex items-center">
@@ -223,6 +228,7 @@ function BrowsePageContent() {
                         <div className="h-full w-[2px] bg-lightmidnight ml-auto"/>
                     </div>
                     <div className="flex flex-col justify-center h-full items-center">
+                        {/* Responsive on sale filter and dynamic search */}
                         <div className="flex items-center">
                             <Switch onClick={handleDiscountToggle} checked={onlyDiscount}/>
                             <p className="ml-3 text-[19px] text-offwhite font-inter">On Sale</p>
@@ -238,6 +244,7 @@ function BrowsePageContent() {
                     </div>
                 </div>
                 <div className="w-full h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
+                {/* Below are the genres and price range filtering systems which are near identical */}
                 <div className="my-3 ml-6">
                     <p className="text-offwhite font-inter text-[19px] mb-3">Price Range</p>
                     <div className="flex flex-col gap-y-[10px] mb-4">
@@ -279,6 +286,7 @@ function BrowsePageContent() {
                     {totalResults} {totalResults === 1 ? 'Result' : 'Results'}
                 </p>
                 <div className="hidden filter2width:flex ml-auto">
+                    {/* This button disappears when clicked and extends into search input */}
                     <button
                     className={`flex hover:bg-lightmidnight transition-colors duration-200 
                     h-10 w-10 rounded-lg justify-center items-center mr-2 ${showSearch ? 'hidden' : 'block'}`} 
@@ -312,6 +320,7 @@ function BrowsePageContent() {
                     {showSortMenu && (
                         <div className="bg-lightmidnight mt-10 rounded-tl-md rounded-b-md right-0 flex flex-col absolute 
                         text-[16px] text-right font-inter px-4 py-2.5 gap-y-[1px] z-50">
+                            {/* Sorting menu and conditionally making them darker to show they are selected */}
                             <p className={`underline-animation2 transition-all duration-150 cursor-pointer
                             ${orderBy == 1 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
                             onClick={() => { setOrderBy(1) }}>Most Popular</p>
@@ -337,6 +346,7 @@ function BrowsePageContent() {
                 </div>
             </div>
             <div className="flex min-h-[640px]">
+                {/* I ensure that users cannot click on filters whilst the page is loading, so that they do not spam and cause issues */}
                 <div className={`absolute z-100 ${clickedButton ? 'block' : 'hidden'} ${loading ? 'pointer-events-none' : 'pointer-events-auto'}`}>
                     <div className={`w-filters h-full
                     ${showFilter ? 'animate-slideout' : 'animate-slideback'}`}>
@@ -347,6 +357,7 @@ function BrowsePageContent() {
                         <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="text-offwhite font-inter text-2xl mt-3 ml-5 mb-2">Price Range</p>
                         <div className="flex flex-col gap-y-[10px] ml-5 mt-3">
+                        {/* Ranges and genres again for regular filter menu, again dynamically having them checked if they are selected for consistency */}
                         {ranges.map((range) => (
                             <div key={range.id} className="flex items-center mr-5">
                                 <Checkbox id={`range-${range.id}`} checked={selectedRanges.includes(range.id)} onClick={() => handleRangeToggle(range.id)} />
@@ -401,6 +412,7 @@ function BrowsePageContent() {
                         <>
                         <div className={`grid transition-transform gap-x-6 gap-y-8 grid-cols-1 pb-2 w-full
                         ${showFilter ? 'filtertablet:grid-cols-2 filterlg:grid-cols-3': 'tablet:grid-cols-2 lg:grid-cols-3'}`}>
+                        {/* Mapping the array of games returned from api page and defining variables as needed */}
                         {games.map((game) => {
                             let gameName = game.name || "";
                             let isLong = 0;
@@ -412,9 +424,9 @@ function BrowsePageContent() {
                             let epicNormalPrice = parseFloat(game.epic_normal_price.replace(/[^\d.-]/g, ''));
                             let steamDiscount = 0;
                             let epicDiscount = 0;
-
+                            // Shortening games names which are too long
                             if (gameName.length > 30) gameName = gameName.substring(0, 30) + '...', isLong = 1;
-
+                            // Below I calculate both the epic and steam discount %
                             if (steamOnSale) {
                                 let normalPrice1 = steamNormalPrice;
                                 let salePrice1 = steamPrice;
@@ -434,11 +446,13 @@ function BrowsePageContent() {
                             }
 
                             return (
+                                // When a game is clicked, call the function and pass the game id to take user to that game's page
                                 <a href={`/game?id=${game.game_id}`} onClick={() => handleGame(game.game_id)} key={game.game_id}>
                                     <div className="w-card bg-lightmidnight rounded-searchbox hover:scale-103 transition-all duration-200">
                                         <div className="flex items-end justify-center">
                                             <div className={`absolute flex py-2 px-4 bg-lightmidnight items-center rounded-popup 
                                                 content-center transition-all duration-150 mb-3 triangle-div text-center 
+                                                // Conditionally rendering a small popup for long game names
                                                 ${isLong && hoveredGameId === game.game_id ? 'opacity-100' : 'opacity-0'}`}>
                                                 <p className="text-offwhite font-inter">{game.name}</p>
                                             </div>
@@ -466,12 +480,14 @@ function BrowsePageContent() {
                                                         </p>
                                                     )}
                                                     <p className="font-interlight text-prices text-offwhite">
+                                                        {/* If statement to render Free for games of price 0 */}
                                                         {steamPrice == 0 ? ( <p>Free</p> ) : ( <p>${steamPrice}</p> )}
                                                     </p>
                                                 </div>
                                                 <div className="bg-grey h-[32px] w-0.2 mt-0.5 mx-[22px]" />
                                                 <div className="flex w-40 justify-start items-center">
                                                     <p className="font-interlight text-prices text-offwhite">
+                                                        {/* Again conditionally rendering N/A if game wasn't available on epic, or free if it was 0 */}
                                                         {epicPrice == -1 ? ( <p>N/A</p> ) : epicPrice == 0 ? ( <p>Free</p> ) : ( <p>${epicPrice}</p> )}
                                                     </p>
                                                     {epicOnSale && (
@@ -488,13 +504,17 @@ function BrowsePageContent() {
                         })}
                         </div>
                         {totalResults == 0 ? 
+                            // Simple no results message to help users diagnose the error
                             ( <p className="text-offwhite flex justify-center mt-5 text-[20px]">No Results.</p> ) :
                             (<div className="flex mx-6 text-offwhite justify-center font-inter mt-3.5 mb-6">
                                 <a href="#" className={`flex mr-3.5 items-center font-inter transition-colors duration-200 text-[16px] px-3.5 h-[38px] rounded-md 
+                                // Here, I conditionally grey out the first button if the page number is one and make it unclickable, do the 
+                                same thing with last and current page, also changing current page number to 1 on click.
                                 ${isFirstPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(1)} >
                                     <RxDoubleArrowLeft />
                                     <p className="ml-1 mr-2">First</p>
                                 </a>
+                                {/* Mapping pagination item array for the page numbers at the bottom to display current page and +- 1 */}
                                 {paginationItems.map((page, index) => (
                                     <a key={index} href="#" className={`text-offwhite flex mr-1.5 items-center hover:bg-lightmidnight 
                                     transition-colors duration-200 text-[16px] justify-center h-[38px] w-[38px] rounded-md 
