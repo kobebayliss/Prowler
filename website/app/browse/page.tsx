@@ -319,7 +319,7 @@ function BrowsePageContent() {
                     </button>
                     {showSortMenu && (
                         <div className="bg-lightmidnight mt-10 rounded-tl-md rounded-b-md right-0 flex flex-col absolute 
-                        text-[16px] text-right font-inter px-4 py-2.5 gap-y-[1px] z-50">
+                        text-[16px] text-right font-inter px-4 py-2.5 gap-y-[1px] z-30">
                             {/* Sorting menu and conditionally making them darker to show they are selected */}
                             <p className={`underline-animation2 transition-all duration-150 cursor-pointer
                             ${orderBy == 1 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 

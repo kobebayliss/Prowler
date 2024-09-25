@@ -63,7 +63,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             # if condition for when website should finish scrolling
-            if i > 10:
+            if i > 30:
                 break
         
         updated_html = driver.page_source

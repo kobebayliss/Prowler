@@ -6,6 +6,7 @@ from fuzzywuzzy import fuzz
 import psycopg2
 import time
 
+# Database connection
 games_db = psycopg2.connect(
     host="ep-damp-bush-a7sbzyn1-pooler.ap-southeast-2.aws.neon.tech",
     user="default",
@@ -20,12 +21,15 @@ r = requests.get(url1)
 soup2 = BeautifulSoup(r.content, 'html.parser')
 genres_container = soup2.find(id="tag_browse_global")
 index = 1
+# Finding all of the genres and looping through them
 for genre1 in genres_container.find_all('div', class_="tag_browse_tag"):
     genre = genre1.text.strip()
     index += 1
+    # Insert each genre into DB
     sql = "INSERT INTO genres (genre) VALUES (%s)"
     val = (genre,)
     mycursor.execute(sql, val)
     games_db.commit()
+# Ensuring that details have been inserted
 print(mycursor.rowcount, "details inserted")
 games_db.close()
