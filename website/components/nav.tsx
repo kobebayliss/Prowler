@@ -40,7 +40,7 @@ export default function Nav() {
                 {/* All page links */}
                 <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="../browse">Browse</a>
                 <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="../contact">Contact</a>
-                <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="#">GitHub</a>
+                <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="https://github.com/kba0297/Prowler">GitHub</a>
               </ul>
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function Nav() {
           style={{ top: 0 }}>
           <div className="flex mt-4 flex-col w-full absolute">
             {/* Mapping the different links in responsive navigation menu to make code more concise */}
-            {["../browse", "../faq", "../contact", "../github"].map((href, index) => (
+            {["../browse", "../faq", "../contact", "https://github.com/kba0297/Prowler"].map((href, index) => (
               <a className="flex items-center self-center px-4 mt-4.5 underline-animation" key={index} href={href}  
               onMouseOver={() => handleMouseOver(href)} onMouseOut={handleMouseOut}>
                 <p

@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 import psycopg2
 import time
 
+failed = False
 # connecting to the prowler-db database
 games_db = psycopg2.connect(
     host="ep-damp-bush-a7sbzyn1-pooler.ap-southeast-2.aws.neon.tech",
@@ -55,6 +56,7 @@ def scrape_epic_page():
         container = soup.find('ul', class_="css-cnqlhg")
         # finding each individual game
         for game in container.find_all('li'):
+            failed = False
             # error handling for name since there are two name type classes
             if game.find('div', class_="css-rgqwpc"):
                 name = game.find('div', class_="css-rgqwpc").text.strip()
@@ -65,7 +67,7 @@ def scrape_epic_page():
                 price_container = game.find('div', class_="css-1a6kj04")
                 price_container_2 = price_container.find('div', class_="css-o1hbmr")
                 price = price_container_2.find('span', class_="css-12s1vua").text.strip()
-                price = price.replace("NZ$", "").strip()
+                price = price.replace("NZ$", "").replace("A$", "").strip()
                 if price == "Free":
                     price = 0
                 if price_container.find('div', class_="css-4jky3p"):
@@ -76,6 +78,7 @@ def scrape_epic_page():
                     on_sale = "0"
                     normal_price = "N/A"
             else:
+                failed = True
                 price = "N/A"
                 on_sale = "N/A"
                 normal_price = "N/A"
@@ -89,7 +92,7 @@ def scrape_epic_page():
             print(f"Link: {link}")
 
             matches = [index for index, game_name in steam_names.items() if name in game_name]
-            if matches:
+            if matches and not failed:
                 # sql to update epic price
                 sql = "UPDATE games SET epic_on_sale = %s, epic_price = %s, epic_normal_price = %s, epic_link = %s WHERE game_id = %s"
                 val = (on_sale, price, normal_price, link, matches[0])

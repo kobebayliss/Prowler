@@ -167,7 +167,7 @@ export default function HomePage() {
           <AccordionItem value="item-2">
             <AccordionTrigger>How does Prowler work?</AccordionTrigger>
             <AccordionContent>
-              Prowler uses a robust and automated web scraping program to scrape Steam and Epic Games' respective websites, storing
+              Prowler uses a robust and automated web scraping program to scrape Steam and Epic Games&#39; respective websites, storing
               thousands of games and their details in a database. This information is then pulled from the database to be displayed
               on this website.
             </AccordionContent>
