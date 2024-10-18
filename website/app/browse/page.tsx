@@ -47,7 +47,6 @@ function BrowsePageContent() {
     const [hoveredGameId, setHoveredGameId] = useState<number | null>(null);
     const [showFilter, setShowFilter] = useState(false);
     const [clickedButton, setClickedButton] = useState(false);
-    const [buttonName, setButtonName] = useState('Show');
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('search') || '';
     const [showExtraGenres, setShowExtraGenres] = useState(false);
@@ -82,11 +81,8 @@ function BrowsePageContent() {
         { id: 3, label: "Price: Low to High" },
         { id: 4, label: "Price: High to Low" },
     ];
-    const [respMenu, setRespMenu] = useState(false);
 
-    useEffect(() => {
-        setButtonName(showFilter ? 'Hide' : 'Show');
-    }, [showFilter]);
+    const [respMenu, setRespMenu] = useState(false);
 
     useEffect(() => {
         setGenreButton(showExtraGenres ? 'Less' : 'More');
@@ -307,7 +303,9 @@ function BrowsePageContent() {
                     className="flex hover:bg-lightmidnight transition-colors duration-200 
                     h-10 w-40 rounded-md justify-center items-center mr-3"
                     onClick={() => { setShowFilter(!showFilter); setClickedButton(true); }}>
-                        <p className="text-offwhite font-inter text-filter mr-2.5">{buttonName} Filters</p>
+                        <p className="text-offwhite font-inter text-filter mr-2.5">
+                            {showFilter ? 'Hide' : 'Show'} Filters
+                        </p>
                         <FaFilter className="text-offwhite h-5.5 w-auto"/>
                     </button>
                     <button
