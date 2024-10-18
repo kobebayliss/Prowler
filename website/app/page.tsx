@@ -26,28 +26,32 @@ import {
 } from "@/components/ui/accordion"
 
 // 3 Arrays for carousel images so I can map in the carousel function
-const carouselNames = [
-  "Ghost of Tsushima",
-  "Sea of Thieves",
-  "Cyberpunk 2077",
-  "Elden Ring",
-  "No Man's Sky",
-];
-
-const carouselImages = [
-  "tsushima.jpg",
-  "seaofthieves.jpg",
-  "cyberpunk.jpeg",
-  "eldenring.jpeg",
-  "nomanssky.jpeg",
-];
-
-const carouselLinks = [
-  "/game?id=1033",
-  "/game?id=1048",
-  "/game?id=5",
-  "/game?id=3",
-  "/game?id=175",
+const carouselData = [
+  {
+    name: "Ghost of Tsushima",
+    image: "tsushima.jpg",
+    link: "/game?id=1033",
+  },
+  {
+    name: "Sea of Thieves",
+    image: "seaofthieves.jpg",
+    link: "/game?id=1048",
+  },
+  {
+    name: "Cyberpunk 2077",
+    image: "cyberpunk.jpeg",
+    link: "/game?id=5",
+  },
+  {
+    name: "Elden Ring",
+    image: "eldenring.jpeg",
+    link: "/game?id=3",
+  },
+  {
+    name: "No Man's Sky",
+    image: "nomanssky.jpeg",
+    link: "/game?id=175",
+  },
 ];
 
 export default function HomePage() {
