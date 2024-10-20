@@ -51,7 +51,7 @@ def scrape_steam_page(url):
     # checking that the page successfully loaded
     if response.status_code == 200:
         # time between each scroll
-        scroll_pause_time = 0.4
+        scroll_pause_time = 0.3
         # find screen height
         screen_height = driver.execute_script("return window.screen.height;")
         i = 1
@@ -63,7 +63,7 @@ def scrape_steam_page(url):
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             # if condition for when website should finish scrolling
-            if i > 50:
+            if i > 80:
                 break
         
         updated_html = driver.page_source
@@ -204,11 +204,11 @@ def scrape_steam_page(url):
             # checking if game already in database
             if name in games_prices:
                 # checking if price has changed
-                if price != games_prices[name]:
+                if str(round(float(price), 2)).strip() != str(round(float(games_prices[name]), 2)).strip():
                     print(f"{price} vs {games_prices[name]}")
                     # sql to update price
-                    sql = "UPDATE games SET steam_price = (%s) WHERE name = (%s)"
-                    val = (price, name)
+                    sql = "UPDATE games SET (steam_price, steam_on_sale, steam_normal_price) = (%s, %s, %s) WHERE name = (%s)"
+                    val = (price, on_sale, normal_price, name)
                     mycursor.execute(sql, val)
                     games_db.commit()
                     print(mycursor.rowcount, "details updated")

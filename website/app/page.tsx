@@ -58,7 +58,7 @@ export default function HomePage() {
   // Carousel settings
   const plugin = useRef(AutoScroll({ speed: 3, stopOnMouseEnter: true, stopOnInteraction: false }));
 
-  const [isHovered, setIsHovered] = useState(Array(carouselImages.length).fill(false));
+  const [isHovered, setIsHovered] = useState(Array(carouselData.length).fill(false));
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
 
@@ -115,28 +115,28 @@ export default function HomePage() {
           <div className="absolute top-0 right-0 h-full w-[60px] pointer-events-none bg-gradient-to-l from-[rgba(8,9,10,1)] via-[rgba(8,9,10,1)] via-10% to-[rgba(0,212,255,0)] to-100% z-10"></div>
           <CarouselContent>
             {/* Mapping the carousel arrays from above */}
-            {carouselImages.map((image, index) => (
+            {carouselData.map((item, index) => (
               <CarouselItem key={index} className="basis-1/2 small:basis-1/3">
                 <Card className="bg-transparent">
                   <CardContent className="flex p-0">
-                    {image ? (
+                    {item.image ? (
                       <a
                         className="relative overflow-hidden rounded-[18px]"
-                        href={carouselLinks[index]}
+                        href={item.link}
                         onMouseEnter={() => handleMouseEnter(index)}
                         onMouseLeave={() => handleMouseLeave(index)}
                       >
                         <img
-                          src={`/images/${image}`}
-                          alt="Game Image" 
+                          src={`/images/${item.image}`}
+                          alt="Game Image"
                           className="h-auto hover:brightness-80 transition-all duration-200"
                         />
-                        <div 
-                        className={`flex flex-col items-center absolute bottom-0 w-full h-[50px] 
-                        bg-lightmidnight z-10 transition-all duration-200 justify-center
-                        // When user hovers carousel image, details slide up
-                        ${isHovered[index] ? 'animate-slideup' : 'animate-slidedown'}`}>
-                          <p className="font-inter small:text-2xl text-offwhite mb-1">{carouselNames[index]}</p>
+                        <div
+                          className={`flex flex-col items-center absolute bottom-0 w-full h-[50px] 
+                          bg-lightmidnight z-10 transition-all duration-200 justify-center
+                          ${isHovered[index] ? 'animate-slideup' : 'animate-slidedown'}`}
+                        >
+                          <p className="font-inter small:text-2xl text-offwhite mb-1">{item.name}</p>
                         </div>
                       </a>
                     ) : (
