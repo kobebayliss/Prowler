@@ -50,7 +50,6 @@ function BrowsePageContent() {
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('search') || '';
     const [showExtraGenres, setShowExtraGenres] = useState(false);
-    const [genreButton, setGenreButton] = useState('More');
     const router = useRouter();
     const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
     const [pageNumber, setPageNumber] = useState<number>(1);
@@ -61,9 +60,8 @@ function BrowsePageContent() {
     const [showSearch, setShowSearch] = useState<boolean>(false);
     const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     // I use these to dynamically map the genres (and price and sorting later down)
-    const genres = ["Indie", "Action", "Adventure", "Casual", "RPG"];
-    const extraGenres = ["Simulation", "Singleplayer", "Strategy", "Racing", "Free To Play"];
-    const allGenres = ["Indie", "Action", "Adventure", "Casual", "RPG", "Simulation", "Singleplayer", "Strategy", "Racing", "Free To Play"];
+    const genres = ["Indie", "Action", "Adventure", "Casual", "RPG", "Simulation", 
+    "Singleplayer", "Strategy", "Racing", "Free To Play"];
     const [showSortMenu, setShowSortMenu] = useState(false);
     const [clickedButton2, setClickedButton2] = useState(false);
     const [orderBy, setOrderBy] = useState(1);
@@ -83,10 +81,6 @@ function BrowsePageContent() {
     ];
 
     const [respMenu, setRespMenu] = useState(false);
-
-    useEffect(() => {
-        setGenreButton(showExtraGenres ? 'Less' : 'More');
-    }, [showExtraGenres]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -258,7 +252,7 @@ function BrowsePageContent() {
                 <div className="ml-6 my-3">
                     <p className="text-offwhite font-inter text-[19px] mb-3">Genres</p>
                     <div className="flex flex-col gap-y-[10px] pb-3">
-                        {allGenres.map((genre) => (
+                        {genres.map((genre) => (
                             <div key={genre} className="flex items-center mr-5">
                                 <Checkbox id={genre} checked={selectedGenres.includes(genre)} onClick={() => handleGenreToggle(genre)} />
                                 <Label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none">
@@ -368,19 +362,19 @@ function BrowsePageContent() {
                         <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         <p className="text-offwhite font-inter text-2xl mt-3 ml-5 mb-2">Genres</p>
                         <div className="flex flex-col gap-y-[10px] ml-5 mt-3">
-                            {allGenres.map((genre, index) => {
+                            {genres.map((genre, index) => {
                                 const isExtraGenre = index >= 5;
                                 if (!isExtraGenre || (isExtraGenre && showExtraGenres)) {
                                     return (
                                         <div key={genre} className="flex items-center mr-5">
                                             <Checkbox 
                                                 id={`genre-${index}`} 
-                                                checked={selectedGenres.includes(genre)} 
-                                                onClick={() => handleGenreToggle(genre)} 
                                             />
                                             <Label 
                                                 htmlFor={`genre-${index}`} 
                                                 className="text-offwhite font-interlight ml-3 text-base leading-none"
+                                                checked={selectedGenres.includes(genre)} 
+                                                onClick={() => handleGenreToggle(genre)} 
                                             >
                                                 {genre}
                                             </Label>
@@ -394,7 +388,7 @@ function BrowsePageContent() {
                             <div className="ml-5 mt-3">
                                 <button className="text-offwhite text-base font-inter hover:underline cursor-pointer"
                                 onClick={() => { setShowExtraGenres(!showExtraGenres) }}>
-                                Show {genreButton}</button>
+                                Show {showExtraGenres ? 'Less' : 'More'}</button>
                             </div>
                             <div className="w-80% mt-4 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
                         </div>
