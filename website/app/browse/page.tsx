@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react";
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from 'next/image';
 import { FaSteam } from "react-icons/fa";
@@ -21,6 +21,7 @@ import { FaSortAmountDownAlt } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 import { Radio } from "lucide-react";
+import debounce from 'lodash/debounce';
 
 interface Game {
     game_id: number;
@@ -49,9 +50,10 @@ function BrowsePageContent() {
     const [clickedButton, setClickedButton] = useState(false);
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('search') || '';
+    const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
     const [showExtraGenres, setShowExtraGenres] = useState(false);
     const router = useRouter();
-    const [searchTerm, setSearchTerm] = useState<string>(searchQuery);
     const [pageNumber, setPageNumber] = useState<number>(1);
     const [totalResults, setTotalResults] = useState(0);
     const [customPage, setCustomPage] = useState(false);
@@ -107,11 +109,11 @@ function BrowsePageContent() {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    
+
     // Retrieving information from api page, also sending specificities like filters etc
     useEffect(() => {
         setLoading(true);
-        axios.get(`/api?pageNumber=${pageNumber}&search=${searchTerm}&discount=${onlyDiscount}&genres=${selectedGenres.join(',')}&priceranges=${selectedRanges.join(',')}&order=${orderBy}`)
+        axios.get(`/api?pageNumber=${pageNumber}&search=${debouncedSearchTerm}&discount=${onlyDiscount}&genres=${selectedGenres.join(',')}&priceranges=${selectedRanges.join(',')}&order=${orderBy}`)
             .then(response => {
                 const { games, totalResults } = response.data;
                 setGames(games);
@@ -122,12 +124,19 @@ function BrowsePageContent() {
                 console.error("There was an error fetching the game's information: ", error);
                 setLoading(false);
             });
-    }, [searchQuery, pageNumber, searchTerm, onlyDiscount, selectedGenres, selectedRanges, orderBy]);
+    }, [pageNumber, debouncedSearchTerm, onlyDiscount, selectedGenres, selectedRanges, orderBy]);
 
-    const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        router.push(`/browse?search=${searchTerm}`);
-    };
+    // Debounced function to update the debouncedSearchTerm state
+    const updateDebouncedSearch = useCallback(
+        debounce((term) => {
+            setDebouncedSearchTerm(term);
+        }, 400),
+        []
+    );
+
+    useEffect(() => {
+        updateDebouncedSearch(searchTerm);
+    }, [searchTerm]);
 
     const handleDiscountToggle = () => {
         setOnlyDiscount(!onlyDiscount);
@@ -136,6 +145,7 @@ function BrowsePageContent() {
 
     const handleGenreToggle = (genre: string) => {
         setSelectedGenres((prevGenres) =>
+            // Check if array of selected genres contains genre being clicked
             prevGenres.includes(genre)
                 ? prevGenres.filter((g) => g !== genre)
                 : [...prevGenres, genre]
@@ -220,7 +230,7 @@ function BrowsePageContent() {
                     <div className="flex flex-col justify-center h-full items-center">
                         {/* Responsive on sale filter and dynamic search */}
                         <div className="flex items-center">
-                            <Switch onClick={handleDiscountToggle} checked={onlyDiscount}/>
+                        <Switch onClick={() => (setOnlyDiscount(!onlyDiscount), setPageNumber(1))} checked={onlyDiscount} />
                             <p className="ml-3 text-[19px] text-offwhite font-inter">On Sale</p>
                         </div>
                         <input 
@@ -313,18 +323,11 @@ function BrowsePageContent() {
                         <div className="bg-lightmidnight mt-10 rounded-tl-md rounded-b-md right-0 flex flex-col absolute 
                         text-[16px] text-right font-inter px-4 py-2.5 gap-y-[1px] z-30">
                             {/* Sorting menu and conditionally making them darker to show they are selected */}
-                            <p className={`underline-animation2 transition-all duration-150 cursor-pointer
-                            ${orderBy == 1 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
-                            onClick={() => { setOrderBy(1) }}>Most Popular</p>
-                            <p className={`underline-animation2 transition-all duration-150 cursor-pointer
-                            ${orderBy == 2 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
-                            onClick={() => { setOrderBy(2) }}>Alphabetical</p>
-                            <p className={`underline-animation2 transition-all duration-150 cursor-pointer
-                            ${orderBy == 3 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
-                            onClick={() => { setOrderBy(3) }}>Price: Low to High</p>
-                            <p className={`underline-animation2 transition-all duration-150 cursor-pointer
-                            ${orderBy == 4 ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
-                            onClick={() => { setOrderBy(4) }}>Price: High to Low</p>
+                            {sorting.map((sort) => (
+                                <p className={`underline-animation2 transition-all duration-150 cursor-pointer
+                                ${orderBy == sort.id ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
+                                onClick={() => { setOrderBy(sort.id) }}>{sort.label}</p>
+                            ))}
                         </div>
                     )}
                 </div>

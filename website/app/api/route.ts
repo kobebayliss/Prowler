@@ -19,16 +19,16 @@ export async function GET(req: NextRequest) {
 
     const whereClause: any = {};
 
-    let orderBy: any = {};
-    // Set orderBy based on the value of 'order', using index for ordering ie 1 = popularity 2 = alphabetical etc.
+    let currentOrder: any = {};
+    // Set currentOrder based on the value of 'order'
     if (order === 1) {
-        orderBy = { game_id: 'asc' };
+        currentOrder = { game_id: 'asc' };
     } else if (order === 2) {
-        orderBy = { name: 'asc' };
+        currentOrder = { name: 'asc' };
     } else if (order === 3) {
-        orderBy = { steam_price: 'asc' };
+        currentOrder = { steam_price: 'asc' };
     } else if (order === 4) {
-        orderBy = { steam_price: 'desc' };
+        currentOrder = { steam_price: 'desc' };
     }
 
     // Apply discount filter if discount is true, checks if either 'steam_on_sale' or 'epic_on_sale' is set to "1" (being on sale)
@@ -39,7 +39,8 @@ export async function GET(req: NextRequest) {
         ];
     }
 
-    // If genreArray is not empty, then filters games by matching any genres in the 'genreArray'
+    // If genreArray is not empty, then filters 
+    // games by matching any genres in the 'genreArray'
     if (genreArray.length > 0) {
         whereClause.game_genre = {
             some: {
@@ -52,12 +53,13 @@ export async function GET(req: NextRequest) {
         };
     }
 
-    // Filters games by checking if the 'name' contains the search query, case-insensitive
+    // Filters games by checking if the 'name' contains 
+    // the search query, case-insensitive
     if (searchQuery) {
         whereClause.AND = whereClause.AND || [];
         whereClause.AND.push({
             name: {
-                contains: searchQuery.toLowerCase(),
+                contains: searchQuery,
                 mode: "insensitive"
             }
         });
@@ -88,14 +90,7 @@ export async function GET(req: NextRequest) {
             // Paginating based on how many games I want per page (48 now)
             skip: (pageNumber - 1) * itemsPerPage,
             take: itemsPerPage,
-            include: {
-                game_genre: {
-                    include: {
-                        genres: true, // Include genres related to each game
-                    },
-                },
-            },
-            orderBy: orderBy, 
+            orderBy: currentOrder, 
         });
 
         // Count total results for 'x Results' on browse page

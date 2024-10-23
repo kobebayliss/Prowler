@@ -62,7 +62,8 @@ export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
 
-  // When user submits a search, this function sends that variable via URL to browse page for search filtering
+  // When user submits a search, this function sends that variable via 
+  // URL to browse page for search filtering
   const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     router.push(`/browse?search=${searchTerm}`);
@@ -92,7 +93,8 @@ export default function HomePage() {
           or browse through games on the browse tab.
         </p>
         
-        <form className="w-full z-20 max-w-[380px] mx-auto" /* Calling search function upon search submit */ onSubmit={handleSearchSubmit}>
+        <form className="w-full z-20 max-w-[380px] mx-auto" 
+        /* Calling search function upon search submit */ onSubmit={handleSearchSubmit}>
             <div className="relative w-auto mx-5">
                 <IoIosSearch className="absolute text-offwhite w-auto h-[70%] ml-3 top-1/2 transform -translate-y-1/2"/>
                 <input
