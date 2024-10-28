@@ -30,27 +30,27 @@ const carouselData = [
   {
     name: "Ghost of Tsushima",
     image: "tsushima.jpg",
-    link: "/game?id=1033",
+    link: "/game?id=1032",
   },
   {
     name: "Sea of Thieves",
     image: "seaofthieves.jpg",
-    link: "/game?id=1048",
+    link: "/game?id=113",
   },
   {
     name: "Cyberpunk 2077",
     image: "cyberpunk.jpeg",
-    link: "/game?id=5",
+    link: "/game?id=58",
   },
   {
     name: "Elden Ring",
     image: "eldenring.jpeg",
-    link: "/game?id=3",
+    link: "/game?id=67",
   },
   {
     name: "No Man's Sky",
     image: "nomanssky.jpeg",
-    link: "/game?id=175",
+    link: "/game?id=377",
   },
 ];
 

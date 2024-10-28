@@ -138,11 +138,6 @@ function BrowsePageContent() {
         updateDebouncedSearch(searchTerm);
     }, [searchTerm]);
 
-    const handleDiscountToggle = () => {
-        setOnlyDiscount(!onlyDiscount);
-        setPageNumber(1);
-    };
-
     const handleGenreToggle = (genre: string) => {
         setSelectedGenres((prevGenres) =>
             // Check if array of selected genres contains genre being clicked
@@ -158,14 +153,6 @@ function BrowsePageContent() {
                 ? prevRanges.filter((id) => id !== rangeId)
                 : [...prevRanges, rangeId]
         );
-    };
-
-    const handleGame = (gameId: number) => {
-        router.push(`/game?id=${gameId}`);
-    };
-
-    const goToPage = (page: number) => {
-        setPageNumber(page);
     };
 
     // Pagination backend
@@ -209,12 +196,12 @@ function BrowsePageContent() {
             </div>
             <div className={`${loading ? 'pointer-events-none' : 'pointer-events-auto'}`}>
                 <div className="w-full mt-3 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
-                <div className="grid grid-cols-[56%_auto]">
+                <div className="grid grid-cols-[50%_auto]">
                     <div className="flex ml-6">
                         <div>
                             <p className="text-[19px] font-inter text-offwhite my-3">Sort By</p>
                             {/* Responsive radio menu for sorting */}
-                            <RadioGroup value={orderBy.toString()} onValueChange={(value) => setOrderBy(parseInt(value))} className="flex flex-col gap-[8px] mb-4.5">
+                            <RadioGroup value={orderBy.toString()} onValueChange={(value) => (setOrderBy(parseInt(value)), setPageNumber(1))} className="flex flex-col gap-[8px] mb-4.5">
                                 {sorting.map((sort) => (
                                     <div key={sort.id} className="flex items-center">
                                         <RadioGroupItem value={sort.id.toString()} id={sort.id.toString()} className="h-5 w-5 text-offwhite" />
@@ -237,7 +224,7 @@ function BrowsePageContent() {
                             type="text"
                             value={searchTerm}
                             placeholder="Search..."
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => (setSearchTerm(e.target.value), setPageNumber(1))}
                             className={`ease-in-out transition-all duration-200 h-10 px-3 rounded-md bg-lightmidnight text-offwhite 
                             font-inter placeholder:text-grey focus:outline-none focus:ring-1 focus:ring-offwhite w-[140px] mt-5`}
                         />
@@ -250,7 +237,8 @@ function BrowsePageContent() {
                     <div className="flex flex-col gap-y-[10px] mb-4">
                         {ranges.map((range) => (
                             <div key={range.id} className="flex items-center mr-5">
-                                <Checkbox id={range.label} checked={selectedRanges.includes(range.id)} onClick={() => handleRangeToggle(range.id)}/>
+                                <Checkbox id={range.label} checked={selectedRanges.includes(range.id)} 
+                                onClick={() => (handleRangeToggle(range.id), setPageNumber(1))}/>
                                 <Label htmlFor={range.label} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                     {range.label}
                                 </Label>
@@ -264,7 +252,8 @@ function BrowsePageContent() {
                     <div className="flex flex-col gap-y-[10px] pb-3">
                         {genres.map((genre) => (
                             <div key={genre} className="flex items-center mr-5">
-                                <Checkbox id={genre} checked={selectedGenres.includes(genre)} onClick={() => handleGenreToggle(genre)} />
+                                <Checkbox id={genre} checked={selectedGenres.includes(genre)} 
+                                onClick={() => (handleGenreToggle(genre), setPageNumber(1))} />
                                 <Label htmlFor={genre} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                     {genre}
                                 </Label>
@@ -297,7 +286,7 @@ function BrowsePageContent() {
                         type="text"
                         value={searchTerm}
                         placeholder="Search..."
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => (setSearchTerm(e.target.value), setPageNumber(1))}
                         onBlur={() => setShowSearch(false)}
                         className={`ease-in-out py-1 px-3 rounded-md bg-lmidnight text-offwhite font-inter
                         placeholder:text-grey ring-[1px] ring-lightermidnight placeholder:text-[13px]
@@ -324,9 +313,9 @@ function BrowsePageContent() {
                         text-[16px] text-right font-inter px-4 py-2.5 gap-y-[1px] z-30">
                             {/* Sorting menu and conditionally making them darker to show they are selected */}
                             {sorting.map((sort) => (
-                                <p className={`underline-animation2 transition-all duration-150 cursor-pointer
+                                <p key={sort.id} className={`underline-animation2 transition-all duration-150 cursor-pointer
                                 ${orderBy == sort.id ? 'text-darkerwhite' : 'text-offwhite hover:text-darkerwhite'}`} 
-                                onClick={() => { setOrderBy(sort.id) }}>{sort.label}</p>
+                                onClick={() => (setOrderBy(sort.id), setPageNumber(1))}>{sort.label}</p>
                             ))}
                         </div>
                     )}
@@ -346,7 +335,7 @@ function BrowsePageContent() {
                     <div className={`w-filters h-full
                     ${showFilter ? 'animate-slideout' : 'animate-slideback'}`}>
                         <div className="flex justify-center items-center mt-5">
-                            <Switch onClick={handleDiscountToggle} checked={onlyDiscount}/>
+                            <Switch onClick={() => (setOnlyDiscount(!onlyDiscount), setPageNumber(1))} checked={onlyDiscount}/>
                             <p className="ml-3 text-2xl text-offwhite font-inter">On Sale</p>
                         </div>
                         <div className="w-80% mt-5 h-0.5 bg-lightmidnight rounded-2xl mx-auto"/>
@@ -355,7 +344,7 @@ function BrowsePageContent() {
                         {/* Ranges and genres again for regular filter menu, again dynamically having them checked if they are selected for consistency */}
                         {ranges.map((range) => (
                             <div key={range.id} className="flex items-center mr-5">
-                                <Checkbox id={`range-${range.id}`} checked={selectedRanges.includes(range.id)} onClick={() => handleRangeToggle(range.id)} />
+                                <Checkbox id={`range-${range.id}`} checked={selectedRanges.includes(range.id)} onClick={() => (handleRangeToggle(range.id), setPageNumber(1))} />
                                 <Label htmlFor={`range-${range.id}`} className="text-offwhite font-interlight ml-3 text-base leading-none">
                                     {range.label}
                                 </Label>
@@ -372,12 +361,12 @@ function BrowsePageContent() {
                                         <div key={genre} className="flex items-center mr-5">
                                             <Checkbox 
                                                 id={`genre-${index}`} 
+                                                checked={selectedGenres.includes(genre)} 
                                             />
                                             <Label 
                                                 htmlFor={`genre-${index}`} 
                                                 className="text-offwhite font-interlight ml-3 text-base leading-none"
-                                                checked={selectedGenres.includes(genre)} 
-                                                onClick={() => handleGenreToggle(genre)} 
+                                                onClick={() => (handleGenreToggle(genre), setPageNumber(1))} 
                                             >
                                                 {genre}
                                             </Label>
@@ -441,8 +430,8 @@ function BrowsePageContent() {
                             }
 
                             return (
-                                // When a game is clicked, call the function and pass the game id to take user to that game's page
-                                <a href={`/game?id=${game.game_id}`} onClick={() => handleGame(game.game_id)} key={game.game_id}>
+                                // When a game is clicked, pass the game id to take user to that game's page
+                                <a href={`/game?id=${game.game_id}`} key={game.game_id}>
                                     <div className="w-card bg-lightmidnight rounded-searchbox hover:scale-103 transition-all duration-200">
                                         <div className="flex items-end justify-center">
                                             <div className={`absolute flex py-2 px-4 bg-lightmidnight items-center rounded-popup 
@@ -505,7 +494,7 @@ function BrowsePageContent() {
                                 <a href="#" className={`flex mr-3.5 items-center font-inter transition-colors duration-200 text-[16px] px-3.5 h-[38px] rounded-md 
                                 // Here, I conditionally grey out the first button if the page number is one and make it unclickable, do the 
                                 same thing with last and current page, also changing current page number to 1 on click.
-                                ${isFirstPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(1)} >
+                                ${isFirstPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => setPageNumber(1)} >
                                     <RxDoubleArrowLeft />
                                     <p className="ml-1 mr-2">First</p>
                                 </a>
@@ -513,12 +502,14 @@ function BrowsePageContent() {
                                 {paginationItems.map((page, index) => (
                                     <a key={index} href="#" className={`text-offwhite flex mr-1.5 items-center hover:bg-lightmidnight 
                                     transition-colors duration-200 text-[16px] justify-center h-[38px] w-[38px] rounded-md 
-                                    ${page === pageNumber ? 'outline outline-[1.5px] outline-lightermidnight' : ''}`} onClick={() => goToPage(page)}>
+                                    ${page === pageNumber ? 'outline outline-[1.5px] outline-lightermidnight' : ''}`} 
+                                    onClick={() => setPageNumber(page)}>
                                         <p>{page}</p>
                                     </a>
                                 ))}
                                 <a href="#" className={`flex ml-3.5 items-center font-inter transition-colors duration-200 text-[16px] px-3.5 h-[38px] rounded-md
-                                ${isLastPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} onClick={() => goToPage(Math.ceil(totalResults / 48))}>
+                                ${isLastPage ? 'text-[#4f4f54] pointer-events-none' : 'text-offwhite hover:bg-lightmidnight'}`} 
+                                onClick={() => setPageNumber(Math.ceil(totalResults / 48))}>
                                     <p className="mr-1 ml-1.5">Last</p>
                                     <RxDoubleArrowRight />
                                 </a>

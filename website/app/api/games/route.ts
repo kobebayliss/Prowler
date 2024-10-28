@@ -36,8 +36,8 @@ export async function GET(req: NextRequest) {
         // Map over 'game_genre' to extract the 'genre' names.
         const formattedGame = {
             ...game,
-            genres: game.game_genre.map((gg) => gg.genres.genre),
-        };
+            genres: game.game_genre.map(({ genres }) => genres.genre),
+        };        
 
         // Return the formatted game data as a JSON response.
         return NextResponse.json(formattedGame);

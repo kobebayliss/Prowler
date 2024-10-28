@@ -30,37 +30,16 @@ interface Game {
     genres: string[];
 }
 
-function useTextOverflow(ref: React.RefObject<HTMLDivElement>, lines: number, isExpanded: boolean) {
-    const [isOverflow, setIsOverflow] = useState(false);
-
-    useEffect(() => {
-        const checkOverflow = () => {
-            if (ref.current) {
-                setIsOverflow(ref.current.scrollHeight > ref.current.clientHeight);
-            }
-        };
-
-        checkOverflow();
-
-        window.addEventListener("resize", checkOverflow);
-        return () => window.removeEventListener("resize", checkOverflow);
-    }, [ref, lines, isExpanded]);
-
-    return isOverflow;
-}
-
 function GamePageContent() {
     const [isHovered, setIsHovered] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
-    const descriptionRef = useRef(null);
-    const isOverflow = useTextOverflow(descriptionRef, 4, isExpanded);
     const router = useRouter();
     const [game, setGame] = useState<Game | null>(null);
     const idQuery = useSearchParams();
     const id = idQuery.get('id');
     const [loading, setLoading] = useState<boolean>(true);
 
-    // Axios statement to retrieve data from games api page (in /api/games) for the specific game's id, with loading logic too
+    // Axios statement to retrieve data from games api page (in /api/games) 
+    // for the specific game's id, with loading logic too
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
@@ -114,13 +93,12 @@ function GamePageContent() {
     let steamPrice = parseFloat(game.steam_price)
     let epicPrice = parseFloat(game.epic_price)
 
-    let epicExists = epicPrice != -1
-
     return (
         <div className="w-auto mx-8 browse-width:mx-auto browse-width:w-[1320px]">
             <div className="grid-width:grid grid-width:grid-cols-[360px_auto] grid-width:mb-6 grid-width:mt-5 grid-width:w-[92.890510948%] w-full">
                 <div className="flex flex-col grid-width:mr-8 justify-center">
-                    <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 mt-3 grid-width:mt-0 line-clamp-2">{game.name}</p>
+                    <p className="text-offwhite font-inter text-[2.4em] mx-auto grid-width:mx-0 mt-3 grid-width:mt-0 line-clamp-2 
+                    text-center grid-width:text-start">{game.name}</p>
                     <p className="text-offwhite font-interlight text-[1.05em] mx-auto grid-width:mx-0">{game.reviews}</p>
                     <div className="h-px w-full bg-lightermidnight mt-3"/>
                     <div className="flex bg-lightmidnight w-full mx-auto h-[96px] mt-[20px] rounded-lg">
@@ -138,20 +116,20 @@ function GamePageContent() {
                         </a>
                         <div className={`w-[1.5px] bg-lightermidnight self-center transition-all duration-150 ${isHovered ? 'h-[100%]' : 'h-[50%]'}`}/>
                         {/* Conditional epic link if it exists, otherwise # and unclickable */}
-                        <a href={epicExists ? game.epic_link : "#"} target="_blank" rel="noopener noreferrer" 
+                        <a href={epicPrice != -1 ? game.epic_link : "#"} target="_blank" rel="noopener noreferrer" 
                         className={`w-[50%] rounded-r-2xl transition-all duration-150 hover:bg-lightermidnight flex flex-col 
-                        justify-center ${epicExists ? 'pointer-events-auto' : 'pointer-events-none' }`}
+                        justify-center ${epicPrice != -1 ? 'pointer-events-auto' : 'pointer-events-none' }`}
                         onMouseEnter={() => { setIsHovered(true); }}
                         onMouseLeave={() => { setIsHovered(false); }}>
                             <div className="flex justify-center items-center">
                                 <img src="/images/epic.png" alt="Epic Games logo" className="mr-3 w-auto h-[32px]"/>
                                 <p className="text-offwhite font-inter text-[23px]">
                                     {/* Conditionally rendering N/A if game doesn't exist on epic, or free if price = 0 */}
-                                    {epicExists ? epicPrice == 0 ? ( <p>Free</p> ) : ( <p>${epicPrice}</p> ) : ( <p>N/A</p> )}
+                                    {epicPrice != -1 ? epicPrice == 0 ? ( <p>Free</p> ) : ( <p>${epicPrice}</p> ) : ( <p>N/A</p> )}
                                 </p>
                             </div>
-                            <p className={`font-interlight text-center text-darkerwhite text-[13px] ${epicExists ? 'mt-2.5' : 'mt-0'}`}>
-                            {epicExists ? (<p>View Epic page</p>) : (<></>)}</p>
+                            <p className={`font-interlight text-center text-darkerwhite text-[13px] ${epicPrice != -1 ? 'mt-2.5' : 'mt-0'}`}>
+                            {epicPrice != -1 ? (<p>View Epic page</p>) : (<></>)}</p>
                         </a>
                     </div>
                     <div className="h-px w-full bg-lightermidnight mt-5"/>
@@ -188,13 +166,6 @@ function GamePageContent() {
                         <div className={`font-interlight text-offwhite grid-width:mr-24 text-[15px]`}>
                             {game.long_desc}
                         </div>
-                        {/* If the description is too long, adding a read more button so that the page isn't automatically filled with a huge amount of text */}
-                        {isOverflow && !isExpanded && (
-                            <p className="font-inter mb-4 text-offwhite text-[15.5px] mt-1 cursor-pointer"
-                            onClick={() => setIsExpanded(true)}>Click to read more</p>)}
-                        {isExpanded && (
-                            <p className="font-inter mb-4 text-offwhite text-[15.5px] mt-1 cursor-pointer"
-                            onClick={() => setIsExpanded(false)}>Click to show less</p>)}
                     </div>
                     <div className="mt-10 grid-width:mt-0 mb-12 grid-width:mb-0 grid-width:justify-end max-w-[320px]">
                         <div className="flex">

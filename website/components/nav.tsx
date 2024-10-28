@@ -10,7 +10,7 @@ import { ToastAction } from "@/components/ui/toast"
 import { Toaster } from "@/components/ui/toaster"
 
 export default function Nav() {
-  const [showMenu, setShowMenu] = useState(false);
+  const [hamburgerMenu, setHamburgerMenu] = useState(false);
   const [pressedMenu, setPressedMenu] = useState(false);
   const [hoveredLink, setHoveredLink] = useState("");
   const { toast } = useToast()
@@ -23,6 +23,12 @@ export default function Nav() {
   const handleMouseOut = () => {
     setHoveredLink("");
   };
+
+  const navLinks = [
+    { label: "Browse", link: "../browse" },
+    { label: "Contact", link: "../contact" },
+    { label: "GitHub", link: "https://github.com/kba0297/Prowler" },
+  ];
 
   return (
     <>
@@ -38,9 +44,10 @@ export default function Nav() {
             <div className="hidden navwidth:block">
               <ul className="flex items-center gap-8 ml-5 mt-0.5">
                 {/* All page links */}
-                <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="../browse">Browse</a>
-                <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="../contact">Contact</a>
-                <a className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors duration-200 underline-animation1" href="https://github.com/kba0297/Prowler">GitHub</a>
+                {navLinks.map((item) => (
+                  <a key={item.label} className="font-intersemibold text-[15px] text-grey hover:text-offwhite px-1 py-0.5 transition-colors 
+                  duration-200 underline-animation1" href={item.link}>{item.label}</a>
+                ))}
               </ul>
             </div>
           </div>
@@ -59,14 +66,14 @@ export default function Nav() {
 
             {/* Responsive navigation menu button */}
             <a className="ml-2 w-8 rounded-md hover:bg-lightmidnight transition-colors duration-200 cursor-pointer navwidth:hidden relative flex flex-col items-center justify-center"
-              onClick={() => { setShowMenu(!showMenu); setPressedMenu(true) }}>
+              onClick={() => { setHamburgerMenu(!hamburgerMenu); setPressedMenu(true) }}>
               <div
                 className={`block w-[60%] h-0.5 rounded-sm bg-offwhite transition-transform duration-200 
-                ${showMenu ? 'rotate-45 translate-y-1' : ''} `}
+                ${hamburgerMenu ? 'rotate-45 translate-y-1' : ''} `}
               />
               <div
                 className={`block w-[60%] h-0.5 rounded-sm bg-offwhite mt-2 transition-transform duration-200 
-                ${showMenu ? '-rotate-45 -translate-y-1.5' : ''} `}
+                ${hamburgerMenu ? '-rotate-45 -translate-y-1.5' : ''} `}
               />
             </a>
           </div>
@@ -74,21 +81,19 @@ export default function Nav() {
         <div className="w-full h-px bg-lightmidnight"></div>
       </div>
       <div className="w-full flex justify-center relative">
-        <div className={`h-navwidth:hidden absolute text-offwhite w-[84%] z-40 h-[280px] navwidth:hidden block
+        <div className={`h-navwidth:hidden absolute text-offwhite w-[84%] z-40 h-[226px] navwidth:hidden block top-0
         rounded-b-xl outline outline-1 outline-lightmidnight bg-midnight backdrop-blur supports-[backdrop-filter]:bg-midnight/80 
         // Responsive navigation menu animations (presets in tailwind.config file)
-        ${showMenu ? 'animate-menudown pointer-events-auto' : 'animate-menuup pointer-events-none'} ${pressedMenu ? 'block' : 'hidden'}`}
-          style={{ top: 0 }}>
+        ${hamburgerMenu ? 'animate-menudown pointer-events-auto' : 'animate-menuup pointer-events-none'} 
+        ${pressedMenu ? 'block' : 'hidden'}`}>
           <div className="flex mt-4 flex-col w-full absolute">
             {/* Mapping the different links in responsive navigation menu to make code more concise */}
-            {["../browse", "../faq", "../contact", "https://github.com/kba0297/Prowler"].map((href, index) => (
-              <a className="flex items-center self-center px-4 mt-4.5 underline-animation" key={index} href={href}  
-              onMouseOver={() => handleMouseOver(href)} onMouseOut={handleMouseOut}>
-                <p
-                  className={`font-inter text-offwhite text-[20px] px-2 py-1 z-20 transition-opacity
-                  ${showMenu ? 'opacity-100' : 'opacity-0'} ${hoveredLink === href ? 'duration-200' : 'duration-200'}`}
-                >
-                  {index === 0 ? "Browse" : index === 1 ? "FAQs" : index === 2 ? "Contact" : "GitHub"}
+            {navLinks.map((item) => (
+              <a key={item.label} className="flex items-center self-center px-4 mt-4.5 underline-animation" 
+              href={item.link} onMouseOut={handleMouseOut}>
+                <p className={`font-inter text-offwhite text-[20px] px-2 py-1 z-20 transition-opacity
+                ${hamburgerMenu ? 'opacity-100' : 'opacity-0'}}`}>
+                  {item.label}
                 </p>
               </a>
             ))}

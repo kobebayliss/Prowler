@@ -56,15 +56,13 @@ def scrape_steam_page(url):
         screen_height = driver.execute_script("return window.screen.height;")
         i = 1
         # while loop to continue scrolling
-        while True:
+        while i <= 140:
             # scroll down
             driver.execute_script(f"window.scrollTo(0, {screen_height * i});")
             i += 1
             time.sleep(scroll_pause_time)
             driver.execute_script("return document.body.scrollHeight;")
             # if condition for when website should finish scrolling
-            if i > 100:
-                break
         
         updated_html = driver.page_source
 
