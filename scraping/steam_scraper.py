@@ -38,7 +38,7 @@ results = mycursor.fetchall()
 for row in results:
     games_prices[row[0]] = row[1]
 
-steam_url = "https://store.steampowered.com/search/?sort_by=_ASC&filter=topsellers&os=win&supportedlang=english"
+steam_url = "https://store.steampowered.com/search/?sort_by=Name_ASC&os=win&supportedlang=english&filter=topsellers&ndl=1"
 
 # initialise web driver
 driver = webdriver.Chrome()
