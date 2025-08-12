@@ -12,9 +12,7 @@ Motivation /
 With no central platform to compare game prices efficiently, Prowler fills the gap by simplifying the search for the best deals.
 
 Technology / 
-Frontend: React, Next.js
-Backend: Node.js web scrapers
-Hosting: Vercel
+Frontend made with React and Next.js. Backend is Node.js and a Python web scraping program. Hosted by Vercel.
 
 Future Plans
 - User accounts and wishlists with sale alerts
