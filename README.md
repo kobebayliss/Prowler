@@ -23,7 +23,6 @@ Future Plans
 
 Legal / 
 Uses public data via web scraping for a non-profit project
-Regular updates to avoid anti-scraping issues
 
 Contact
 kobebayliss1@gmail.com
