@@ -8,10 +8,10 @@ Features
 - Thousands of games with filters for price, genre, and discounts
 - Dark-themed, user-friendly interface for easy browsing
 
-Motivation
+Motivation / 
 With no central platform to compare game prices efficiently, Prowler fills the gap by simplifying the search for the best deals.
 
-Technology
+Technology / 
 Frontend: React, Next.js
 Backend: Node.js web scrapers
 Hosting: Vercel
@@ -21,7 +21,7 @@ Future Plans
 - Multi-language support
 - Add more vendors
 
-Legal
+Legal / 
 Uses public data via web scraping for a non-profit project
 Regular updates to avoid anti-scraping issues
 
