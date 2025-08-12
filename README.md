@@ -19,6 +19,8 @@ Future Plans
 - Multi-language support
 - Add more vendors
 
+Documentation and write up can be found in the pdf file in the root file of the project
+
 Legal / 
 Uses public data via web scraping for a non-profit project
 
