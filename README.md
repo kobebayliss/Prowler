@@ -1,6 +1,7 @@
-Prowler: prowler-nu.vercel.app
+# Prowler
+ Prowler is a free web app that helps gamers quickly compare video game prices across Steam and Epic Games. It centralizes pricing and game info, saving users from checking multiple stores.
 
-Prowler is a free web app that helps gamers quickly compare video game prices across Steam and Epic Games. It centralizes pricing and game info, saving users from checking multiple stores.
+prowler-nu.vercel.app
 
 Features
 - Real-time price and sale comparisons from Steam and Epic Games
