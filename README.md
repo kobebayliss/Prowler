@@ -24,4 +24,4 @@ Documentation and write up can be found in the pdf file in the root file of the 
 
 ## Legal and Contact
 Uses public data via web scraping for a non-profit project
-<br><br>kobebayliss1@gmail.com
+<br><br>Contact: kobebayliss1@gmail.com
