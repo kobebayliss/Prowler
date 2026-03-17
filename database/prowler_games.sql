@@ -38,7 +38,7 @@ CREATE TABLE `games` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `games`
+-- Dumping data for table `games` for testing purposes (not prod)
 --
 
 INSERT INTO `games` (`game_id`, `game_name`, `steam_price`, `epic_price`, `game_picture`, `game_developer`, `game_description`) VALUES
